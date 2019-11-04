@@ -361,7 +361,7 @@ Module dataFunctions
             cmd.Connection = cnn
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT lines_to_users.COD_USR_LINE, lines_to_users.COD_LINE, lines_to_users.ID_RATE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_type.NAME_TYPE, user_lines.USER_DOCID, lines_to_users.TITULAR_LINE, rates.NAME_RATE
+            cmd.CommandText = "SELECT lines_to_users.COD_USR_LINE, lines_to_users.COD_LINE, lines_to_users.ID_RATE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_type.NAME_TYPE, user_lines.USER_DOCID, lines_to_users.TITULAR_LINE, rates.NAME_RATE, lines_to_users.COD_ACCOUNT
             FROM rates INNER JOIN (user_type INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON user_type.ID_TYPE_USER = user_lines.USER_TYPE) ON rates.ID_RATE = lines_to_users.ID_RATE
             WHERE lines_to_users.COD_LINE LIKE '" & vCodLine & "'"
 
@@ -371,7 +371,7 @@ Module dataFunctions
                 If dr.HasRows Then
                     dgUserOfLine.Rows.Clear()
                     While dr.Read()
-                        dgUserOfLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString, Convert.ToBoolean(dr(7).ToString), dr(8).ToString)
+                        dgUserOfLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(9).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString, Convert.ToBoolean(dr(7).ToString), dr(8).ToString)
                     End While
                 Else
                     dgUserOfLine.Rows.Clear()
@@ -537,6 +537,8 @@ Module dataFunctions
 
         Dim cmdInsertUser As New OleDbCommand
         Dim cmdInsertLineUser As New OleDbCommand
+        Dim cmdLastInsertLineUser As New OleDbCommand
+        Dim cmdUpdateCodeLineUser As New OleDbCommand
         Dim dr As OleDbDataReader
 
         If Not (cnn.DataSource.Equals("")) Then
@@ -567,11 +569,31 @@ Module dataFunctions
                     cmdInsertLineUser.Parameters.AddWithValue("pricerate", dataUser(11))
 
                     cmdInsertLineUser.ExecuteNonQuery()
-                    cmdInsertLineUser.Dispose()
+
+                    cmdLastInsertLineUser.Connection = cnn
+                    cmdLastInsertLineUser.CommandType = CommandType.Text
+                    cmdLastInsertLineUser.CommandText = "SELECT lines_to_users.ID_ACCOUNT FROM lines_to_users WHERE COD_LINE LIKE @codline AND COD_USR_LINE LIKE @coduserline"
+                    cmdLastInsertLineUser.Parameters.AddWithValue("codline", dataUser(12))
+                    cmdLastInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
+
+                    dr = cmdLastInsertLineUser.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dr.Read()
+                        cmdUpdateCodeLineUser.Connection = cnn
+                        cmdUpdateCodeLineUser.CommandType = CommandType.Text
+                        cmdUpdateCodeLineUser.CommandText = "UPDATE lines_to_users SET lines_to_users.COD_ACCOUNT = @codaccount WHERE lines_to_users.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
+                        cmdUpdateCodeLineUser.Parameters.AddWithValue("codaccount", "C" & dr(0).ToString.PadLeft(6, "0"))
+                        cmdUpdateCodeLineUser.ExecuteNonQuery()
+                    End If
+
                 End If
 
                 dr.Close()
                 cmdInsertUser.Dispose()
+                cmdInsertLineUser.Dispose()
+                cmdLastInsertLineUser.Dispose()
+                cmdUpdateCodeLineUser.Dispose()
 
                 MsgBox("El usuario se guardo exitosamente", vbInformation, "Aviso")
             Catch ex As Exception
