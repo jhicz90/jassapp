@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AA1978C4-EEB1-4827-B855-28734B8CFA43}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>JASS_APP.My.MyApplication</StartupObject>
+    <RootNamespace>JASS_APP</RootNamespace>
+    <AssemblyName>JASS APP</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsForms</MyType>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>JASS APP.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>JASS APP.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\iconApp.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="frmAbout.Designer.vb">
+      <DependentUpon>frmAbout.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmAbout.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditLine.Designer.vb">
+      <DependentUpon>frmEditLine.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmEditLine.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFindUsers.Designer.vb">
+      <DependentUpon>frmFindUsers.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFindUsers.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.vb">
+      <DependentUpon>frmLogin.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.vb">
+      <DependentUpon>frmMain.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dataFunctions.vb" />
+    <Compile Include="frmNewLine.Designer.vb">
+      <DependentUpon>frmNewLine.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewLine.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFindLines.Designer.vb">
+      <DependentUpon>frmFindLines.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmFindLines.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewUser.Designer.vb">
+      <DependentUpon>frmNewUser.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmNewUser.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmAbout.resx">
+      <DependentUpon>frmAbout.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditLine.resx">
+      <DependentUpon>frmEditLine.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFindUsers.resx">
+      <DependentUpon>frmFindUsers.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewLine.resx">
+      <DependentUpon>frmNewLine.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFindLines.resx">
+      <DependentUpon>frmFindLines.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewUser.resx">
+      <DependentUpon>frmNewUser.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dbJASS.accdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Resources\iconCollect.ico" />
+    <None Include="Resources\help.png" />
+    <None Include="Resources\help-32.png" />
+    <None Include="Resources\iconLogoapp.png" />
+    <None Include="Resources\logo_jass.png" />
+    <None Include="Resources\logojassc.png" />
+    <None Include="Resources\add-user-male.png" />
+    <None Include="Resources\add-user-male-32.png" />
+    <None Include="Resources\find-user-male-32.png" />
+    <None Include="Resources\find-user-male.png" />
+    <None Include="Resources\add-link.png" />
+    <None Include="Resources\add-link-32.png" />
+    <None Include="Resources\iconEditpipe.ico" />
+    <None Include="Resources\plumbing.png" />
+    <None Include="Resources\plumbing-32.png" />
+    <None Include="Resources\analyze.png" />
+    <None Include="Resources\analyze-32.png" />
+    <None Include="Resources\restore-window.png" />
+    <None Include="Resources\restore-window-32.png" />
+    <None Include="Resources\top-menu.png" />
+    <None Include="Resources\top-menu-32.png" />
+    <None Include="Resources\book-stack-32.png" />
+    <None Include="Resources\book-stack.png" />
+    <None Include="Resources\coins.png" />
+    <None Include="Resources\coins-32.png" />
+    <None Include="Resources\safe-ok.png" />
+    <None Include="Resources\safe-ok-32.png" />
+    <None Include="Resources\safe-out-32.png" />
+    <None Include="Resources\safe-out.png" />
+    <None Include="Resources\iconSearch.ico" />
+    <None Include="Resources\piping.png" />
+    <None Include="Resources\piping-32.png" />
+    <None Include="Resources\pipelines-32.png" />
+    <None Include="Resources\pipelines.png" />
+    <None Include="Resources\paid-search-32.png" />
+    <None Include="Resources\paid-search.png" />
+    <None Include="Resources\search-32.png" />
+    <None Include="Resources\search.png" />
+    <None Include="Resources\cancel-32.png" />
+    <None Include="Resources\save-32.png" />
+    <None Include="Resources\clear-32.png" />
+    <None Include="Resources\clear.png" />
+    <None Include="Resources\save.png" />
+    <None Include="Resources\cancel.png" />
+    <None Include="Resources\iconNewline.ico" />
+    <None Include="Resources\iconAdduser.ico" />
+    <None Include="Resources\iconApp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+</Project>
