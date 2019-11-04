@@ -44,8 +44,6 @@ Partial Class frmNewuser
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.grpRate = New System.Windows.Forms.GroupBox()
-        Me.Label13 = New System.Windows.Forms.Label()
-        Me.txtDescRate = New System.Windows.Forms.TextBox()
         Me.txtPriceRate = New System.Windows.Forms.TextBox()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.cbxRates = New System.Windows.Forms.ComboBox()
@@ -263,7 +261,7 @@ Partial Class frmNewuser
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.Controls.Add(Me.Panel3, 1, 0)
-        Me.TableLayoutPanel3.Location = New System.Drawing.Point(12, 424)
+        Me.TableLayoutPanel3.Location = New System.Drawing.Point(12, 374)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
         Me.TableLayoutPanel3.RowCount = 1
         Me.TableLayoutPanel3.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -308,43 +306,17 @@ Partial Class frmNewuser
         '
         'grpRate
         '
-        Me.grpRate.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.grpRate.Controls.Add(Me.Label13)
-        Me.grpRate.Controls.Add(Me.txtDescRate)
         Me.grpRate.Controls.Add(Me.txtPriceRate)
         Me.grpRate.Controls.Add(Me.Label7)
         Me.grpRate.Controls.Add(Me.cbxRates)
         Me.grpRate.Location = New System.Drawing.Point(12, 294)
         Me.grpRate.Name = "grpRate"
         Me.grpRate.Padding = New System.Windows.Forms.Padding(10)
-        Me.grpRate.Size = New System.Drawing.Size(760, 124)
+        Me.grpRate.Size = New System.Drawing.Size(760, 56)
         Me.grpRate.TabIndex = 2
         Me.grpRate.TabStop = False
         Me.grpRate.Text = "Tarifa asociada a la cuenta"
         Me.grpRate.Visible = False
-        '
-        'Label13
-        '
-        Me.Label13.AutoSize = True
-        Me.Label13.Location = New System.Drawing.Point(11, 50)
-        Me.Label13.Name = "Label13"
-        Me.Label13.Size = New System.Drawing.Size(80, 32)
-        Me.Label13.TabIndex = 18
-        Me.Label13.Text = "Descripcion" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "de la tarifa:"
-        '
-        'txtDescRate
-        '
-        Me.txtDescRate.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtDescRate.Location = New System.Drawing.Point(137, 50)
-        Me.txtDescRate.Multiline = True
-        Me.txtDescRate.Name = "txtDescRate"
-        Me.txtDescRate.ReadOnly = True
-        Me.txtDescRate.Size = New System.Drawing.Size(614, 61)
-        Me.txtDescRate.TabIndex = 3
-        Me.txtDescRate.TabStop = False
         '
         'txtPriceRate
         '
@@ -437,7 +409,7 @@ Partial Class frmNewuser
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnCancel
-        Me.ClientSize = New System.Drawing.Size(784, 511)
+        Me.ClientSize = New System.Drawing.Size(784, 461)
         Me.Controls.Add(Me.txtDateUpdated)
         Me.Controls.Add(Me.txtDateCreated)
         Me.Controls.Add(Me.txtCodUser)
@@ -449,7 +421,7 @@ Partial Class frmNewuser
         Me.Controls.Add(Me.grpUser)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Margin = New System.Windows.Forms.Padding(4)
-        Me.MinimumSize = New System.Drawing.Size(800, 550)
+        Me.MinimumSize = New System.Drawing.Size(800, 500)
         Me.Name = "frmNewuser"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Usuario"
@@ -487,8 +459,6 @@ Partial Class frmNewuser
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
     Friend WithEvents grpRate As GroupBox
-    Friend WithEvents Label13 As Label
-    Friend WithEvents txtDescRate As TextBox
     Friend WithEvents txtPriceRate As TextBox
     Friend WithEvents Label7 As Label
     Friend WithEvents cbxRates As ComboBox

@@ -35,6 +35,8 @@ Public Class frmNewuser
             grpRate.Visible = False
         ElseIf vFrmGet = 2 Then
             grpRate.Visible = True
+        ElseIf vFrmGet = 3 Then
+            grpRate.Visible = True
         Else
             grpRate.Visible = False
         End If
@@ -105,7 +107,6 @@ Public Class frmNewuser
         If IsNumeric(cbxRates.SelectedValue.ToString) Then
             Dim dataPrice() As String = getPriceRate(cbxRates.SelectedValue.ToString)
             txtPriceRate.Text = Math.Round(Convert.ToDouble(dataPrice(0)), 2).ToString
-            txtDescRate.Text = dataPrice(1)
             If Convert.ToBoolean(dataPrice(2)) = True Then
                 txtPriceRate.ReadOnly = False
                 If vPriceRate > 0 Then
