@@ -48,7 +48,7 @@ Public Class frmEditLine
         Close()
     End Sub
 
-    Private Sub btnAddUser_Click(sender As Object, e As EventArgs) Handles btnAddUser.Click
+    Private Sub btnAddUser_Click(sender As Object, e As EventArgs) Handles btnAddAccount.Click
         frmFindUsers.vFrmGet = 2
         frmFindUsers.ShowDialog()
     End Sub
@@ -113,7 +113,7 @@ Public Class frmEditLine
         End If
     End Sub
 
-    Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewUser.Click
+    Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewAccount.Click
         showNewEditUser(3, Me, "new", txtCodLine.Text)
         listUserOfLine(txtCodLine.Text, dtgUserLine)
     End Sub

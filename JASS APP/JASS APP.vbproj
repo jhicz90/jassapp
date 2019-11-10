@@ -204,6 +204,18 @@
     <Content Include="dbJASS.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\general-ledger.png" />
+    <None Include="Resources\general-ledger-32.png" />
+    <None Include="Resources\deposit.png" />
+    <None Include="Resources\deposit-32.png" />
+    <None Include="Resources\bill.png" />
+    <None Include="Resources\bill-32.png" />
+    <None Include="Resources\refund.png" />
+    <None Include="Resources\refund-32.png" />
+    <None Include="Resources\user-account.png" />
+    <None Include="Resources\user-account-32.png" />
+    <None Include="Resources\new-contact.png" />
+    <None Include="Resources\new-contact-32.png" />
     <None Include="Resources\iconCollect.ico" />
     <None Include="Resources\help.png" />
     <None Include="Resources\help-32.png" />

@@ -136,6 +136,12 @@
   <data name="analyze_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\analyze-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="bill" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="bill_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\bill-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="book_stack" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\book-stack.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -160,11 +166,23 @@
   <data name="coins_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\coins-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="deposit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\deposit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="deposit_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\deposit-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="find_user_male" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\find-user-male.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="find_user_male_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\find-user-male-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="general_ledger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\general-ledger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="general_ledger_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\general-ledger-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -199,6 +217,12 @@
   <data name="logo_jass" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\logo_jass.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="new_contact" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\new-contact.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="new_contact_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\new-contact-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="paid_search" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\paid-search.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -222,6 +246,12 @@
   </data>
   <data name="plumbing_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\plumbing-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refund" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refund.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refund_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\refund-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="restore_window" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\restore-window.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -258,5 +288,11 @@
   </data>
   <data name="top_menu_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\top-menu-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="user_account" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\user-account.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="user_account_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\user-account-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
