@@ -33,8 +33,6 @@ Partial Class frmFindLines
         Me.clmSector = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmUserLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmDocId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmHolder = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.clmRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOptions = New System.Windows.Forms.DataGridViewButtonColumn()
         CType(Me.dtgLines, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -95,7 +93,7 @@ Partial Class frmFindLines
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgLines.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgLines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmHolder, Me.clmRate, Me.clmOptions})
+        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmOptions})
         Me.dtgLines.Location = New System.Drawing.Point(12, 52)
         Me.dtgLines.MultiSelect = False
         Me.dtgLines.Name = "dtgLines"
@@ -147,24 +145,6 @@ Partial Class frmFindLines
         Me.clmDocId.Name = "clmDocId"
         Me.clmDocId.ReadOnly = True
         '
-        'clmHolder
-        '
-        Me.clmHolder.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmHolder.FillWeight = 50.0!
-        Me.clmHolder.HeaderText = "Titular"
-        Me.clmHolder.Name = "clmHolder"
-        Me.clmHolder.ReadOnly = True
-        Me.clmHolder.Width = 50
-        '
-        'clmRate
-        '
-        Me.clmRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmRate.FillWeight = 120.0!
-        Me.clmRate.HeaderText = "Tarifa"
-        Me.clmRate.Name = "clmRate"
-        Me.clmRate.ReadOnly = True
-        Me.clmRate.Width = 120
-        '
         'clmOptions
         '
         Me.clmOptions.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
@@ -208,7 +188,5 @@ Partial Class frmFindLines
     Friend WithEvents clmSector As DataGridViewTextBoxColumn
     Friend WithEvents clmUserLine As DataGridViewTextBoxColumn
     Friend WithEvents clmDocId As DataGridViewTextBoxColumn
-    Friend WithEvents clmHolder As DataGridViewCheckBoxColumn
-    Friend WithEvents clmRate As DataGridViewTextBoxColumn
     Friend WithEvents clmOptions As DataGridViewButtonColumn
 End Class

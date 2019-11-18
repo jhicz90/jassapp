@@ -276,13 +276,13 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID, lines_to_users.TITULAR_LINE, rates.NAME_RATE
-                    FROM user_lines INNER JOIN (sector INNER JOIN (rates INNER JOIN (lines INNER JOIN lines_to_users ON lines.COD_LINE = lines_to_users.COD_LINE) ON rates.ID_RATE = lines_to_users.ID_RATE) ON sector.ID_SECTOR = lines.ID_SECTOR) ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE
+                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
                     WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID, lines_to_users.TITULAR_LINE, rates.NAME_RATE
-                    FROM user_lines INNER JOIN (sector INNER JOIN (rates INNER JOIN (lines INNER JOIN lines_to_users ON lines.COD_LINE = lines_to_users.COD_LINE) ON rates.ID_RATE = lines_to_users.ID_RATE) ON sector.ID_SECTOR = lines.ID_SECTOR) ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE
+                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
                     WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
                 Case 2
                     'Buscar por codigo de linea
@@ -290,10 +290,8 @@ Module dataFunctions
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS DOCID,
-                    (SELECT TOP 1 IIF(lines_to_users.TITULAR_LINE = TRUE,'TRUE', 'FALSE') FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS TITULAR, 
-                    (SELECT TOP 1 rates.NAME_RATE FROM rates INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON rates.ID_RATE = lines_to_users.ID_RATE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS RATE
+                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
+                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
                     FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
                     WHERE VLINES.COD_LINE LIKE '%" & txtBusq & "%'"
                 Case 3
@@ -302,10 +300,8 @@ Module dataFunctions
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS DOCID,
-                    (SELECT TOP 1 IIF(lines_to_users.TITULAR_LINE = TRUE,'TRUE', 'FALSE') FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS TITULAR, 
-                    (SELECT TOP 1 rates.NAME_RATE FROM rates INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON rates.ID_RATE = lines_to_users.ID_RATE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS RATE
+                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
+                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
                     FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
                     WHERE VLINES.NAME_LINE LIKE '%" & txtBusq & "%'"
                 Case Else
@@ -314,10 +310,8 @@ Module dataFunctions
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS DOCID,
-                    (SELECT TOP 1 IIF(lines_to_users.TITULAR_LINE = TRUE,'TRUE', 'FALSE') FROM user_lines INNER JOIN lines_to_users ON lines_to_users.COD_USR_LINE = user_lines.COD_USR_LINE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS TITULAR, 
-                    (SELECT TOP 1 rates.NAME_RATE FROM rates INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON rates.ID_RATE = lines_to_users.ID_RATE WHERE lines_to_users.COD_LINE = VLINES.COD_LINE AND lines_to_users.TITULAR_LINE = TRUE) AS RATE
+                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
+                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
                     FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR"
             End Select
 
@@ -329,19 +323,12 @@ Module dataFunctions
                 If dr.HasRows Then
                     dgLinesService.Rows.Clear()
                     While dr.Read()
-                        Dim vHolder As Boolean = False
-                        If dr(5).ToString.Equals("") Then
-                            vHolder = False
-                        ElseIf CType(dr(5).ToString, Boolean) = False Then
-                            vHolder = False
-                        ElseIf CType(dr(5).ToString, Boolean) = True Then
-                            vHolder = True
-                        End If
-                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, vHolder, dr(6).ToString)
+                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString)
                     End While
                 Else
                     dgLinesService.Rows.Clear()
                 End If
+
                 dr.Close()
                 cmd.Dispose()
             Catch ex As Exception
@@ -613,19 +600,22 @@ Module dataFunctions
         Dim cmdFindUser As New OleDbCommand
         Dim cmdInsertLine As New OleDbCommand
         Dim cmdInsertUser As New OleDbCommand
-        Dim cmdInsertLineUser As New OleDbCommand
+        Dim cmdInsertLineAccount As New OleDbCommand
         Dim cmdLastInsertLineUser As New OleDbCommand
-        Dim cmdUpdateCodeLineUser As New OleDbCommand
+        Dim cmdUpdateCodeLineAccount As New OleDbCommand
+        Dim cmdInsertAccountUser As New OleDbCommand
         Dim dr As OleDbDataReader
 
         If Not (cnn.DataSource.Equals("")) Then
             Try
-                cmdFindUser.Connection = cnn
-                cmdFindUser.CommandType = CommandType.Text
-                cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
-                cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
-                dr = cmdFindUser.ExecuteReader
-                vFindUser = dr.HasRows
+                If dataUser(3).Trim <> "" Then
+                    cmdFindUser.Connection = cnn
+                    cmdFindUser.CommandType = CommandType.Text
+                    cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
+                    cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
+                    dr = cmdFindUser.ExecuteReader
+                    vFindUser = dr.HasRows
+                End If
 
                 cmdFindLine.Connection = cnn
                 cmdFindLine.CommandType = CommandType.Text
@@ -670,17 +660,17 @@ Module dataFunctions
                     cmdInsertLine.Parameters.AddWithValue("descpline", dataLine(6))
 
                     'Registrando una linea-cuenta
-                    cmdInsertLineUser.Connection = cnn
-                    cmdInsertLineUser.CommandType = CommandType.Text
+                    cmdInsertLineAccount.Connection = cnn
+                    cmdInsertLineAccount.CommandType = CommandType.Text
 
-                    cmdInsertLineUser.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
-                    cmdInsertLineUser.Parameters.AddWithValue("codaccount", "new")
-                    cmdInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
-                    cmdInsertLineUser.Parameters.AddWithValue("codrate", dataLine(4))
-                    cmdInsertLineUser.Parameters.AddWithValue("pricerate", vPriceRate)
+                    cmdInsertLineAccount.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
+                    cmdInsertLineAccount.Parameters.AddWithValue("codaccount", "new")
+                    cmdInsertLineAccount.Parameters.AddWithValue("codline", dataLine(0))
+                    cmdInsertLineAccount.Parameters.AddWithValue("codrate", dataLine(4))
+                    cmdInsertLineAccount.Parameters.AddWithValue("pricerate", vPriceRate)
 
                     cmdInsertLine.ExecuteNonQuery()
-                    cmdInsertLineUser.ExecuteNonQuery()
+                    cmdInsertLineAccount.ExecuteNonQuery()
 
                     'Buscando y cambiando el codigo de cuenta
                     cmdLastInsertLineUser.Connection = cnn
@@ -692,27 +682,46 @@ Module dataFunctions
 
                     dr = cmdLastInsertLineUser.ExecuteReader()
 
+                    Dim codAccount As String = ""
                     If dr.HasRows Then
                         dr.Read()
-                        cmdUpdateCodeLineUser.Connection = cnn
-                        cmdUpdateCodeLineUser.CommandType = CommandType.Text
-                        cmdUpdateCodeLineUser.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
-                        cmdUpdateCodeLineUser.Parameters.AddWithValue("codaccount", "C" & dr(0).ToString.PadLeft(6, "0"))
-                        cmdUpdateCodeLineUser.ExecuteNonQuery()
+                        codAccount = "C" & dr(0).ToString.PadLeft(6, "0")
+                        cmdUpdateCodeLineAccount.Connection = cnn
+                        cmdUpdateCodeLineAccount.CommandType = CommandType.Text
+                        cmdUpdateCodeLineAccount.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
+                        cmdUpdateCodeLineAccount.Parameters.AddWithValue("codaccount", codAccount)
+                        cmdUpdateCodeLineAccount.ExecuteNonQuery()
                     End If
+
+                    'Registrando la cuenta-usuario
+                    Dim codLineUser As String = ""
+                    If dataUser(7).Length = 0 And dataUser(7) = "" Then
+                        codLineUser = codUser
+                    Else
+                        codLineUser = dataUser(7)
+                    End If
+
+                    cmdInsertAccountUser.Connection = cnn
+                    cmdInsertAccountUser.CommandType = CommandType.Text
+
+                    cmdInsertAccountUser.CommandText = "INSERT INTO users_to_account(COD_USR_LINE, COD_ACCOUNT) VALUES(@coduserline, @codaccount)"
+                    cmdInsertAccountUser.Parameters.AddWithValue("coduserline", codLineUser)
+                    cmdInsertAccountUser.Parameters.AddWithValue("codaccount", codAccount)
+                    cmdInsertAccountUser.ExecuteNonQuery()
 
                     dr.Close()
                     cmdFindUser.Dispose()
                     cmdInsertLine.Dispose()
                     cmdInsertUser.Dispose()
-                    cmdInsertLineUser.Dispose()
+                    cmdInsertLineAccount.Dispose()
                     cmdLastInsertLineUser.Dispose()
-                    cmdUpdateCodeLineUser.Dispose()
+                    cmdUpdateCodeLineAccount.Dispose()
+                    cmdInsertAccountUser.Dispose()
 
                     MsgBox("La linea se guardo exitosamente", vbInformation, "Aviso")
                 Else
                     If vFindUser Then
-                        MsgBox("El numero de documento que trata ya esta en uso", vbExclamation, "Aviso")
+                        MsgBox("El numero de documento ya esta registrado", vbExclamation, "Aviso")
                     End If
                     If vFindLine Then
                         MsgBox("El codigo de linea ya esta en uso", vbExclamation, "Aviso")
