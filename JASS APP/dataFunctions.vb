@@ -607,7 +607,10 @@ Module dataFunctions
 
     Public Sub saveLineNew(dataLine() As String, dataUser() As String, Optional vPriceRate As Double = 0)
         Dim codUser As String = generateCode(15, True, True, True)
+        Dim vFindUser, vFindLine As Boolean
 
+        Dim cmdFindLine As New OleDbCommand
+        Dim cmdFindUser As New OleDbCommand
         Dim cmdInsertLine As New OleDbCommand
         Dim cmdInsertUser As New OleDbCommand
         Dim cmdInsertLineUser As New OleDbCommand
@@ -616,92 +619,109 @@ Module dataFunctions
         Dim dr As OleDbDataReader
 
         If Not (cnn.DataSource.Equals("")) Then
-            cmdInsertLine.Connection = cnn
-            cmdInsertUser.Connection = cnn
-            cmdInsertLineUser.Connection = cnn
-            cmdInsertLine.CommandType = CommandType.Text
-            cmdInsertUser.CommandType = CommandType.Text
-            cmdInsertLineUser.CommandType = CommandType.Text
-
-            If (dataLine(1) = "" Or dataLine(1) = Nothing) Then
-                dataLine(1) = dataLine(0)
-            End If
-
-            cmdInsertLine.CommandText = "INSERT INTO lines(COD_LINE, NAME_LINE, ID_SECTOR, ADDRESS, INSTALLDATE_LINE, DESCP_LINE) VALUES(@codline, @nameline, @codsector, @address, @installdate, @descpline)"
-            cmdInsertLine.Parameters.AddWithValue("codline", dataLine(0))
-            cmdInsertLine.Parameters.AddWithValue("nameline", dataLine(1))
-            cmdInsertLine.Parameters.AddWithValue("codsector", dataLine(2))
-            cmdInsertLine.Parameters.AddWithValue("address", dataLine(3))
-            cmdInsertLine.Parameters.AddWithValue("installdate", dataLine(5))
-            cmdInsertLine.Parameters.AddWithValue("descpline", dataLine(6))
-
-            cmdInsertUser.CommandText = "INSERT INTO user_lines(COD_USR_LINE, USER_NAMES, USER_SURNAMES, USER_TYPE, USER_DOCID, USER_ADRSS, USER_CEL, USER_TEL) VALUES(@coduserline, @nameuser, @surnameuser, @typeuser, @dociduser, @addressuser, @celluser, @teleuser)"
-            cmdInsertUser.Parameters.AddWithValue("coduserline", codUser)
-            cmdInsertUser.Parameters.AddWithValue("nameuser", dataUser(0))
-            cmdInsertUser.Parameters.AddWithValue("surnameuser", dataUser(1))
-            cmdInsertUser.Parameters.AddWithValue("typeuser", dataUser(2))
-            cmdInsertUser.Parameters.AddWithValue("dociduser", dataUser(3))
-            cmdInsertUser.Parameters.AddWithValue("addressuser", dataUser(4))
-            cmdInsertUser.Parameters.AddWithValue("celluser", dataUser(5))
-            cmdInsertUser.Parameters.AddWithValue("teleuser", dataUser(6))
-
-            If dataUser(7).Length > 0 And dataUser(7) <> "" Then
-                cmdInsertLineUser.CommandText = "INSERT INTO lines_to_users(COD_LINE, COD_USR_LINE, TITULAR_LINE, ID_RATE, PRICE_RATE) VALUES(@codline, @coduserline, @titular, @codrate, @pricerate)"
-                cmdInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
-                cmdInsertLineUser.Parameters.AddWithValue("coduserline", dataUser(7))
-                cmdInsertLineUser.Parameters.AddWithValue("titular", Convert.ToBoolean(True))
-                cmdInsertLineUser.Parameters.AddWithValue("codrate", dataLine(4))
-                cmdInsertLineUser.Parameters.AddWithValue("pricerate", vPriceRate)
-            Else
-                cmdInsertLineUser.CommandText = "INSERT INTO lines_to_users(COD_LINE, COD_USR_LINE, TITULAR_LINE, ID_RATE, PRICE_RATE) VALUES(@codline, @coduserline, @titular, @codrate, @pricerate)"
-                cmdInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
-                cmdInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
-                cmdInsertLineUser.Parameters.AddWithValue("titular", Convert.ToBoolean(True))
-                cmdInsertLineUser.Parameters.AddWithValue("codrate", dataLine(4))
-                cmdInsertLineUser.Parameters.AddWithValue("pricerate", vPriceRate)
-            End If
-
-
             Try
-                If dataUser(7).Length = 0 And dataUser(7) = "" Then
-                    dr = cmdInsertUser.ExecuteReader()
-                End If
-                dr = cmdInsertLine.ExecuteReader()
-                dr = cmdInsertLineUser.ExecuteReader()
+                cmdFindUser.Connection = cnn
+                cmdFindUser.CommandType = CommandType.Text
+                cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
+                cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
+                dr = cmdFindUser.ExecuteReader
+                vFindUser = dr.HasRows
 
-                cmdLastInsertLineUser.Connection = cnn
-                cmdLastInsertLineUser.CommandType = CommandType.Text
-                cmdLastInsertLineUser.CommandText = "SELECT lines_to_users.ID_ACCOUNT FROM lines_to_users WHERE COD_LINE LIKE @codline AND COD_USR_LINE LIKE @coduserline"
-                cmdLastInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
-                If dataUser(7).Length = 0 And dataUser(7) = "" Then
-                    cmdLastInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
+                cmdFindLine.Connection = cnn
+                cmdFindLine.CommandType = CommandType.Text
+                cmdFindLine.CommandText = "SELECT * FROM lines WHERE lines.COD_LINE LIKE @codline"
+                cmdFindLine.Parameters.AddWithValue("codline", dataLine(0))
+                dr = cmdFindLine.ExecuteReader
+                vFindLine = dr.HasRows
+
+                If Not vFindUser And Not vFindLine Then
+                    'Registrando un nuevo usuario
+                    cmdInsertUser.Connection = cnn
+                    cmdInsertUser.CommandType = CommandType.Text
+
+                    cmdInsertUser.CommandText = "INSERT INTO user_lines(COD_USR_LINE, USER_NAMES, USER_SURNAMES, USER_TYPE, USER_DOCID, USER_ADRSS, USER_CEL, USER_TEL) VALUES(@coduserline, @nameuser, @surnameuser, @typeuser, @dociduser, @addressuser, @celluser, @teleuser)"
+                    cmdInsertUser.Parameters.AddWithValue("coduserline", codUser)
+                    cmdInsertUser.Parameters.AddWithValue("nameuser", dataUser(0))
+                    cmdInsertUser.Parameters.AddWithValue("surnameuser", dataUser(1))
+                    cmdInsertUser.Parameters.AddWithValue("typeuser", dataUser(2))
+                    cmdInsertUser.Parameters.AddWithValue("dociduser", dataUser(3))
+                    cmdInsertUser.Parameters.AddWithValue("addressuser", dataUser(4))
+                    cmdInsertUser.Parameters.AddWithValue("celluser", dataUser(5))
+                    cmdInsertUser.Parameters.AddWithValue("teleuser", dataUser(6))
+
+                    If dataUser(7).Length = 0 And dataUser(7) = "" Then
+                        cmdInsertUser.ExecuteNonQuery()
+                    End If
+
+                    'Registrando una nueva linea
+                    cmdInsertLine.Connection = cnn
+                    cmdInsertLine.CommandType = CommandType.Text
+
+                    If (dataLine(1) = "" Or dataLine(1) = Nothing) Then
+                        dataLine(1) = dataLine(0)
+                    End If
+
+                    cmdInsertLine.CommandText = "INSERT INTO lines(COD_LINE, NAME_LINE, ID_SECTOR, ADDRESS, INSTALLDATE_LINE, DESCP_LINE) VALUES(@codline, @nameline, @codsector, @address, @installdate, @descpline)"
+                    cmdInsertLine.Parameters.AddWithValue("codline", dataLine(0))
+                    cmdInsertLine.Parameters.AddWithValue("nameline", dataLine(1))
+                    cmdInsertLine.Parameters.AddWithValue("codsector", dataLine(2))
+                    cmdInsertLine.Parameters.AddWithValue("address", dataLine(3))
+                    cmdInsertLine.Parameters.AddWithValue("installdate", dataLine(5))
+                    cmdInsertLine.Parameters.AddWithValue("descpline", dataLine(6))
+
+                    'Registrando una linea-cuenta
+                    cmdInsertLineUser.Connection = cnn
+                    cmdInsertLineUser.CommandType = CommandType.Text
+
+                    cmdInsertLineUser.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
+                    cmdInsertLineUser.Parameters.AddWithValue("codaccount", "new")
+                    cmdInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
+                    cmdInsertLineUser.Parameters.AddWithValue("codrate", dataLine(4))
+                    cmdInsertLineUser.Parameters.AddWithValue("pricerate", vPriceRate)
+
+                    cmdInsertLine.ExecuteNonQuery()
+                    cmdInsertLineUser.ExecuteNonQuery()
+
+                    'Buscando y cambiando el codigo de cuenta
+                    cmdLastInsertLineUser.Connection = cnn
+                    cmdLastInsertLineUser.CommandType = CommandType.Text
+
+                    cmdLastInsertLineUser.CommandText = "SELECT lines_to_account.ID_ACCOUNT FROM lines_to_account WHERE lines_to_account.COD_LINE LIKE @codline AND lines_to_account.COD_ACCOUNT LIKE @codaccount"
+                    cmdLastInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
+                    cmdLastInsertLineUser.Parameters.AddWithValue("codaccount", "new")
+
+                    dr = cmdLastInsertLineUser.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dr.Read()
+                        cmdUpdateCodeLineUser.Connection = cnn
+                        cmdUpdateCodeLineUser.CommandType = CommandType.Text
+                        cmdUpdateCodeLineUser.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
+                        cmdUpdateCodeLineUser.Parameters.AddWithValue("codaccount", "C" & dr(0).ToString.PadLeft(6, "0"))
+                        cmdUpdateCodeLineUser.ExecuteNonQuery()
+                    End If
+
+                    dr.Close()
+                    cmdFindUser.Dispose()
+                    cmdInsertLine.Dispose()
+                    cmdInsertUser.Dispose()
+                    cmdInsertLineUser.Dispose()
+                    cmdLastInsertLineUser.Dispose()
+                    cmdUpdateCodeLineUser.Dispose()
+
+                    MsgBox("La linea se guardo exitosamente", vbInformation, "Aviso")
                 Else
-                    cmdLastInsertLineUser.Parameters.AddWithValue("coduserline", dataUser(7))
+                    If vFindUser Then
+                        MsgBox("El numero de documento que trata ya esta en uso", vbExclamation, "Aviso")
+                    End If
+                    If vFindLine Then
+                        MsgBox("El codigo de linea ya esta en uso", vbExclamation, "Aviso")
+                    End If
+                    Exit Sub
                 End If
-
-
-                dr = cmdLastInsertLineUser.ExecuteReader()
-                If dr.HasRows Then
-                    dr.Read()
-                    cmdUpdateCodeLineUser.Connection = cnn
-                    cmdUpdateCodeLineUser.CommandType = CommandType.Text
-                    cmdUpdateCodeLineUser.CommandText = "UPDATE lines_to_users SET lines_to_users.COD_ACCOUNT = @codaccount WHERE lines_to_users.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
-                    cmdUpdateCodeLineUser.Parameters.AddWithValue("codaccount", "C" & dr(0).ToString.PadLeft(6, "0"))
-                    cmdUpdateCodeLineUser.ExecuteNonQuery()
-                End If
-
-
-                dr.Close()
-                cmdInsertLine.Dispose()
-                cmdInsertUser.Dispose()
-                cmdInsertLineUser.Dispose()
-                cmdLastInsertLineUser.Dispose()
-                cmdUpdateCodeLineUser.Dispose()
-
-                MsgBox("La linea se guardo exitosamente", vbInformation, "Aviso")
             Catch ex As Exception
                 MsgBox("Ocurrio un error al guardar el registro", vbCritical, "Aviso")
-                MsgBox(ex.Message)
+            MsgBox(ex.Message)
             End Try
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
