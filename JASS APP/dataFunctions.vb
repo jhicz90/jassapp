@@ -338,7 +338,7 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub listUserOfLine(vCodLine As String, dgUserOfLine As DataGridView)
+    Public Sub listAccountLine(vCodLine As String, dgAccountLine As DataGridView)
         Dim cmd As New OleDbCommand
         Dim dr As OleDbDataReader
 
@@ -347,7 +347,6 @@ Module dataFunctions
         Else
             cmd.Connection = cnn
             cmd.CommandType = CommandType.Text
-
             cmd.CommandText = "SELECT lines_to_account.COD_LINE, rates.ID_RATE, lines_to_account.COD_ACCOUNT, (SELECT TOP 1 (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM users_to_account INNER JOIN user_lines ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE WHERE users_to_account.COD_ACCOUNT = lines_to_account.COD_ACCOUNT), rates.NAME_RATE 
             FROM lines_to_account INNER JOIN rates ON lines_to_account.ID_RATE = rates.ID_RATE
             WHERE lines_to_account.COD_LINE = @codline"
@@ -357,12 +356,46 @@ Module dataFunctions
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
-                    dgUserOfLine.Rows.Clear()
+                    dgAccountLine.Rows.Clear()
                     While dr.Read()
-                        dgUserOfLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString)
+                        dgAccountLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString)
                     End While
                 Else
-                    dgUserOfLine.Rows.Clear()
+                    dgAccountLine.Rows.Clear()
+                End If
+                dr.Close()
+                cmd.Dispose()
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
+    Public Sub listUserAccount(vCodLine As String, vCodAccount As String, dgUserAccount As DataGridView)
+        Dim cmd As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        If cnn.DataSource.Equals("") Then
+            MsgBox("Error de conexion", vbExclamation, "Aviso")
+        Else
+            cmd.Connection = cnn
+            cmd.CommandType = CommandType.Text
+            cmd.CommandText = "SELECT lines_to_account.COD_ACCOUNT, lines_to_account.COD_LINE, user_lines.COD_USR_LINE, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID, user_type.NAME_TYPE 
+            FROM (lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN user_type ON user_lines.USER_TYPE = user_type.ID_TYPE_USER 
+            WHERE lines_to_account.COD_LINE = @codline AND lines_to_account.COD_ACCOUNT = @codaccount"
+            cmd.Parameters.AddWithValue("codline", vCodLine)
+            cmd.Parameters.AddWithValue("codaccount", vCodAccount)
+
+            Try
+                dr = cmd.ExecuteReader()
+
+                If dr.HasRows Then
+                    dgUserAccount.Rows.Clear()
+                    While dr.Read()
+                        dgUserAccount.Rows.Add(dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString)
+                    End While
+                Else
+                    dgUserAccount.Rows.Clear()
                 End If
                 dr.Close()
                 cmd.Dispose()
@@ -841,7 +874,6 @@ Module dataFunctions
             If Not (vCodLine = Nothing And vCodUser = Nothing) Then
                 cmdDeleteLineUser.CommandText = "DELETE * FROM lines_to_users " &
                     "WHERE lines_to_users.COD_LINE = @codline AND lines_to_users.COD_USR_LINE = @codusrline"
-
                 cmdDeleteLineUser.Parameters.AddWithValue("codline", vCodLine)
                 cmdDeleteLineUser.Parameters.AddWithValue("codusrline", vCodUser)
 
@@ -862,24 +894,65 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub showEditLine(codLine As String)
-        frmEditLine.vCodEditLine = codLine
+    Public Sub showEditLine(vCodLine As String)
+        frmEditLine.vCodEditLine = vCodLine
         frmEditLine.ShowDialog()
     End Sub
 
-    Public Sub showNewEditUser(vState As Integer, vForm As Form, Optional vCodUser As String = "new", Optional vCodLine As String = Nothing, Optional vCodRate As Integer = 0)
-        frmNewuser.vFrmGet = vState
-        frmNewuser.vCodUser = vCodUser
-
-        If vState = 1 Then
-            frmNewuser.MdiParent = vForm
-            frmNewuser.Show()
-        ElseIf vState = 2 Or vState = 3 Then
-            frmNewuser.ShowDialog(vForm)
-        End If
-
-        frmNewuser.Focus()
+    Public Sub showAccount(vCodLine As String, vCodAccount As String)
+        frmAccount.vCodLine = vCodLine
+        frmAccount.vCodAccount = vCodAccount
+        frmAccount.ShowDialog()
     End Sub
+
+    Public Function getAccount(vCodLine As String, vCodAccount As String) As String()
+        Dim cmdGetAccount As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        If Not (cnn.DataSource.Equals("")) Then
+            cmdGetAccount.Connection = cnn
+            cmdGetAccount.CommandType = CommandType.Text
+
+            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
+                cmdGetAccount.CommandText = "SELECT lines_to_account.COD_ACCOUNT, lines_to_account.COD_LINE, lines_to_account.ID_RATE, lines_to_account.PRICE_RATE, lines_to_account.ACCOUNT_CREATED, lines_to_account.ACCOUNT_UPDATED 
+                FROM lines_to_account WHERE lines_to_account.COD_ACCOUNT = @codaccount AND lines_to_account.COD_LINE = @codline"
+                cmdGetAccount.Parameters.AddWithValue("codaccount", vCodAccount)
+                cmdGetAccount.Parameters.AddWithValue("codline", vCodLine)
+
+                Try
+                    dr = cmdGetAccount.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dr.Read()
+                        cmdGetAccount.Dispose()
+
+                        Dim dataAccount(5) As String
+                        dataAccount(0) = dr(0).ToString
+                        dataAccount(1) = dr(1).ToString
+                        dataAccount(2) = dr(2).ToString
+                        dataAccount(3) = dr(3).ToString
+                        dataAccount(4) = Format(dr(4).ToString, "Short Date")
+                        dataAccount(5) = Format(dr(5).ToString, "Short Date")
+
+                        Return dataAccount
+                    Else
+                        MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
+                        Return Nothing
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al obtener el registro", vbCritical, "Aviso")
+                    MsgBox(ex.Message)
+                    Return Nothing
+                End Try
+            Else
+                MsgBox("No se envio el codigo de la cuenta", vbCritical, "Aviso")
+                Return Nothing
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            Return Nothing
+        End If
+    End Function
 
     Public Function getLine(vCodLine As String) As String()
         Dim cmd As New OleDbCommand

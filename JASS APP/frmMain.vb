@@ -23,7 +23,7 @@
     End Sub
 
     Private Sub tsmiNewUser_Click(sender As Object, e As EventArgs) Handles tsmiNewUser.Click
-        showNewEditUser(1, Me)
+        'Nuevo usuario
     End Sub
 
     Private Sub tsmiFindLines_Click(sender As Object, e As EventArgs) Handles tsmiFindLines.Click

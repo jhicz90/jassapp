@@ -33,8 +33,8 @@ Partial Class frmAccount
         Me.cbxRates = New System.Windows.Forms.ComboBox()
         Me.tabDataAccount = New System.Windows.Forms.TabControl()
         Me.tabpageAcounts = New System.Windows.Forms.TabPage()
+        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.tabpageUsers = New System.Windows.Forms.TabPage()
-        Me.btnNewUser = New System.Windows.Forms.Button()
         Me.dtgUsersAccount = New System.Windows.Forms.DataGridView()
         Me.clmCodUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -42,7 +42,11 @@ Partial Class frmAccount
         Me.clmTypeUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.clmDelete = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.btnNewUser = New System.Windows.Forms.Button()
+        Me.txtDateUpdated = New System.Windows.Forms.TextBox()
+        Me.txtDateCreated = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -53,9 +57,9 @@ Partial Class frmAccount
         Me.GroupBox1.SuspendLayout()
         Me.tabDataAccount.SuspendLayout()
         Me.tabpageAcounts.SuspendLayout()
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabpageUsers.SuspendLayout()
         CType(Me.dtgUsersAccount, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'txtCodAccount
@@ -65,7 +69,7 @@ Partial Class frmAccount
         Me.txtCodAccount.Name = "txtCodAccount"
         Me.txtCodAccount.ReadOnly = True
         Me.txtCodAccount.Size = New System.Drawing.Size(200, 22)
-        Me.txtCodAccount.TabIndex = 0
+        Me.txtCodAccount.TabIndex = 2
         '
         'txtCodLine
         '
@@ -78,16 +82,18 @@ Partial Class frmAccount
         '
         'GroupBox1
         '
+        Me.GroupBox1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.GroupBox1.Controls.Add(Me.Label13)
         Me.GroupBox1.Controls.Add(Me.txtDescRate)
         Me.GroupBox1.Controls.Add(Me.txtPriceRate)
         Me.GroupBox1.Controls.Add(Me.Label12)
         Me.GroupBox1.Controls.Add(Me.Label7)
         Me.GroupBox1.Controls.Add(Me.cbxRates)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 40)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 66)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(760, 104)
-        Me.GroupBox1.TabIndex = 2
+        Me.GroupBox1.TabIndex = 3
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Datos de la tarifa del servicio"
         '
@@ -110,7 +116,7 @@ Partial Class frmAccount
         Me.txtDescRate.Name = "txtDescRate"
         Me.txtDescRate.ReadOnly = True
         Me.txtDescRate.Size = New System.Drawing.Size(620, 52)
-        Me.txtDescRate.TabIndex = 19
+        Me.txtDescRate.TabIndex = 3
         Me.txtDescRate.TabStop = False
         '
         'txtPriceRate
@@ -119,7 +125,7 @@ Partial Class frmAccount
         Me.txtPriceRate.Name = "txtPriceRate"
         Me.txtPriceRate.ReadOnly = True
         Me.txtPriceRate.Size = New System.Drawing.Size(160, 20)
-        Me.txtPriceRate.TabIndex = 20
+        Me.txtPriceRate.TabIndex = 2
         Me.txtPriceRate.TabStop = False
         Me.txtPriceRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -148,17 +154,20 @@ Partial Class frmAccount
         Me.cbxRates.Location = New System.Drawing.Point(134, 19)
         Me.cbxRates.Name = "cbxRates"
         Me.cbxRates.Size = New System.Drawing.Size(387, 21)
-        Me.cbxRates.TabIndex = 21
+        Me.cbxRates.TabIndex = 1
         '
         'tabDataAccount
         '
+        Me.tabDataAccount.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tabDataAccount.Controls.Add(Me.tabpageAcounts)
         Me.tabDataAccount.Controls.Add(Me.tabpageUsers)
-        Me.tabDataAccount.Location = New System.Drawing.Point(12, 150)
+        Me.tabDataAccount.Location = New System.Drawing.Point(12, 176)
         Me.tabDataAccount.Name = "tabDataAccount"
         Me.tabDataAccount.SelectedIndex = 0
-        Me.tabDataAccount.Size = New System.Drawing.Size(760, 499)
-        Me.tabDataAccount.TabIndex = 3
+        Me.tabDataAccount.Size = New System.Drawing.Size(760, 473)
+        Me.tabDataAccount.TabIndex = 4
         '
         'tabpageAcounts
         '
@@ -166,10 +175,31 @@ Partial Class frmAccount
         Me.tabpageAcounts.Location = New System.Drawing.Point(4, 22)
         Me.tabpageAcounts.Name = "tabpageAcounts"
         Me.tabpageAcounts.Padding = New System.Windows.Forms.Padding(5)
-        Me.tabpageAcounts.Size = New System.Drawing.Size(752, 473)
+        Me.tabpageAcounts.Size = New System.Drawing.Size(752, 447)
         Me.tabpageAcounts.TabIndex = 0
         Me.tabpageAcounts.Text = "CUENTAS ANUALES"
         Me.tabpageAcounts.UseVisualStyleBackColor = True
+        '
+        'DataGridView1
+        '
+        Me.DataGridView1.AllowUserToAddRows = False
+        Me.DataGridView1.AllowUserToDeleteRows = False
+        Me.DataGridView1.AllowUserToResizeColumns = False
+        Me.DataGridView1.AllowUserToResizeRows = False
+        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.clmState, Me.DataGridViewButtonColumn1, Me.DataGridViewButtonColumn2})
+        Me.DataGridView1.Location = New System.Drawing.Point(9, 50)
+        Me.DataGridView1.Name = "DataGridView1"
+        Me.DataGridView1.ReadOnly = True
+        Me.DataGridView1.RowHeadersVisible = False
+        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.DataGridView1.Size = New System.Drawing.Size(735, 389)
+        Me.DataGridView1.TabIndex = 7
         '
         'tabpageUsers
         '
@@ -178,21 +208,10 @@ Partial Class frmAccount
         Me.tabpageUsers.Location = New System.Drawing.Point(4, 22)
         Me.tabpageUsers.Name = "tabpageUsers"
         Me.tabpageUsers.Padding = New System.Windows.Forms.Padding(20)
-        Me.tabpageUsers.Size = New System.Drawing.Size(752, 473)
+        Me.tabpageUsers.Size = New System.Drawing.Size(752, 447)
         Me.tabpageUsers.TabIndex = 1
         Me.tabpageUsers.Text = "USUARIOS ASOCIADOS A LA CUENTA"
         Me.tabpageUsers.UseVisualStyleBackColor = True
-        '
-        'btnNewUser
-        '
-        Me.btnNewUser.Image = Global.JASS_APP.My.Resources.Resources.add_user_male_32
-        Me.btnNewUser.Location = New System.Drawing.Point(23, 23)
-        Me.btnNewUser.Name = "btnNewUser"
-        Me.btnNewUser.Size = New System.Drawing.Size(140, 48)
-        Me.btnNewUser.TabIndex = 2
-        Me.btnNewUser.Text = "Nuevo Usuario"
-        Me.btnNewUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnNewUser.UseVisualStyleBackColor = True
         '
         'dtgUsersAccount
         '
@@ -263,26 +282,56 @@ Partial Class frmAccount
         Me.clmDelete.UseColumnTextForButtonValue = True
         Me.clmDelete.Width = 75
         '
-        'DataGridView1
+        'btnNewUser
         '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.AllowUserToResizeColumns = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.clmState, Me.DataGridViewButtonColumn1, Me.DataGridViewButtonColumn2})
-        Me.DataGridView1.Location = New System.Drawing.Point(9, 50)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(735, 415)
-        Me.DataGridView1.TabIndex = 7
+        Me.btnNewUser.Image = Global.JASS_APP.My.Resources.Resources.add_user_male_32
+        Me.btnNewUser.Location = New System.Drawing.Point(23, 23)
+        Me.btnNewUser.Name = "btnNewUser"
+        Me.btnNewUser.Size = New System.Drawing.Size(140, 48)
+        Me.btnNewUser.TabIndex = 1
+        Me.btnNewUser.Text = "Nuevo Usuario"
+        Me.btnNewUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnNewUser.UseVisualStyleBackColor = True
+        '
+        'txtDateUpdated
+        '
+        Me.txtDateUpdated.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtDateUpdated.Location = New System.Drawing.Point(636, 40)
+        Me.txtDateUpdated.Name = "txtDateUpdated"
+        Me.txtDateUpdated.ReadOnly = True
+        Me.txtDateUpdated.Size = New System.Drawing.Size(136, 20)
+        Me.txtDateUpdated.TabIndex = 11
+        Me.txtDateUpdated.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txtDateCreated
+        '
+        Me.txtDateCreated.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtDateCreated.Location = New System.Drawing.Point(636, 12)
+        Me.txtDateCreated.Name = "txtDateCreated"
+        Me.txtDateCreated.ReadOnly = True
+        Me.txtDateCreated.Size = New System.Drawing.Size(136, 20)
+        Me.txtDateCreated.TabIndex = 10
+        Me.txtDateCreated.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label4
+        '
+        Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(510, 43)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(62, 13)
+        Me.Label4.TabIndex = 9
+        Me.Label4.Text = "Actualizado"
+        '
+        'Label3
+        '
+        Me.Label3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(510, 15)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(96, 13)
+        Me.Label3.TabIndex = 8
+        Me.Label3.Text = "Fecha de creación"
         '
         'DataGridViewTextBoxColumn1
         '
@@ -293,24 +342,28 @@ Partial Class frmAccount
         '
         'DataGridViewTextBoxColumn2
         '
+        Me.DataGridViewTextBoxColumn2.FillWeight = 30.0!
         Me.DataGridViewTextBoxColumn2.HeaderText = "Año"
         Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
         Me.DataGridViewTextBoxColumn2.ReadOnly = True
         '
         'DataGridViewTextBoxColumn3
         '
+        Me.DataGridViewTextBoxColumn3.FillWeight = 50.0!
         Me.DataGridViewTextBoxColumn3.HeaderText = "Monto Total"
         Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
         Me.DataGridViewTextBoxColumn3.ReadOnly = True
         '
         'DataGridViewTextBoxColumn4
         '
+        Me.DataGridViewTextBoxColumn4.FillWeight = 50.0!
         Me.DataGridViewTextBoxColumn4.HeaderText = "Saldo Total"
         Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
         Me.DataGridViewTextBoxColumn4.ReadOnly = True
         '
         'clmState
         '
+        Me.clmState.FillWeight = 70.0!
         Me.clmState.HeaderText = "Estado"
         Me.clmState.Name = "clmState"
         Me.clmState.ReadOnly = True
@@ -342,11 +395,14 @@ Partial Class frmAccount
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 661)
+        Me.Controls.Add(Me.txtDateUpdated)
+        Me.Controls.Add(Me.txtDateCreated)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.tabDataAccount)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.txtCodLine)
         Me.Controls.Add(Me.txtCodAccount)
-        Me.MaximumSize = New System.Drawing.Size(800, 700)
         Me.Name = "frmAccount"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Cuenta de Servicio"
@@ -354,9 +410,9 @@ Partial Class frmAccount
         Me.GroupBox1.PerformLayout()
         Me.tabDataAccount.ResumeLayout(False)
         Me.tabpageAcounts.ResumeLayout(False)
+        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabpageUsers.ResumeLayout(False)
         CType(Me.dtgUsersAccount, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -377,6 +433,16 @@ Partial Class frmAccount
     Friend WithEvents btnNewUser As Button
     Friend WithEvents dtgUsersAccount As DataGridView
     Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
+    Friend WithEvents clmNames As DataGridViewTextBoxColumn
+    Friend WithEvents clmDocNum As DataGridViewTextBoxColumn
+    Friend WithEvents clmTypeUser As DataGridViewTextBoxColumn
+    Friend WithEvents clmEdit As DataGridViewButtonColumn
+    Friend WithEvents clmDelete As DataGridViewButtonColumn
+    Private WithEvents txtDateUpdated As TextBox
+    Private WithEvents txtDateCreated As TextBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label3 As Label
     Friend WithEvents DataGridViewTextBoxColumn1 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn2 As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn3 As DataGridViewTextBoxColumn
@@ -384,10 +450,4 @@ Partial Class frmAccount
     Friend WithEvents clmState As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewButtonColumn1 As DataGridViewButtonColumn
     Friend WithEvents DataGridViewButtonColumn2 As DataGridViewButtonColumn
-    Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
-    Friend WithEvents clmNames As DataGridViewTextBoxColumn
-    Friend WithEvents clmDocNum As DataGridViewTextBoxColumn
-    Friend WithEvents clmTypeUser As DataGridViewTextBoxColumn
-    Friend WithEvents clmEdit As DataGridViewButtonColumn
-    Friend WithEvents clmDelete As DataGridViewButtonColumn
 End Class

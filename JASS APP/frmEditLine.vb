@@ -34,21 +34,21 @@ Public Class frmEditLine
                 txtDescpLine.Text = dataLine(6)
 
                 dataLineOriginal = dataLine
-                listUserOfLine(dataLine(1), dtgAccountLine)
+                listAccountLine(dataLine(1), dtgAccountLine)
             End If
         End If
     End Sub
 
     Public Sub userFound(vActive As Boolean, Optional vDataUser() As String = Nothing, Optional vRates As Integer = 0, Optional vPriceRate As Double = 0)
         addUserToLine(txtCodLine.Text, vDataUser, vRates, vPriceRate)
-        listUserOfLine(txtCodLine.Text, dtgAccountLine)
+        listAccountLine(txtCodLine.Text, dtgAccountLine)
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
         Close()
     End Sub
 
-    Private Sub btnAddUser_Click(sender As Object, e As EventArgs) Handles btnAddAccount.Click
+    Private Sub btnAddAccount_Click(sender As Object, e As EventArgs) Handles btnAddAccount.Click
         frmFindUsers.vFrmGet = 2
         frmFindUsers.ShowDialog()
     End Sub
@@ -102,19 +102,19 @@ Public Class frmEditLine
             If MsgBox("¿Desea eleminar a " & dtgAccountLine.Item(3, e.RowIndex).Value & " " & dtgAccountLine.Item(4, e.RowIndex).Value & vbCr & " de " & txtNameLine.Text & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
                 Try
                     deleteUserToLine(txtCodLine.Text, dtgAccountLine.Item(0, e.RowIndex).Value)
-                    listUserOfLine(txtCodLine.Text, dtgAccountLine)
+                    listAccountLine(txtCodLine.Text, dtgAccountLine)
                 Catch ex As Exception
                     MsgBox("Ocurrio un error", vbExclamation, "Aviso")
                 End Try
             End If
         ElseIf dtgAccountLine.Columns(e.ColumnIndex).Name = "clmEdit" Then
-            showNewEditUser(2, Me, dtgAccountLine.Item(0, e.RowIndex).Value, txtCodLine.Text, dtgAccountLine.Item(2, e.RowIndex).Value)
-            listUserOfLine(txtCodLine.Text, dtgAccountLine)
+            showAccount(dtgAccountLine.Item(0, e.RowIndex).Value, dtgAccountLine.Item(2, e.RowIndex).Value)
+            listAccountLine(txtCodLine.Text, dtgAccountLine)
         End If
     End Sub
 
-    Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewAccount.Click
-        showNewEditUser(3, Me, "new", txtCodLine.Text)
-        listUserOfLine(txtCodLine.Text, dtgAccountLine)
+    Private Sub btnNewAccount_Click(sender As Object, e As EventArgs) Handles btnNewAccount.Click
+        showAccount(txtCodLine.Text, "new")
+        listAccountLine(txtCodLine.Text, dtgAccountLine)
     End Sub
 End Class
