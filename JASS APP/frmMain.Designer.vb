@@ -73,7 +73,7 @@ Partial Class frmMain
         '
         Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiSharedLine, Me.tsmiNewUser})
         Me.tsmiNew.Name = "tsmiNew"
-        Me.tsmiNew.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiNew.Size = New System.Drawing.Size(150, 22)
         Me.tsmiNew.Text = "Nuevo"
         '
         'tsmiNewLine
@@ -108,13 +108,13 @@ Partial Class frmMain
         'tsmiPrint
         '
         Me.tsmiPrint.Name = "tsmiPrint"
-        Me.tsmiPrint.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiPrint.Size = New System.Drawing.Size(150, 22)
         Me.tsmiPrint.Text = "Impresora"
         '
         'tsmiConfig
         '
         Me.tsmiConfig.Name = "tsmiConfig"
-        Me.tsmiConfig.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiConfig.Size = New System.Drawing.Size(150, 22)
         Me.tsmiConfig.Text = "Configuración"
         '
         'tsmiExit
@@ -122,7 +122,7 @@ Partial Class frmMain
         Me.tsmiExit.Name = "tsmiExit"
         Me.tsmiExit.ShortcutKeyDisplayString = "Alt + F4"
         Me.tsmiExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.tsmiExit.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiExit.Size = New System.Drawing.Size(150, 22)
         Me.tsmiExit.Text = "&Salir"
         '
         'tsdpdRegister

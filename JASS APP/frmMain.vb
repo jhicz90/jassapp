@@ -31,15 +31,23 @@
         frmFindLines.Focus()
     End Sub
 
+    Private Sub tsmiCollectBox_Click(sender As Object, e As EventArgs) Handles tsmiCollectBox.Click
+        frmFindCollect.Show()
+        frmFindCollect.Focus()
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         frmNewline.Close()
         frmFindLines.Close()
+        frmFindCollect.Close()
         frmEditLine.Close()
+        frmNewuser.Close()
     End Sub
 
     Private Sub tsmiMinWindows_Click(sender As Object, e As EventArgs) Handles tsmiMinWindows.Click
         frmNewline.WindowState = FormWindowState.Minimized
         frmFindLines.WindowState = FormWindowState.Minimized
+        frmFindCollect.WindowState = FormWindowState.Minimized
         frmEditLine.WindowState = FormWindowState.Minimized
         frmNewuser.WindowState = FormWindowState.Minimized
     End Sub
@@ -47,6 +55,7 @@
     Private Sub tsmiMaxWindows_Click(sender As Object, e As EventArgs) Handles tsmiMaxWindows.Click
         frmNewline.WindowState = FormWindowState.Normal
         frmFindLines.WindowState = FormWindowState.Normal
+        frmFindCollect.WindowState = FormWindowState.Normal
         frmEditLine.WindowState = FormWindowState.Normal
         frmNewuser.WindowState = FormWindowState.Normal
     End Sub
@@ -54,4 +63,5 @@
     Private Sub tsmiAbout_Click(sender As Object, e As EventArgs) Handles tsmiAbout.Click
         frmAbout.ShowDialog()
     End Sub
+
 End Class

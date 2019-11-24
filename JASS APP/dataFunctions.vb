@@ -905,6 +905,10 @@ Module dataFunctions
         frmAccount.ShowDialog()
     End Sub
 
+    Public Sub showCollect()
+        'Cobrar cuenta
+    End Sub
+
     Public Function getAccount(vCodLine As String, vCodAccount As String) As String()
         Dim cmdGetAccount As New OleDbCommand
         Dim dr As OleDbDataReader

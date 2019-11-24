@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmFindLines
+Partial Class frmFindCollect
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
@@ -22,11 +22,11 @@ Partial Class frmFindLines
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.cbxCrit = New System.Windows.Forms.ComboBox()
-        Me.txtFind = New System.Windows.Forms.TextBox()
         Me.btnFind = New System.Windows.Forms.Button()
+        Me.txtFind = New System.Windows.Forms.TextBox()
+        Me.cbxCrit = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.dtgLines = New System.Windows.Forms.DataGridView()
         Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNameLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -37,23 +37,22 @@ Partial Class frmFindLines
         CType(Me.dtgLines, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
-        'Label1
+        'btnFind
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 9)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(61, 13)
-        Me.Label1.TabIndex = 0
-        Me.Label1.Text = "Buscar por:"
+        Me.btnFind.Location = New System.Drawing.Point(729, 24)
+        Me.btnFind.Name = "btnFind"
+        Me.btnFind.Size = New System.Drawing.Size(143, 23)
+        Me.btnFind.TabIndex = 7
+        Me.btnFind.Text = "Buscar"
+        Me.btnFind.UseVisualStyleBackColor = True
         '
-        'Label2
+        'txtFind
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(202, 9)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(115, 13)
-        Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Ingrese texto a buscar:"
+        Me.txtFind.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.txtFind.Location = New System.Drawing.Point(205, 25)
+        Me.txtFind.Name = "txtFind"
+        Me.txtFind.Size = New System.Drawing.Size(518, 20)
+        Me.txtFind.TabIndex = 6
         '
         'cbxCrit
         '
@@ -63,24 +62,25 @@ Partial Class frmFindLines
         Me.cbxCrit.Location = New System.Drawing.Point(12, 24)
         Me.cbxCrit.Name = "cbxCrit"
         Me.cbxCrit.Size = New System.Drawing.Size(187, 21)
-        Me.cbxCrit.TabIndex = 1
+        Me.cbxCrit.TabIndex = 5
         '
-        'txtFind
+        'Label2
         '
-        Me.txtFind.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.txtFind.Location = New System.Drawing.Point(205, 25)
-        Me.txtFind.Name = "txtFind"
-        Me.txtFind.Size = New System.Drawing.Size(518, 20)
-        Me.txtFind.TabIndex = 2
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(202, 9)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(115, 13)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "Ingrese texto a buscar:"
         '
-        'btnFind
+        'Label1
         '
-        Me.btnFind.Location = New System.Drawing.Point(729, 24)
-        Me.btnFind.Name = "btnFind"
-        Me.btnFind.Size = New System.Drawing.Size(143, 23)
-        Me.btnFind.TabIndex = 3
-        Me.btnFind.Text = "Buscar"
-        Me.btnFind.UseVisualStyleBackColor = True
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 9)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(61, 13)
+        Me.Label1.TabIndex = 4
+        Me.Label1.Text = "Buscar por:"
         '
         'dtgLines
         '
@@ -102,7 +102,7 @@ Partial Class frmFindLines
         Me.dtgLines.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgLines.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgLines.Size = New System.Drawing.Size(860, 397)
-        Me.dtgLines.TabIndex = 7
+        Me.dtgLines.TabIndex = 9
         '
         'clmCodLine
         '
@@ -152,11 +152,11 @@ Partial Class frmFindLines
         Me.clmOptions.HeaderText = ""
         Me.clmOptions.Name = "clmOptions"
         Me.clmOptions.ReadOnly = True
-        Me.clmOptions.Text = "Editar"
+        Me.clmOptions.Text = "Ver"
         Me.clmOptions.UseColumnTextForButtonValue = True
         Me.clmOptions.Width = 75
         '
-        'frmFindLines
+        'frmFindCollect
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -168,20 +168,20 @@ Partial Class frmFindLines
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
         Me.MinimumSize = New System.Drawing.Size(900, 500)
-        Me.Name = "frmFindLines"
+        Me.Name = "frmFindCollect"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Lineas de servicio"
+        Me.Text = "Cobranza"
         CType(Me.dtgLines, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
     End Sub
 
-    Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
-    Friend WithEvents cbxCrit As ComboBox
-    Friend WithEvents txtFind As TextBox
     Friend WithEvents btnFind As Button
+    Friend WithEvents txtFind As TextBox
+    Friend WithEvents cbxCrit As ComboBox
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
     Friend WithEvents dtgLines As DataGridView
     Friend WithEvents clmCodLine As DataGridViewTextBoxColumn
     Friend WithEvents clmNameLine As DataGridViewTextBoxColumn
