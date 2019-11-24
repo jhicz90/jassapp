@@ -35,7 +35,6 @@ Partial Class frmNewuser
         Me.Label14 = New System.Windows.Forms.Label()
         Me.cbxTypeUser = New System.Windows.Forms.ComboBox()
         Me.Label10 = New System.Windows.Forms.Label()
-        Me.chkTitular = New System.Windows.Forms.CheckBox()
         Me.txtNames = New System.Windows.Forms.TextBox()
         Me.txtCellphone = New System.Windows.Forms.TextBox()
         Me.txtTelephone = New System.Windows.Forms.TextBox()
@@ -43,10 +42,6 @@ Partial Class frmNewuser
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.grpRate = New System.Windows.Forms.GroupBox()
-        Me.txtPriceRate = New System.Windows.Forms.TextBox()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.cbxRates = New System.Windows.Forms.ComboBox()
         Me.txtDateUpdated = New System.Windows.Forms.TextBox()
         Me.txtDateCreated = New System.Windows.Forms.TextBox()
         Me.txtCodUser = New System.Windows.Forms.TextBox()
@@ -57,7 +52,6 @@ Partial Class frmNewuser
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.Panel3.SuspendLayout()
-        Me.grpRate.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpUser
@@ -92,7 +86,6 @@ Partial Class frmNewuser
         Me.TableLayoutPanel2.Controls.Add(Me.Label14, 2, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.cbxTypeUser, 3, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.Label10, 2, 3)
-        Me.TableLayoutPanel2.Controls.Add(Me.chkTitular, 3, 2)
         Me.TableLayoutPanel2.Controls.Add(Me.txtNames, 1, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.txtCellphone, 3, 3)
         Me.TableLayoutPanel2.Controls.Add(Me.txtTelephone, 1, 3)
@@ -215,17 +208,6 @@ Partial Class frmNewuser
         Me.Label10.TabIndex = 11
         Me.Label10.Text = "Celular:"
         '
-        'chkTitular
-        '
-        Me.chkTitular.AutoSize = True
-        Me.chkTitular.Location = New System.Drawing.Point(451, 66)
-        Me.chkTitular.Margin = New System.Windows.Forms.Padding(4)
-        Me.chkTitular.Name = "chkTitular"
-        Me.chkTitular.Size = New System.Drawing.Size(164, 20)
-        Me.chkTitular.TabIndex = 6
-        Me.chkTitular.Text = "Tittular o representante"
-        Me.chkTitular.UseVisualStyleBackColor = True
-        '
         'txtNames
         '
         Me.txtNames.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
@@ -304,48 +286,6 @@ Partial Class frmNewuser
         Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'grpRate
-        '
-        Me.grpRate.Controls.Add(Me.txtPriceRate)
-        Me.grpRate.Controls.Add(Me.Label7)
-        Me.grpRate.Controls.Add(Me.cbxRates)
-        Me.grpRate.Location = New System.Drawing.Point(12, 294)
-        Me.grpRate.Name = "grpRate"
-        Me.grpRate.Padding = New System.Windows.Forms.Padding(10)
-        Me.grpRate.Size = New System.Drawing.Size(760, 56)
-        Me.grpRate.TabIndex = 2
-        Me.grpRate.TabStop = False
-        Me.grpRate.Text = "Tarifa asociada a la cuenta"
-        Me.grpRate.Visible = False
-        '
-        'txtPriceRate
-        '
-        Me.txtPriceRate.Location = New System.Drawing.Point(383, 22)
-        Me.txtPriceRate.Name = "txtPriceRate"
-        Me.txtPriceRate.ReadOnly = True
-        Me.txtPriceRate.Size = New System.Drawing.Size(95, 22)
-        Me.txtPriceRate.TabIndex = 2
-        Me.txtPriceRate.TabStop = False
-        Me.txtPriceRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label7
-        '
-        Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(13, 25)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(110, 16)
-        Me.Label7.TabIndex = 12
-        Me.Label7.Text = "Tipos de Tarifas:"
-        '
-        'cbxRates
-        '
-        Me.cbxRates.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbxRates.FormattingEnabled = True
-        Me.cbxRates.Location = New System.Drawing.Point(137, 20)
-        Me.cbxRates.Name = "cbxRates"
-        Me.cbxRates.Size = New System.Drawing.Size(240, 24)
-        Me.cbxRates.TabIndex = 1
-        '
         'txtDateUpdated
         '
         Me.txtDateUpdated.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -416,7 +356,6 @@ Partial Class frmNewuser
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.grpRate)
         Me.Controls.Add(Me.TableLayoutPanel3)
         Me.Controls.Add(Me.grpUser)
         Me.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -430,8 +369,6 @@ Partial Class frmNewuser
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
-        Me.grpRate.ResumeLayout(False)
-        Me.grpRate.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -453,15 +390,10 @@ Partial Class frmNewuser
     Friend WithEvents Label10 As Label
     Friend WithEvents txtTelephone As TextBox
     Friend WithEvents txtNames As TextBox
-    Friend WithEvents chkTitular As CheckBox
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
-    Friend WithEvents grpRate As GroupBox
-    Friend WithEvents txtPriceRate As TextBox
-    Friend WithEvents Label7 As Label
-    Friend WithEvents cbxRates As ComboBox
     Private WithEvents txtDateUpdated As TextBox
     Private WithEvents txtDateCreated As TextBox
     Private WithEvents txtCodUser As TextBox

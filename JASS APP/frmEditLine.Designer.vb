@@ -35,19 +35,7 @@ Partial Class frmEditLine
         Me.tabpageUsers = New System.Windows.Forms.TabPage()
         Me.btnAddAccount = New System.Windows.Forms.Button()
         Me.btnNewAccount = New System.Windows.Forms.Button()
-        Me.dtgUserLine = New System.Windows.Forms.DataGridView()
-        Me.clmCodUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmCodRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmSurnames = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmTypeUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmDoc = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmHolder = New System.Windows.Forms.DataGridViewCheckBoxColumn()
-        Me.clmRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.clmDelete = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.dtgAccountLine = New System.Windows.Forms.DataGridView()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.txtDateUpdated = New System.Windows.Forms.TextBox()
         Me.txtDateCreated = New System.Windows.Forms.TextBox()
@@ -62,10 +50,17 @@ Partial Class frmEditLine
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
+        Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmCodRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.clmDelete = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.tabDataLine.SuspendLayout()
         Me.tabpageDataLine.SuspendLayout()
         Me.tabpageUsers.SuspendLayout()
-        CType(Me.dtgUserLine, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dtgAccountLine, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
@@ -182,7 +177,7 @@ Partial Class frmEditLine
         '
         Me.tabpageUsers.Controls.Add(Me.btnAddAccount)
         Me.tabpageUsers.Controls.Add(Me.btnNewAccount)
-        Me.tabpageUsers.Controls.Add(Me.dtgUserLine)
+        Me.tabpageUsers.Controls.Add(Me.dtgAccountLine)
         Me.tabpageUsers.Location = New System.Drawing.Point(4, 22)
         Me.tabpageUsers.Name = "tabpageUsers"
         Me.tabpageUsers.Padding = New System.Windows.Forms.Padding(20)
@@ -199,6 +194,7 @@ Partial Class frmEditLine
         Me.btnAddAccount.Size = New System.Drawing.Size(140, 48)
         Me.btnAddAccount.TabIndex = 2
         Me.btnAddAccount.Text = "Agregar una cuenta existente"
+        Me.btnAddAccount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnAddAccount.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnAddAccount.UseVisualStyleBackColor = True
         '
@@ -210,121 +206,30 @@ Partial Class frmEditLine
         Me.btnNewAccount.Size = New System.Drawing.Size(140, 48)
         Me.btnNewAccount.TabIndex = 1
         Me.btnNewAccount.Text = "Nuevo Cuenta"
+        Me.btnNewAccount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnNewAccount.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnNewAccount.UseVisualStyleBackColor = True
         '
-        'dtgUserLine
+        'dtgAccountLine
         '
-        Me.dtgUserLine.AllowUserToAddRows = False
-        Me.dtgUserLine.AllowUserToDeleteRows = False
-        Me.dtgUserLine.AllowUserToResizeColumns = False
-        Me.dtgUserLine.AllowUserToResizeRows = False
-        Me.dtgUserLine.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.dtgAccountLine.AllowUserToAddRows = False
+        Me.dtgAccountLine.AllowUserToDeleteRows = False
+        Me.dtgAccountLine.AllowUserToResizeColumns = False
+        Me.dtgAccountLine.AllowUserToResizeRows = False
+        Me.dtgAccountLine.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dtgUserLine.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.dtgUserLine.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgUserLine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodUser, Me.clmCodLine, Me.clmCodRate, Me.clmAccount, Me.clmNames, Me.clmSurnames, Me.clmTypeUser, Me.clmDoc, Me.clmHolder, Me.clmRate, Me.clmEdit, Me.clmDelete})
-        Me.dtgUserLine.Location = New System.Drawing.Point(23, 86)
-        Me.dtgUserLine.Name = "dtgUserLine"
-        Me.dtgUserLine.ReadOnly = True
-        Me.dtgUserLine.RowHeadersVisible = False
-        Me.dtgUserLine.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dtgUserLine.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgUserLine.Size = New System.Drawing.Size(874, 320)
-        Me.dtgUserLine.TabIndex = 5
-        '
-        'clmCodUser
-        '
-        Me.clmCodUser.HeaderText = "Codigo de usuario"
-        Me.clmCodUser.Name = "clmCodUser"
-        Me.clmCodUser.ReadOnly = True
-        Me.clmCodUser.Visible = False
-        '
-        'clmCodLine
-        '
-        Me.clmCodLine.HeaderText = "Codigo de linea"
-        Me.clmCodLine.Name = "clmCodLine"
-        Me.clmCodLine.ReadOnly = True
-        Me.clmCodLine.Visible = False
-        '
-        'clmCodRate
-        '
-        Me.clmCodRate.HeaderText = "Codigo de Tarifa"
-        Me.clmCodRate.Name = "clmCodRate"
-        Me.clmCodRate.ReadOnly = True
-        Me.clmCodRate.Visible = False
-        '
-        'clmAccount
-        '
-        Me.clmAccount.HeaderText = "Cod. Cuenta"
-        Me.clmAccount.Name = "clmAccount"
-        Me.clmAccount.ReadOnly = True
-        '
-        'clmNames
-        '
-        Me.clmNames.FillWeight = 200.0!
-        Me.clmNames.HeaderText = "Nombre(s) o Razon social"
-        Me.clmNames.Name = "clmNames"
-        Me.clmNames.ReadOnly = True
-        '
-        'clmSurnames
-        '
-        Me.clmSurnames.HeaderText = "Apellido(s)"
-        Me.clmSurnames.Name = "clmSurnames"
-        Me.clmSurnames.ReadOnly = True
-        '
-        'clmTypeUser
-        '
-        Me.clmTypeUser.HeaderText = "Tipo de Usuario"
-        Me.clmTypeUser.Name = "clmTypeUser"
-        Me.clmTypeUser.ReadOnly = True
-        '
-        'clmDoc
-        '
-        Me.clmDoc.HeaderText = "Doc. de identidad"
-        Me.clmDoc.Name = "clmDoc"
-        Me.clmDoc.ReadOnly = True
-        '
-        'clmHolder
-        '
-        Me.clmHolder.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmHolder.FillWeight = 50.0!
-        Me.clmHolder.HeaderText = "Titular"
-        Me.clmHolder.Name = "clmHolder"
-        Me.clmHolder.ReadOnly = True
-        Me.clmHolder.Width = 50
-        '
-        'clmRate
-        '
-        Me.clmRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmRate.FillWeight = 120.0!
-        Me.clmRate.HeaderText = "Tarifa"
-        Me.clmRate.Name = "clmRate"
-        Me.clmRate.ReadOnly = True
-        Me.clmRate.Width = 120
-        '
-        'clmEdit
-        '
-        Me.clmEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmEdit.FillWeight = 75.0!
-        Me.clmEdit.HeaderText = ""
-        Me.clmEdit.Name = "clmEdit"
-        Me.clmEdit.ReadOnly = True
-        Me.clmEdit.Text = "Editar"
-        Me.clmEdit.UseColumnTextForButtonValue = True
-        Me.clmEdit.Width = 75
-        '
-        'clmDelete
-        '
-        Me.clmDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmDelete.FillWeight = 75.0!
-        Me.clmDelete.HeaderText = ""
-        Me.clmDelete.Name = "clmDelete"
-        Me.clmDelete.ReadOnly = True
-        Me.clmDelete.Text = "Quitar"
-        Me.clmDelete.UseColumnTextForButtonValue = True
-        Me.clmDelete.Width = 75
+        Me.dtgAccountLine.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dtgAccountLine.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dtgAccountLine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodLine, Me.clmCodRate, Me.clmAccount, Me.clmNames, Me.clmRate, Me.clmEdit, Me.clmDelete})
+        Me.dtgAccountLine.Location = New System.Drawing.Point(23, 86)
+        Me.dtgAccountLine.Name = "dtgAccountLine"
+        Me.dtgAccountLine.ReadOnly = True
+        Me.dtgAccountLine.RowHeadersVisible = False
+        Me.dtgAccountLine.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dtgAccountLine.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dtgAccountLine.Size = New System.Drawing.Size(874, 320)
+        Me.dtgAccountLine.TabIndex = 5
         '
         'Panel1
         '
@@ -485,6 +390,64 @@ Partial Class frmEditLine
         Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
+        'clmCodLine
+        '
+        Me.clmCodLine.HeaderText = "Codigo de linea"
+        Me.clmCodLine.Name = "clmCodLine"
+        Me.clmCodLine.ReadOnly = True
+        Me.clmCodLine.Visible = False
+        '
+        'clmCodRate
+        '
+        Me.clmCodRate.HeaderText = "Codigo de Tarifa"
+        Me.clmCodRate.Name = "clmCodRate"
+        Me.clmCodRate.ReadOnly = True
+        Me.clmCodRate.Visible = False
+        '
+        'clmAccount
+        '
+        Me.clmAccount.HeaderText = "Codigo de Cuenta"
+        Me.clmAccount.Name = "clmAccount"
+        Me.clmAccount.ReadOnly = True
+        '
+        'clmNames
+        '
+        Me.clmNames.FillWeight = 200.0!
+        Me.clmNames.HeaderText = "Nombre(s) o Razon social"
+        Me.clmNames.Name = "clmNames"
+        Me.clmNames.ReadOnly = True
+        '
+        'clmRate
+        '
+        Me.clmRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmRate.FillWeight = 120.0!
+        Me.clmRate.HeaderText = "Tarifa"
+        Me.clmRate.Name = "clmRate"
+        Me.clmRate.ReadOnly = True
+        Me.clmRate.Width = 120
+        '
+        'clmEdit
+        '
+        Me.clmEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmEdit.FillWeight = 75.0!
+        Me.clmEdit.HeaderText = ""
+        Me.clmEdit.Name = "clmEdit"
+        Me.clmEdit.ReadOnly = True
+        Me.clmEdit.Text = "Editar"
+        Me.clmEdit.UseColumnTextForButtonValue = True
+        Me.clmEdit.Width = 75
+        '
+        'clmDelete
+        '
+        Me.clmDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmDelete.FillWeight = 75.0!
+        Me.clmDelete.HeaderText = ""
+        Me.clmDelete.Name = "clmDelete"
+        Me.clmDelete.ReadOnly = True
+        Me.clmDelete.Text = "Quitar"
+        Me.clmDelete.UseColumnTextForButtonValue = True
+        Me.clmDelete.Width = 75
+        '
         'frmEditLine
         '
         Me.AcceptButton = Me.btnSave
@@ -501,7 +464,7 @@ Partial Class frmEditLine
         Me.tabpageDataLine.ResumeLayout(False)
         Me.tabpageDataLine.PerformLayout()
         Me.tabpageUsers.ResumeLayout(False)
-        CType(Me.dtgUserLine, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dtgAccountLine, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -532,22 +495,17 @@ Partial Class frmEditLine
     Friend WithEvents Label7 As Label
     Friend WithEvents dtpInstallDate As DateTimePicker
     Friend WithEvents Label8 As Label
-    Friend WithEvents dtgUserLine As DataGridView
+    Friend WithEvents dtgAccountLine As DataGridView
     Friend WithEvents btnAddAccount As Button
     Friend WithEvents btnNewAccount As Button
     Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
-    Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
     Friend WithEvents clmCodLine As DataGridViewTextBoxColumn
     Friend WithEvents clmCodRate As DataGridViewTextBoxColumn
     Friend WithEvents clmAccount As DataGridViewTextBoxColumn
     Friend WithEvents clmNames As DataGridViewTextBoxColumn
-    Friend WithEvents clmSurnames As DataGridViewTextBoxColumn
-    Friend WithEvents clmTypeUser As DataGridViewTextBoxColumn
-    Friend WithEvents clmDoc As DataGridViewTextBoxColumn
-    Friend WithEvents clmHolder As DataGridViewCheckBoxColumn
     Friend WithEvents clmRate As DataGridViewTextBoxColumn
     Friend WithEvents clmEdit As DataGridViewButtonColumn
     Friend WithEvents clmDelete As DataGridViewButtonColumn

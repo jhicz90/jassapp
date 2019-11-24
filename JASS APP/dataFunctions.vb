@@ -348,9 +348,10 @@ Module dataFunctions
             cmd.Connection = cnn
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT lines_to_users.COD_USR_LINE, lines_to_users.COD_LINE, lines_to_users.ID_RATE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_type.NAME_TYPE, user_lines.USER_DOCID, lines_to_users.TITULAR_LINE, rates.NAME_RATE, lines_to_users.COD_ACCOUNT
-            FROM rates INNER JOIN (user_type INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON user_type.ID_TYPE_USER = user_lines.USER_TYPE) ON rates.ID_RATE = lines_to_users.ID_RATE
-            WHERE lines_to_users.COD_LINE LIKE '" & vCodLine & "'"
+            cmd.CommandText = "SELECT lines_to_account.COD_LINE, rates.ID_RATE, lines_to_account.COD_ACCOUNT, (SELECT TOP 1 (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM users_to_account INNER JOIN user_lines ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE WHERE users_to_account.COD_ACCOUNT = lines_to_account.COD_ACCOUNT), rates.NAME_RATE 
+            FROM lines_to_account INNER JOIN rates ON lines_to_account.ID_RATE = rates.ID_RATE
+            WHERE lines_to_account.COD_LINE = @codline"
+            cmd.Parameters.AddWithValue("codline", vCodLine)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -358,7 +359,7 @@ Module dataFunctions
                 If dr.HasRows Then
                     dgUserOfLine.Rows.Clear()
                     While dr.Read()
-                        dgUserOfLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(9).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString, Convert.ToBoolean(dr(7).ToString), dr(8).ToString)
+                        dgUserOfLine.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString)
                     End While
                 Else
                     dgUserOfLine.Rows.Clear()
@@ -869,8 +870,6 @@ Module dataFunctions
     Public Sub showNewEditUser(vState As Integer, vForm As Form, Optional vCodUser As String = "new", Optional vCodLine As String = Nothing, Optional vCodRate As Integer = 0)
         frmNewuser.vFrmGet = vState
         frmNewuser.vCodUser = vCodUser
-        frmNewuser.vCodLine = vCodLine
-        frmNewuser.vCodRate = vCodRate
 
         If vState = 1 Then
             frmNewuser.MdiParent = vForm
@@ -922,7 +921,7 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getUser(vCodeUser As String, Optional vRate As Integer = 0) As String()
+    Public Function getUser(vCodeUser As String) As String()
         Dim cmd As New OleDbCommand
         Dim dr As OleDbDataReader
 
@@ -932,16 +931,9 @@ Module dataFunctions
             cmd.Connection = cnn
             cmd.CommandType = CommandType.Text
 
-            If vRate = 0 Then
-                cmd.CommandText = "SELECT user_lines.COD_USR_LINE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_type.NAME_TYPE, user_lines.USER_DOCID, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL, user_lines.USER_CREATED, user_lines.USER_UPDATED
-                FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
-                WHERE user_lines.COD_USR_LINE LIKE '" & vCodeUser & "'"
-            Else
-                cmd.CommandText = "SELECT user_lines.COD_USR_LINE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_type.NAME_TYPE, user_lines.USER_DOCID, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL, user_lines.USER_CREATED, user_lines.USER_UPDATED, lines_to_users.ID_RATE, lines_to_users.TITULAR_LINE, lines_to_users.COD_LINE, rates.VARIABLE, lines_to_users.PRICE_RATE
-                FROM rates INNER JOIN (user_type INNER JOIN (user_lines INNER JOIN lines_to_users ON user_lines.COD_USR_LINE = lines_to_users.COD_USR_LINE) ON user_type.ID_TYPE_USER = user_lines.USER_TYPE) ON rates.ID_RATE = lines_to_users.ID_RATE 
-                WHERE user_lines.COD_USR_LINE LIKE '" & vCodeUser & "'"
-            End If
-
+            cmd.CommandText = "SELECT user_lines.COD_USR_LINE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_type.NAME_TYPE, user_lines.USER_DOCID, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL, user_lines.USER_CREATED, user_lines.USER_UPDATED
+            FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
+            WHERE user_lines.COD_USR_LINE LIKE '" & vCodeUser & "'"
 
             Try
                 dr = cmd.ExecuteReader()
@@ -963,19 +955,19 @@ Module dataFunctions
                     dataUser(9) = dr(9).ToString 'Fecha creado
                     dataUser(10) = dr(10).ToString 'Fecha actualizado
 
-                    If vRate = 0 Then
-                        dataUser(11) = 0
-                        dataUser(12) = False
-                        dataUser(13) = 0
-                        dataUser(14) = False
-                        dataUser(15) = 0
-                    Else
-                        dataUser(11) = dr(11).ToString 'Codigo de tarifa
-                        dataUser(12) = Convert.ToBoolean(dr(12).ToString) 'Titular
-                        dataUser(13) = dr(11).ToString 'Codigo de linea
-                        dataUser(14) = Convert.ToBoolean(dr(14).ToString) 'Variable
-                        dataUser(15) = dr(15).ToString 'Precio de tarifa
-                    End If
+                    'If vRate = 0 Then
+                    '    dataUser(11) = 0
+                    '    dataUser(12) = False
+                    '    dataUser(13) = 0
+                    '    dataUser(14) = False
+                    '    dataUser(15) = 0
+                    'Else
+                    '    dataUser(11) = dr(11).ToString 'Codigo de tarifa
+                    '    dataUser(12) = Convert.ToBoolean(dr(12).ToString) 'Titular
+                    '    dataUser(13) = dr(11).ToString 'Codigo de linea
+                    '    dataUser(14) = Convert.ToBoolean(dr(14).ToString) 'Variable
+                    '    dataUser(15) = dr(15).ToString 'Precio de tarifa
+                    'End If
 
                     Return dataUser
                 Else

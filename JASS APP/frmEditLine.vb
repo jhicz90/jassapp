@@ -34,14 +34,14 @@ Public Class frmEditLine
                 txtDescpLine.Text = dataLine(6)
 
                 dataLineOriginal = dataLine
-                listUserOfLine(dataLine(1), dtgUserLine)
+                listUserOfLine(dataLine(1), dtgAccountLine)
             End If
         End If
     End Sub
 
     Public Sub userFound(vActive As Boolean, Optional vDataUser() As String = Nothing, Optional vRates As Integer = 0, Optional vPriceRate As Double = 0)
         addUserToLine(txtCodLine.Text, vDataUser, vRates, vPriceRate)
-        listUserOfLine(txtCodLine.Text, dtgUserLine)
+        listUserOfLine(txtCodLine.Text, dtgAccountLine)
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -97,24 +97,24 @@ Public Class frmEditLine
         End Try
     End Sub
 
-    Private Sub dtgUserLine_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgUserLine.CellContentClick
-        If dtgUserLine.Columns(e.ColumnIndex).Name = "clmDelete" Then
-            If MsgBox("¿Desea eleminar a " & dtgUserLine.Item(3, e.RowIndex).Value & " " & dtgUserLine.Item(4, e.RowIndex).Value & vbCr & " de " & txtNameLine.Text & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+    Private Sub dtgUserLine_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountLine.CellContentClick
+        If dtgAccountLine.Columns(e.ColumnIndex).Name = "clmDelete" Then
+            If MsgBox("¿Desea eleminar a " & dtgAccountLine.Item(3, e.RowIndex).Value & " " & dtgAccountLine.Item(4, e.RowIndex).Value & vbCr & " de " & txtNameLine.Text & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
                 Try
-                    deleteUserToLine(txtCodLine.Text, dtgUserLine.Item(0, e.RowIndex).Value)
-                    listUserOfLine(txtCodLine.Text, dtgUserLine)
+                    deleteUserToLine(txtCodLine.Text, dtgAccountLine.Item(0, e.RowIndex).Value)
+                    listUserOfLine(txtCodLine.Text, dtgAccountLine)
                 Catch ex As Exception
                     MsgBox("Ocurrio un error", vbExclamation, "Aviso")
                 End Try
             End If
-        ElseIf dtgUserLine.Columns(e.ColumnIndex).Name = "clmEdit" Then
-            showNewEditUser(2, Me, dtgUserLine.Item(0, e.RowIndex).Value, txtCodLine.Text, dtgUserLine.Item(2, e.RowIndex).Value)
-            listUserOfLine(txtCodLine.Text, dtgUserLine)
+        ElseIf dtgAccountLine.Columns(e.ColumnIndex).Name = "clmEdit" Then
+            showNewEditUser(2, Me, dtgAccountLine.Item(0, e.RowIndex).Value, txtCodLine.Text, dtgAccountLine.Item(2, e.RowIndex).Value)
+            listUserOfLine(txtCodLine.Text, dtgAccountLine)
         End If
     End Sub
 
     Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewAccount.Click
         showNewEditUser(3, Me, "new", txtCodLine.Text)
-        listUserOfLine(txtCodLine.Text, dtgUserLine)
+        listUserOfLine(txtCodLine.Text, dtgAccountLine)
     End Sub
 End Class
