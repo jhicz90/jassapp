@@ -33,7 +33,14 @@ Partial Class frmAccount
         Me.cbxRates = New System.Windows.Forms.ComboBox()
         Me.tabDataAccount = New System.Windows.Forms.TabControl()
         Me.tabpageAcounts = New System.Windows.Forms.TabPage()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
+        Me.dtgAccountYear = New System.Windows.Forms.DataGridView()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmState = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewButtonColumn1 = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.DataGridViewButtonColumn2 = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.tabpageUsers = New System.Windows.Forms.TabPage()
         Me.dtgUsersAccount = New System.Windows.Forms.DataGridView()
         Me.clmCodUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -47,17 +54,10 @@ Partial Class frmAccount
         Me.txtDateCreated = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
-        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewTextBoxColumn4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmState = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.DataGridViewButtonColumn1 = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.DataGridViewButtonColumn2 = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.GroupBox1.SuspendLayout()
         Me.tabDataAccount.SuspendLayout()
         Me.tabpageAcounts.SuspendLayout()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabpageUsers.SuspendLayout()
         CType(Me.dtgUsersAccount, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -171,7 +171,7 @@ Partial Class frmAccount
         '
         'tabpageAcounts
         '
-        Me.tabpageAcounts.Controls.Add(Me.DataGridView1)
+        Me.tabpageAcounts.Controls.Add(Me.dtgAccountYear)
         Me.tabpageAcounts.Location = New System.Drawing.Point(4, 22)
         Me.tabpageAcounts.Name = "tabpageAcounts"
         Me.tabpageAcounts.Padding = New System.Windows.Forms.Padding(5)
@@ -180,26 +180,83 @@ Partial Class frmAccount
         Me.tabpageAcounts.Text = "CUENTAS ANUALES"
         Me.tabpageAcounts.UseVisualStyleBackColor = True
         '
-        'DataGridView1
+        'dtgAccountYear
         '
-        Me.DataGridView1.AllowUserToAddRows = False
-        Me.DataGridView1.AllowUserToDeleteRows = False
-        Me.DataGridView1.AllowUserToResizeColumns = False
-        Me.DataGridView1.AllowUserToResizeRows = False
-        Me.DataGridView1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.dtgAccountYear.AllowUserToAddRows = False
+        Me.dtgAccountYear.AllowUserToDeleteRows = False
+        Me.dtgAccountYear.AllowUserToResizeColumns = False
+        Me.dtgAccountYear.AllowUserToResizeRows = False
+        Me.dtgAccountYear.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.DataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.clmState, Me.DataGridViewButtonColumn1, Me.DataGridViewButtonColumn2})
-        Me.DataGridView1.Location = New System.Drawing.Point(9, 50)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.ReadOnly = True
-        Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.DataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridView1.Size = New System.Drawing.Size(735, 389)
-        Me.DataGridView1.TabIndex = 7
+        Me.dtgAccountYear.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
+        Me.dtgAccountYear.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dtgAccountYear.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn4, Me.clmState, Me.DataGridViewButtonColumn1, Me.DataGridViewButtonColumn2})
+        Me.dtgAccountYear.Location = New System.Drawing.Point(9, 50)
+        Me.dtgAccountYear.Name = "dtgAccountYear"
+        Me.dtgAccountYear.ReadOnly = True
+        Me.dtgAccountYear.RowHeadersVisible = False
+        Me.dtgAccountYear.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dtgAccountYear.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dtgAccountYear.Size = New System.Drawing.Size(735, 389)
+        Me.dtgAccountYear.TabIndex = 7
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.HeaderText = "Cod. Cuenta Linea"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        Me.DataGridViewTextBoxColumn1.ReadOnly = True
+        Me.DataGridViewTextBoxColumn1.Visible = False
+        '
+        'DataGridViewTextBoxColumn2
+        '
+        Me.DataGridViewTextBoxColumn2.FillWeight = 30.0!
+        Me.DataGridViewTextBoxColumn2.HeaderText = "Año"
+        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
+        Me.DataGridViewTextBoxColumn2.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn3
+        '
+        Me.DataGridViewTextBoxColumn3.FillWeight = 50.0!
+        Me.DataGridViewTextBoxColumn3.HeaderText = "Monto Total"
+        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
+        Me.DataGridViewTextBoxColumn3.ReadOnly = True
+        '
+        'DataGridViewTextBoxColumn4
+        '
+        Me.DataGridViewTextBoxColumn4.FillWeight = 50.0!
+        Me.DataGridViewTextBoxColumn4.HeaderText = "Saldo Total"
+        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
+        Me.DataGridViewTextBoxColumn4.ReadOnly = True
+        '
+        'clmState
+        '
+        Me.clmState.FillWeight = 70.0!
+        Me.clmState.HeaderText = "Estado"
+        Me.clmState.Name = "clmState"
+        Me.clmState.ReadOnly = True
+        '
+        'DataGridViewButtonColumn1
+        '
+        Me.DataGridViewButtonColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.DataGridViewButtonColumn1.FillWeight = 75.0!
+        Me.DataGridViewButtonColumn1.HeaderText = ""
+        Me.DataGridViewButtonColumn1.Name = "DataGridViewButtonColumn1"
+        Me.DataGridViewButtonColumn1.ReadOnly = True
+        Me.DataGridViewButtonColumn1.Text = "Reporte"
+        Me.DataGridViewButtonColumn1.UseColumnTextForButtonValue = True
+        Me.DataGridViewButtonColumn1.Width = 75
+        '
+        'DataGridViewButtonColumn2
+        '
+        Me.DataGridViewButtonColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.DataGridViewButtonColumn2.FillWeight = 75.0!
+        Me.DataGridViewButtonColumn2.HeaderText = ""
+        Me.DataGridViewButtonColumn2.Name = "DataGridViewButtonColumn2"
+        Me.DataGridViewButtonColumn2.ReadOnly = True
+        Me.DataGridViewButtonColumn2.Text = "Ver"
+        Me.DataGridViewButtonColumn2.UseColumnTextForButtonValue = True
+        Me.DataGridViewButtonColumn2.Width = 75
         '
         'tabpageUsers
         '
@@ -333,63 +390,6 @@ Partial Class frmAccount
         Me.Label3.TabIndex = 8
         Me.Label3.Text = "Fecha de creación"
         '
-        'DataGridViewTextBoxColumn1
-        '
-        Me.DataGridViewTextBoxColumn1.HeaderText = "Cod. Cuenta Linea"
-        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
-        Me.DataGridViewTextBoxColumn1.ReadOnly = True
-        Me.DataGridViewTextBoxColumn1.Visible = False
-        '
-        'DataGridViewTextBoxColumn2
-        '
-        Me.DataGridViewTextBoxColumn2.FillWeight = 30.0!
-        Me.DataGridViewTextBoxColumn2.HeaderText = "Año"
-        Me.DataGridViewTextBoxColumn2.Name = "DataGridViewTextBoxColumn2"
-        Me.DataGridViewTextBoxColumn2.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn3
-        '
-        Me.DataGridViewTextBoxColumn3.FillWeight = 50.0!
-        Me.DataGridViewTextBoxColumn3.HeaderText = "Monto Total"
-        Me.DataGridViewTextBoxColumn3.Name = "DataGridViewTextBoxColumn3"
-        Me.DataGridViewTextBoxColumn3.ReadOnly = True
-        '
-        'DataGridViewTextBoxColumn4
-        '
-        Me.DataGridViewTextBoxColumn4.FillWeight = 50.0!
-        Me.DataGridViewTextBoxColumn4.HeaderText = "Saldo Total"
-        Me.DataGridViewTextBoxColumn4.Name = "DataGridViewTextBoxColumn4"
-        Me.DataGridViewTextBoxColumn4.ReadOnly = True
-        '
-        'clmState
-        '
-        Me.clmState.FillWeight = 70.0!
-        Me.clmState.HeaderText = "Estado"
-        Me.clmState.Name = "clmState"
-        Me.clmState.ReadOnly = True
-        '
-        'DataGridViewButtonColumn1
-        '
-        Me.DataGridViewButtonColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.DataGridViewButtonColumn1.FillWeight = 75.0!
-        Me.DataGridViewButtonColumn1.HeaderText = ""
-        Me.DataGridViewButtonColumn1.Name = "DataGridViewButtonColumn1"
-        Me.DataGridViewButtonColumn1.ReadOnly = True
-        Me.DataGridViewButtonColumn1.Text = "Reporte"
-        Me.DataGridViewButtonColumn1.UseColumnTextForButtonValue = True
-        Me.DataGridViewButtonColumn1.Width = 75
-        '
-        'DataGridViewButtonColumn2
-        '
-        Me.DataGridViewButtonColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.DataGridViewButtonColumn2.FillWeight = 75.0!
-        Me.DataGridViewButtonColumn2.HeaderText = ""
-        Me.DataGridViewButtonColumn2.Name = "DataGridViewButtonColumn2"
-        Me.DataGridViewButtonColumn2.ReadOnly = True
-        Me.DataGridViewButtonColumn2.Text = "Ver"
-        Me.DataGridViewButtonColumn2.UseColumnTextForButtonValue = True
-        Me.DataGridViewButtonColumn2.Width = 75
-        '
         'frmAccount
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -410,7 +410,7 @@ Partial Class frmAccount
         Me.GroupBox1.PerformLayout()
         Me.tabDataAccount.ResumeLayout(False)
         Me.tabpageAcounts.ResumeLayout(False)
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabpageUsers.ResumeLayout(False)
         CType(Me.dtgUsersAccount, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
@@ -432,7 +432,7 @@ Partial Class frmAccount
     Friend WithEvents tabpageUsers As TabPage
     Friend WithEvents btnNewUser As Button
     Friend WithEvents dtgUsersAccount As DataGridView
-    Friend WithEvents DataGridView1 As DataGridView
+    Friend WithEvents dtgAccountYear As DataGridView
     Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
     Friend WithEvents clmNames As DataGridViewTextBoxColumn
     Friend WithEvents clmDocNum As DataGridViewTextBoxColumn
