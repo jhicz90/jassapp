@@ -103,6 +103,12 @@
     <Compile Include="frmAccount.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmCollectDetail.Designer.vb">
+      <DependentUpon>frmCollectDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmCollectDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFindCollect.Designer.vb">
       <DependentUpon>frmFindCollect.vb</DependentUpon>
     </Compile>
@@ -175,6 +181,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmAccount.resx">
       <DependentUpon>frmAccount.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCollectDetail.resx">
+      <DependentUpon>frmCollectDetail.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmFindCollect.resx">
       <DependentUpon>frmFindCollect.vb</DependentUpon>
