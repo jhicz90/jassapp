@@ -26,7 +26,7 @@
 
     Private Sub dtgLines_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgLines.CellContentClick
         If dtgLines.Columns(e.ColumnIndex).Name = "clmOptions" Then
-            showCollect()
+            showAccountCollect(dtgLines.Item(1, e.RowIndex).Value, dtgLines.Item(0, e.RowIndex).Value, dtgLines.Item(2, e.RowIndex).Value)
         End If
     End Sub
 End Class

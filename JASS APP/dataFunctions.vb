@@ -276,12 +276,12 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
                     FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
                     WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
                     FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
                     WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
                 Case 2
@@ -323,7 +323,7 @@ Module dataFunctions
                 If dr.HasRows Then
                     dgLinesService.Rows.Clear()
                     While dr.Read()
-                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString)
+                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString)
                     End While
                 Else
                     dgLinesService.Rows.Clear()
@@ -905,8 +905,47 @@ Module dataFunctions
         frmAccount.ShowDialog()
     End Sub
 
-    Public Sub showCollect()
-        'Cobrar cuenta
+    Public Sub showAccountCollect(vCodLine As String, vCodAccount As String, vNameLine As String)
+        frmCollectDetail.vCodLine = vCodLine
+        frmCollectDetail.vCodAccount = vCodAccount
+        frmCollectDetail.vNameLine = vNameLine
+        frmCollectDetail.ShowDialog()
+    End Sub
+
+    Public Sub getAccountCollect(vCodLine As String, vCodAccount As String, dgAccountYear As DataGridView)
+        Dim cmdGetAccountCollect As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        If Not (cnn.DataSource.Equals("")) Then
+            cmdGetAccountCollect.Connection = cnn
+            cmdGetAccountCollect.CommandType = CommandType.Text
+
+            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
+                cmdGetAccountCollect.CommandText = "SELECT account_line.ACCOUNT_YEAR, account_line.ACCOUNT_DEBTOTAL, account_line.ACCOUNT_SALDO 
+                FROM account_line WHERE account_line.COD_ACCOUNT = @codaccount 
+                ORDER BY account_line.ACCOUNT_YEAR DESC"
+                cmdGetAccountCollect.Parameters.AddWithValue("codaccount", vCodAccount)
+
+                Try
+                    dr = cmdGetAccountCollect.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dgAccountYear.Rows.Clear()
+                        While dr.Read()
+                            dgAccountYear.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, "Bien")
+                        End While
+                    Else
+                        MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
+                End Try
+            Else
+                MsgBox("No se envio el codigo de la cuenta", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
     End Sub
 
     Public Function getAccount(vCodLine As String, vCodAccount As String) As String()

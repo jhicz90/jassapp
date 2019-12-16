@@ -232,6 +232,8 @@
     <Content Include="dbJASS.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\payment-history-32.png" />
+    <None Include="Resources\payment-history.png" />
     <None Include="Resources\general-ledger.png" />
     <None Include="Resources\general-ledger-32.png" />
     <None Include="Resources\deposit.png" />
