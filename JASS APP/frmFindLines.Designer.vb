@@ -28,6 +28,7 @@ Partial Class frmFindLines
         Me.txtFind = New System.Windows.Forms.TextBox()
         Me.btnFind = New System.Windows.Forms.Button()
         Me.dtgLines = New System.Windows.Forms.DataGridView()
+        Me.clmCodAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNameLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSector = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -93,7 +94,7 @@ Partial Class frmFindLines
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgLines.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgLines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmOptions})
+        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodAccount, Me.clmCodLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmOptions})
         Me.dtgLines.Location = New System.Drawing.Point(12, 52)
         Me.dtgLines.MultiSelect = False
         Me.dtgLines.Name = "dtgLines"
@@ -104,11 +105,18 @@ Partial Class frmFindLines
         Me.dtgLines.Size = New System.Drawing.Size(860, 397)
         Me.dtgLines.TabIndex = 7
         '
+        'clmCodAccount
+        '
+        Me.clmCodAccount.HeaderText = "Codigo Cuenta"
+        Me.clmCodAccount.Name = "clmCodAccount"
+        Me.clmCodAccount.ReadOnly = True
+        Me.clmCodAccount.Visible = False
+        '
         'clmCodLine
         '
         Me.clmCodLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
         Me.clmCodLine.FillWeight = 120.0!
-        Me.clmCodLine.HeaderText = "Codigo de Linea"
+        Me.clmCodLine.HeaderText = "Codigo Linea"
         Me.clmCodLine.Name = "clmCodLine"
         Me.clmCodLine.ReadOnly = True
         Me.clmCodLine.Width = 120
@@ -183,6 +191,7 @@ Partial Class frmFindLines
     Friend WithEvents txtFind As TextBox
     Friend WithEvents btnFind As Button
     Friend WithEvents dtgLines As DataGridView
+    Friend WithEvents clmCodAccount As DataGridViewTextBoxColumn
     Friend WithEvents clmCodLine As DataGridViewTextBoxColumn
     Friend WithEvents clmNameLine As DataGridViewTextBoxColumn
     Friend WithEvents clmSector As DataGridViewTextBoxColumn

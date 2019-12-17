@@ -116,7 +116,7 @@ Partial Class frmFindCollect
         '
         Me.clmCodLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
         Me.clmCodLine.FillWeight = 120.0!
-        Me.clmCodLine.HeaderText = "Codigo de Linea"
+        Me.clmCodLine.HeaderText = "Codigo Linea"
         Me.clmCodLine.Name = "clmCodLine"
         Me.clmCodLine.ReadOnly = True
         Me.clmCodLine.Width = 120

@@ -35,6 +35,12 @@ Partial Class frmCollectDetail
         Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.grpYearDetail = New System.Windows.Forms.GroupBox()
+        Me.chkChangingUse = New System.Windows.Forms.CheckBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.txtChanging = New System.Windows.Forms.TextBox()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.txtCash = New System.Windows.Forms.TextBox()
+        Me.btnDeposit = New System.Windows.Forms.Button()
         Me.btnSeePayments = New System.Windows.Forms.Button()
         Me.btnPay = New System.Windows.Forms.Button()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -45,12 +51,8 @@ Partial Class frmCollectDetail
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtDebitAccount = New System.Windows.Forms.TextBox()
         Me.dtgAccountMounth = New System.Windows.Forms.DataGridView()
-        Me.btnDeposit = New System.Windows.Forms.Button()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.txtCash = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.txtChanging = New System.Windows.Forms.TextBox()
-        Me.chkChangingUse = New System.Windows.Forms.CheckBox()
+        Me.clmCodCharge = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmCodMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpcionMes = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.clmCharge = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -195,6 +197,75 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
         '
+        'chkChangingUse
+        '
+        Me.chkChangingUse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkChangingUse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkChangingUse.Location = New System.Drawing.Point(649, 255)
+        Me.chkChangingUse.Name = "chkChangingUse"
+        Me.chkChangingUse.Size = New System.Drawing.Size(250, 70)
+        Me.chkChangingUse.TabIndex = 27
+        Me.chkChangingUse.Text = "¿Usar el cambio sobrante como deposito?"
+        Me.chkChangingUse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.chkChangingUse.UseVisualStyleBackColor = True
+        '
+        'Label8
+        '
+        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(729, 226)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(63, 20)
+        Me.Label8.TabIndex = 25
+        Me.Label8.Text = "Cambio"
+        '
+        'txtChanging
+        '
+        Me.txtChanging.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtChanging.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtChanging.Location = New System.Drawing.Point(801, 223)
+        Me.txtChanging.Name = "txtChanging"
+        Me.txtChanging.ReadOnly = True
+        Me.txtChanging.Size = New System.Drawing.Size(98, 26)
+        Me.txtChanging.TabIndex = 26
+        Me.txtChanging.Text = "0.00"
+        Me.txtChanging.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'Label7
+        '
+        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.Location = New System.Drawing.Point(729, 194)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(66, 20)
+        Me.Label7.TabIndex = 23
+        Me.Label7.Text = "Efectivo"
+        '
+        'txtCash
+        '
+        Me.txtCash.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCash.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCash.Location = New System.Drawing.Point(801, 191)
+        Me.txtCash.Name = "txtCash"
+        Me.txtCash.Size = New System.Drawing.Size(98, 26)
+        Me.txtCash.TabIndex = 24
+        Me.txtCash.Text = "0.00"
+        Me.txtCash.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'btnDeposit
+        '
+        Me.btnDeposit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnDeposit.Image = Global.JASS_APP.My.Resources.Resources.deposit_32
+        Me.btnDeposit.Location = New System.Drawing.Point(683, 391)
+        Me.btnDeposit.Name = "btnDeposit"
+        Me.btnDeposit.Size = New System.Drawing.Size(105, 82)
+        Me.btnDeposit.TabIndex = 22
+        Me.btnDeposit.Text = "DEPOSITO A CUENTA"
+        Me.btnDeposit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnDeposit.UseVisualStyleBackColor = True
+        '
         'btnSeePayments
         '
         Me.btnSeePayments.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -274,6 +345,7 @@ Partial Class frmCollectDetail
         Me.chkDebitUse.Size = New System.Drawing.Size(250, 70)
         Me.chkDebitUse.TabIndex = 15
         Me.chkDebitUse.Text = "¿Usar el debito acumulado para pagar el saldo?"
+        Me.chkDebitUse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chkDebitUse.UseVisualStyleBackColor = True
         '
         'Label4
@@ -310,83 +382,29 @@ Partial Class frmCollectDetail
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountMounth.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgAccountMounth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
+        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
         Me.dtgAccountMounth.Location = New System.Drawing.Point(6, 19)
         Me.dtgAccountMounth.Name = "dtgAccountMounth"
         Me.dtgAccountMounth.ReadOnly = True
         Me.dtgAccountMounth.RowHeadersVisible = False
         Me.dtgAccountMounth.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccountMounth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccountMounth.Size = New System.Drawing.Size(531, 454)
+        Me.dtgAccountMounth.Size = New System.Drawing.Size(620, 454)
         Me.dtgAccountMounth.TabIndex = 13
         '
-        'btnDeposit
+        'clmCodCharge
         '
-        Me.btnDeposit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnDeposit.Image = Global.JASS_APP.My.Resources.Resources.deposit_32
-        Me.btnDeposit.Location = New System.Drawing.Point(683, 391)
-        Me.btnDeposit.Name = "btnDeposit"
-        Me.btnDeposit.Size = New System.Drawing.Size(105, 82)
-        Me.btnDeposit.TabIndex = 22
-        Me.btnDeposit.Text = "DEPOSITO A CUENTA"
-        Me.btnDeposit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnDeposit.UseVisualStyleBackColor = True
+        Me.clmCodCharge.HeaderText = "Codigo Cargo"
+        Me.clmCodCharge.Name = "clmCodCharge"
+        Me.clmCodCharge.ReadOnly = True
+        Me.clmCodCharge.Visible = False
         '
-        'Label7
+        'clmCodMonth
         '
-        Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label7.AutoSize = True
-        Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(729, 194)
-        Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(66, 20)
-        Me.Label7.TabIndex = 23
-        Me.Label7.Text = "Efectivo"
-        '
-        'txtCash
-        '
-        Me.txtCash.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtCash.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCash.Location = New System.Drawing.Point(801, 191)
-        Me.txtCash.Name = "txtCash"
-        Me.txtCash.Size = New System.Drawing.Size(98, 26)
-        Me.txtCash.TabIndex = 24
-        Me.txtCash.Text = "0.00"
-        Me.txtCash.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'Label8
-        '
-        Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label8.AutoSize = True
-        Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(729, 226)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(63, 20)
-        Me.Label8.TabIndex = 25
-        Me.Label8.Text = "Cambio"
-        '
-        'txtChanging
-        '
-        Me.txtChanging.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtChanging.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtChanging.Location = New System.Drawing.Point(801, 223)
-        Me.txtChanging.Name = "txtChanging"
-        Me.txtChanging.ReadOnly = True
-        Me.txtChanging.Size = New System.Drawing.Size(98, 26)
-        Me.txtChanging.TabIndex = 26
-        Me.txtChanging.Text = "0.00"
-        Me.txtChanging.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'chkChangingUse
-        '
-        Me.chkChangingUse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.chkChangingUse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkChangingUse.Location = New System.Drawing.Point(649, 255)
-        Me.chkChangingUse.Name = "chkChangingUse"
-        Me.chkChangingUse.Size = New System.Drawing.Size(250, 70)
-        Me.chkChangingUse.TabIndex = 27
-        Me.chkChangingUse.Text = "¿Usar el cambio sobrante como deposito?"
-        Me.chkChangingUse.UseVisualStyleBackColor = True
+        Me.clmCodMonth.HeaderText = "Codigo Mes"
+        Me.clmCodMonth.Name = "clmCodMonth"
+        Me.clmCodMonth.ReadOnly = True
+        Me.clmCodMonth.Visible = False
         '
         'clmOpcionMes
         '
@@ -399,9 +417,12 @@ Partial Class frmCollectDetail
         '
         'clmCharge
         '
+        Me.clmCharge.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmCharge.FillWeight = 150.0!
         Me.clmCharge.HeaderText = "Cargo"
         Me.clmCharge.Name = "clmCharge"
         Me.clmCharge.ReadOnly = True
+        Me.clmCharge.Width = 150
         '
         'clmMontoMes
         '
@@ -475,6 +496,8 @@ Partial Class frmCollectDetail
     Friend WithEvents Label7 As Label
     Friend WithEvents txtCash As TextBox
     Friend WithEvents chkChangingUse As CheckBox
+    Friend WithEvents clmCodCharge As DataGridViewTextBoxColumn
+    Friend WithEvents clmCodMonth As DataGridViewTextBoxColumn
     Friend WithEvents clmOpcionMes As DataGridViewCheckBoxColumn
     Friend WithEvents clmCharge As DataGridViewTextBoxColumn
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn

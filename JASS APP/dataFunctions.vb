@@ -287,6 +287,7 @@ Module dataFunctions
                 Case 2
                     'Buscar por codigo de linea
                     comand = "SELECT 
+                    (SELECT ''),
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
@@ -297,6 +298,7 @@ Module dataFunctions
                 Case 3
                     'Buscar por nombre de linea
                     comand = "SELECT 
+                    (SELECT ''),
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
@@ -307,6 +309,7 @@ Module dataFunctions
                 Case Else
                     'Buscar a todos
                     comand = "SELECT 
+                    (SELECT ''),
                     VLINES.COD_LINE,
                     VLINES.NAME_LINE,
                     VSECTOR.NAME_SECTOR, 
@@ -932,19 +935,70 @@ Module dataFunctions
                     If dr.HasRows Then
                         dgAccountYear.Rows.Clear()
                         While dr.Read()
-                            dgAccountYear.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, "Bien")
+                            Dim vState As String
+                            If CDec(dr(2).ToString) > 0 Then
+                                vState = "Saldo Pendiente"
+                            Else
+                                vState = "Cancelado"
+                            End If
+                            dgAccountYear.Rows.Add(dr(0).ToString, Format(CDec(dr(1).ToString), "###,##0.00"), Format(CDec(dr(2).ToString), "###,##0.00"), vState)
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
                     End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
+                    dgAccountYear.Rows.Clear()
+                End Try
+            Else
+                MsgBox("No se envio el codigo de linea o cuenta", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub getAccountCollectCharge(vCodAccount As String, dgAccountCharge As DataGridView)
+        Dim cmdGetAccountCollectCharge As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        If Not (cnn.DataSource.Equals("")) Then
+            cmdGetAccountCollectCharge.Connection = cnn
+            cmdGetAccountCollectCharge.CommandType = CommandType.Text
+
+            If Not (vCodAccount = Nothing) Then
+                cmdGetAccountCollectCharge.CommandText = "SELECT account_detail.ID_DETAIL_ACCOUNT, account_detail.COD_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.TYPE_CHARGE, account_detail.MONTH_DEB, account_detail.AMOUNT_DEB, account_detail.AMOUNT_SALDO 
+                FROM account_detail WHERE account_detail.COD_ACCOUNT = @codaccount 
+                ORDER BY account_detail.ACCOUNT_YEAR DESC, account_detail.ACCOUNT_DETAIL_CREATED ASC"
+                cmdGetAccountCollectCharge.Parameters.AddWithValue("codaccount", vCodAccount)
+
+                Try
+                    dr = cmdGetAccountCollectCharge.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dgAccountCharge.Rows.Clear()
+                        While dr.Read
+                            Dim vState As String = ""
+                            Select Case CInt(dr(3).ToString)
+                                Case 1
+                                    vState = "Instalacion"
+                                Case 2
+                                    vState = "Reposicion"
+                                Case 3
+                                    vState = "Servicio de " & MonthName(CInt(dr(4).ToString))
+                            End Select
+                            dgAccountCharge.Rows.Add(dr(3).ToString, dr(4).ToString, False, vState, Format(CDec(dr(5).ToString), "###,##0.00"), CDec(dr(5).ToString) - CDec(dr(6).ToString), Format(CDec(dr(6).ToString), "###,##0.00"))
+                        End While
+                    Else
+                        MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
+                    dgAccountCharge.Rows.Clear()
                 End Try
             Else
                 MsgBox("No se envio el codigo de la cuenta", vbCritical, "Aviso")
             End If
-        Else
-            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
         End If
     End Sub
 
