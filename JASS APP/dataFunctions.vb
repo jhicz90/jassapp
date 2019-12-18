@@ -898,21 +898,24 @@ Module dataFunctions
     End Sub
 
     Public Sub showEditLine(vCodLine As String)
-        frmEditLine.vCodEditLine = vCodLine
-        frmEditLine.ShowDialog()
+        Dim frm As New frmEditLine
+        frm.vCodEditLine = vCodLine
+        frm.ShowDialog()
     End Sub
 
     Public Sub showAccount(vCodLine As String, vCodAccount As String)
-        frmAccount.vCodLine = vCodLine
-        frmAccount.vCodAccount = vCodAccount
-        frmAccount.ShowDialog()
+        Dim frm As New frmAccount
+        frm.vCodLine = vCodLine
+        frm.vCodAccount = vCodAccount
+        frm.ShowDialog()
     End Sub
 
     Public Sub showAccountCollect(vCodLine As String, vCodAccount As String, vNameLine As String)
-        frmCollectDetail.vCodLine = vCodLine
-        frmCollectDetail.vCodAccount = vCodAccount
-        frmCollectDetail.vNameLine = vNameLine
-        frmCollectDetail.ShowDialog()
+        Dim frm As New frmCollectDetail
+        frm.vCodLine = vCodLine
+        frm.vCodAccount = vCodAccount
+        frm.vNameLine = vNameLine
+        frm.ShowDialog()
     End Sub
 
     Public Sub getAccountCollect(vCodLine As String, vCodAccount As String, dgAccountYear As DataGridView)
@@ -969,7 +972,7 @@ Module dataFunctions
             If Not (vCodAccount = Nothing) Then
                 cmdGetAccountCollectCharge.CommandText = "SELECT account_detail.ID_DETAIL_ACCOUNT, account_detail.COD_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.TYPE_CHARGE, account_detail.MONTH_DEB, account_detail.AMOUNT_DEB, account_detail.AMOUNT_SALDO 
                 FROM account_detail WHERE account_detail.COD_ACCOUNT = @codaccount 
-                ORDER BY account_detail.ACCOUNT_YEAR DESC, account_detail.ACCOUNT_DETAIL_CREATED ASC"
+                ORDER BY account_detail.TYPE_CHARGE ASC, account_detail.MONTH_DEB ASC, account_detail.ACCOUNT_DETAIL_CREATED ASC"
                 cmdGetAccountCollectCharge.Parameters.AddWithValue("codaccount", vCodAccount)
 
                 Try
@@ -987,7 +990,7 @@ Module dataFunctions
                                 Case 3
                                     vState = "Servicio de " & MonthName(CInt(dr(4).ToString))
                             End Select
-                            dgAccountCharge.Rows.Add(dr(3).ToString, dr(4).ToString, False, vState, Format(CDec(dr(5).ToString), "###,##0.00"), CDec(dr(5).ToString) - CDec(dr(6).ToString), Format(CDec(dr(6).ToString), "###,##0.00"))
+                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(3).ToString, dr(4).ToString, False, vState, Format(CDec(dr(5).ToString), "###,##0.00"), Format(CDec(dr(5).ToString) - CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString), "###,##0.00"))
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1001,6 +1004,25 @@ Module dataFunctions
             End If
         End If
     End Sub
+
+    Public Function selectCharge(dgAccountCharge As DataGridView, Optional ByVal cleanAll As Boolean = False) As Decimal
+        Dim vSaldoTotal As Decimal = 0
+
+        If cleanAll Then
+            For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
+                dgAccountCharge.Item(3, index).Value = False
+            Next
+            vSaldoTotal = 0
+        Else
+            For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
+                If dgAccountCharge.Item(3, index).Value = True Then
+                    vSaldoTotal += CDec(dgAccountCharge.Item(7, index).Value)
+                End If
+            Next
+        End If
+
+        Return vSaldoTotal
+    End Function
 
     Public Function getAccount(vCodLine As String, vCodAccount As String) As String()
         Dim cmdGetAccount As New OleDbCommand

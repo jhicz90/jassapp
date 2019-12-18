@@ -51,6 +51,7 @@ Partial Class frmCollectDetail
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtDebitAccount = New System.Windows.Forms.TextBox()
         Me.dtgAccountMounth = New System.Windows.Forms.DataGridView()
+        Me.clmIdDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodCharge = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpcionMes = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -58,6 +59,7 @@ Partial Class frmCollectDetail
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPagadoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.btnClean = New System.Windows.Forms.Button()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -71,7 +73,7 @@ Partial Class frmCollectDetail
         Me.txtNameLine.Name = "txtNameLine"
         Me.txtNameLine.ReadOnly = True
         Me.txtNameLine.Size = New System.Drawing.Size(260, 20)
-        Me.txtNameLine.TabIndex = 9
+        Me.txtNameLine.TabIndex = 3
         '
         'txtCodLine
         '
@@ -79,7 +81,7 @@ Partial Class frmCollectDetail
         Me.txtCodLine.Name = "txtCodLine"
         Me.txtCodLine.ReadOnly = True
         Me.txtCodLine.Size = New System.Drawing.Size(260, 20)
-        Me.txtCodLine.TabIndex = 8
+        Me.txtCodLine.TabIndex = 1
         '
         'Label2
         '
@@ -106,7 +108,7 @@ Partial Class frmCollectDetail
         Me.txtCodAccount.Name = "txtCodAccount"
         Me.txtCodAccount.ReadOnly = True
         Me.txtCodAccount.Size = New System.Drawing.Size(260, 20)
-        Me.txtCodAccount.TabIndex = 11
+        Me.txtCodAccount.TabIndex = 2
         '
         'Label3
         '
@@ -135,7 +137,7 @@ Partial Class frmCollectDetail
         Me.dtgAccountYear.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccountYear.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgAccountYear.Size = New System.Drawing.Size(905, 150)
-        Me.dtgAccountYear.TabIndex = 12
+        Me.dtgAccountYear.TabIndex = 4
         '
         'clmYear
         '
@@ -143,24 +145,28 @@ Partial Class frmCollectDetail
         Me.clmYear.HeaderText = "Año"
         Me.clmYear.Name = "clmYear"
         Me.clmYear.ReadOnly = True
+        Me.clmYear.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmMontoTotal
         '
         Me.clmMontoTotal.HeaderText = "Monto Total"
         Me.clmMontoTotal.Name = "clmMontoTotal"
         Me.clmMontoTotal.ReadOnly = True
+        Me.clmMontoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmSaldoTotal
         '
         Me.clmSaldoTotal.HeaderText = "Saldo Total"
         Me.clmSaldoTotal.Name = "clmSaldoTotal"
         Me.clmSaldoTotal.ReadOnly = True
+        Me.clmSaldoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmEstado
         '
         Me.clmEstado.HeaderText = "Estado"
         Me.clmEstado.Name = "clmEstado"
         Me.clmEstado.ReadOnly = True
+        Me.clmEstado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmOpciones
         '
@@ -174,6 +180,7 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grpYearDetail.Controls.Add(Me.btnClean)
         Me.grpYearDetail.Controls.Add(Me.chkChangingUse)
         Me.grpYearDetail.Controls.Add(Me.Label8)
         Me.grpYearDetail.Controls.Add(Me.txtChanging)
@@ -193,7 +200,7 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.Location = New System.Drawing.Point(12, 220)
         Me.grpYearDetail.Name = "grpYearDetail"
         Me.grpYearDetail.Size = New System.Drawing.Size(905, 479)
-        Me.grpYearDetail.TabIndex = 13
+        Me.grpYearDetail.TabIndex = 5
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
         '
@@ -204,7 +211,7 @@ Partial Class frmCollectDetail
         Me.chkChangingUse.Location = New System.Drawing.Point(649, 255)
         Me.chkChangingUse.Name = "chkChangingUse"
         Me.chkChangingUse.Size = New System.Drawing.Size(250, 70)
-        Me.chkChangingUse.TabIndex = 27
+        Me.chkChangingUse.TabIndex = 8
         Me.chkChangingUse.Text = "¿Usar el cambio sobrante como deposito?"
         Me.chkChangingUse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chkChangingUse.UseVisualStyleBackColor = True
@@ -228,7 +235,7 @@ Partial Class frmCollectDetail
         Me.txtChanging.Name = "txtChanging"
         Me.txtChanging.ReadOnly = True
         Me.txtChanging.Size = New System.Drawing.Size(98, 26)
-        Me.txtChanging.TabIndex = 26
+        Me.txtChanging.TabIndex = 7
         Me.txtChanging.Text = "0.00"
         Me.txtChanging.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -250,30 +257,30 @@ Partial Class frmCollectDetail
         Me.txtCash.Location = New System.Drawing.Point(801, 191)
         Me.txtCash.Name = "txtCash"
         Me.txtCash.Size = New System.Drawing.Size(98, 26)
-        Me.txtCash.TabIndex = 24
+        Me.txtCash.TabIndex = 6
         Me.txtCash.Text = "0.00"
         Me.txtCash.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'btnDeposit
         '
-        Me.btnDeposit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnDeposit.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnDeposit.Image = Global.JASS_APP.My.Resources.Resources.deposit_32
-        Me.btnDeposit.Location = New System.Drawing.Point(683, 391)
+        Me.btnDeposit.Location = New System.Drawing.Point(117, 391)
         Me.btnDeposit.Name = "btnDeposit"
         Me.btnDeposit.Size = New System.Drawing.Size(105, 82)
-        Me.btnDeposit.TabIndex = 22
+        Me.btnDeposit.TabIndex = 11
         Me.btnDeposit.Text = "DEPOSITO A CUENTA"
         Me.btnDeposit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnDeposit.UseVisualStyleBackColor = True
         '
         'btnSeePayments
         '
-        Me.btnSeePayments.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSeePayments.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnSeePayments.Image = Global.JASS_APP.My.Resources.Resources.payment_history_32
-        Me.btnSeePayments.Location = New System.Drawing.Point(794, 391)
+        Me.btnSeePayments.Location = New System.Drawing.Point(228, 391)
         Me.btnSeePayments.Name = "btnSeePayments"
         Me.btnSeePayments.Size = New System.Drawing.Size(105, 82)
-        Me.btnSeePayments.TabIndex = 21
+        Me.btnSeePayments.TabIndex = 12
         Me.btnSeePayments.Text = "VER PAGOS REALIZADOS"
         Me.btnSeePayments.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnSeePayments.UseVisualStyleBackColor = True
@@ -283,10 +290,10 @@ Partial Class frmCollectDetail
         Me.btnPay.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnPay.Image = Global.JASS_APP.My.Resources.Resources.refund_32
         Me.btnPay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.btnPay.Location = New System.Drawing.Point(683, 337)
+        Me.btnPay.Location = New System.Drawing.Point(683, 425)
         Me.btnPay.Name = "btnPay"
         Me.btnPay.Size = New System.Drawing.Size(216, 48)
-        Me.btnPay.TabIndex = 20
+        Me.btnPay.TabIndex = 9
         Me.btnPay.Text = "PAGAR"
         Me.btnPay.UseVisualStyleBackColor = True
         '
@@ -308,7 +315,7 @@ Partial Class frmCollectDetail
         Me.txtMountPay.Location = New System.Drawing.Point(801, 159)
         Me.txtMountPay.Name = "txtMountPay"
         Me.txtMountPay.Size = New System.Drawing.Size(98, 26)
-        Me.txtMountPay.TabIndex = 19
+        Me.txtMountPay.TabIndex = 5
         Me.txtMountPay.Text = "0.00"
         Me.txtMountPay.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -331,7 +338,7 @@ Partial Class frmCollectDetail
         Me.txtSaldo.Name = "txtSaldo"
         Me.txtSaldo.ReadOnly = True
         Me.txtSaldo.Size = New System.Drawing.Size(98, 26)
-        Me.txtSaldo.TabIndex = 17
+        Me.txtSaldo.TabIndex = 4
         Me.txtSaldo.Text = "0.00"
         Me.txtSaldo.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -343,7 +350,7 @@ Partial Class frmCollectDetail
         Me.chkDebitUse.Location = New System.Drawing.Point(649, 51)
         Me.chkDebitUse.Name = "chkDebitUse"
         Me.chkDebitUse.Size = New System.Drawing.Size(250, 70)
-        Me.chkDebitUse.TabIndex = 15
+        Me.chkDebitUse.TabIndex = 3
         Me.chkDebitUse.Text = "¿Usar el debito acumulado para pagar el saldo?"
         Me.chkDebitUse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chkDebitUse.UseVisualStyleBackColor = True
@@ -367,7 +374,7 @@ Partial Class frmCollectDetail
         Me.txtDebitAccount.Name = "txtDebitAccount"
         Me.txtDebitAccount.ReadOnly = True
         Me.txtDebitAccount.Size = New System.Drawing.Size(98, 26)
-        Me.txtDebitAccount.TabIndex = 14
+        Me.txtDebitAccount.TabIndex = 2
         Me.txtDebitAccount.Text = "0.00"
         Me.txtDebitAccount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
@@ -382,21 +389,29 @@ Partial Class frmCollectDetail
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountMounth.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgAccountMounth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
+        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdDetail, Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
         Me.dtgAccountMounth.Location = New System.Drawing.Point(6, 19)
         Me.dtgAccountMounth.Name = "dtgAccountMounth"
         Me.dtgAccountMounth.ReadOnly = True
         Me.dtgAccountMounth.RowHeadersVisible = False
         Me.dtgAccountMounth.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccountMounth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccountMounth.Size = New System.Drawing.Size(620, 454)
-        Me.dtgAccountMounth.TabIndex = 13
+        Me.dtgAccountMounth.Size = New System.Drawing.Size(620, 366)
+        Me.dtgAccountMounth.TabIndex = 1
+        '
+        'clmIdDetail
+        '
+        Me.clmIdDetail.HeaderText = "Id Detalle"
+        Me.clmIdDetail.Name = "clmIdDetail"
+        Me.clmIdDetail.ReadOnly = True
+        Me.clmIdDetail.Visible = False
         '
         'clmCodCharge
         '
         Me.clmCodCharge.HeaderText = "Codigo Cargo"
         Me.clmCodCharge.Name = "clmCodCharge"
         Me.clmCodCharge.ReadOnly = True
+        Me.clmCodCharge.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.clmCodCharge.Visible = False
         '
         'clmCodMonth
@@ -404,6 +419,7 @@ Partial Class frmCollectDetail
         Me.clmCodMonth.HeaderText = "Codigo Mes"
         Me.clmCodMonth.Name = "clmCodMonth"
         Me.clmCodMonth.ReadOnly = True
+        Me.clmCodMonth.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.clmCodMonth.Visible = False
         '
         'clmOpcionMes
@@ -422,6 +438,7 @@ Partial Class frmCollectDetail
         Me.clmCharge.HeaderText = "Cargo"
         Me.clmCharge.Name = "clmCharge"
         Me.clmCharge.ReadOnly = True
+        Me.clmCharge.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         Me.clmCharge.Width = 150
         '
         'clmMontoMes
@@ -429,18 +446,33 @@ Partial Class frmCollectDetail
         Me.clmMontoMes.HeaderText = "Monto"
         Me.clmMontoMes.Name = "clmMontoMes"
         Me.clmMontoMes.ReadOnly = True
+        Me.clmMontoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmPagadoMes
         '
         Me.clmPagadoMes.HeaderText = "Pagado"
         Me.clmPagadoMes.Name = "clmPagadoMes"
         Me.clmPagadoMes.ReadOnly = True
+        Me.clmPagadoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
         'clmSaldoMes
         '
         Me.clmSaldoMes.HeaderText = "Saldo"
         Me.clmSaldoMes.Name = "clmSaldoMes"
         Me.clmSaldoMes.ReadOnly = True
+        Me.clmSaldoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'btnClean
+        '
+        Me.btnClean.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnClean.Image = Global.JASS_APP.My.Resources.Resources.clear_32
+        Me.btnClean.Location = New System.Drawing.Point(6, 391)
+        Me.btnClean.Name = "btnClean"
+        Me.btnClean.Size = New System.Drawing.Size(105, 82)
+        Me.btnClean.TabIndex = 10
+        Me.btnClean.Text = "LIMPIAR"
+        Me.btnClean.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnClean.UseVisualStyleBackColor = True
         '
         'frmCollectDetail
         '
@@ -475,11 +507,6 @@ Partial Class frmCollectDetail
     Friend WithEvents Label3 As Label
     Friend WithEvents dtgAccountYear As DataGridView
     Friend WithEvents grpYearDetail As GroupBox
-    Friend WithEvents clmYear As DataGridViewTextBoxColumn
-    Friend WithEvents clmMontoTotal As DataGridViewTextBoxColumn
-    Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
-    Friend WithEvents clmEstado As DataGridViewTextBoxColumn
-    Friend WithEvents clmOpciones As DataGridViewButtonColumn
     Friend WithEvents dtgAccountMounth As DataGridView
     Friend WithEvents chkDebitUse As CheckBox
     Friend WithEvents Label4 As Label
@@ -496,6 +523,12 @@ Partial Class frmCollectDetail
     Friend WithEvents Label7 As Label
     Friend WithEvents txtCash As TextBox
     Friend WithEvents chkChangingUse As CheckBox
+    Friend WithEvents clmYear As DataGridViewTextBoxColumn
+    Friend WithEvents clmMontoTotal As DataGridViewTextBoxColumn
+    Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
+    Friend WithEvents clmEstado As DataGridViewTextBoxColumn
+    Friend WithEvents clmOpciones As DataGridViewButtonColumn
+    Friend WithEvents clmIdDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmCodCharge As DataGridViewTextBoxColumn
     Friend WithEvents clmCodMonth As DataGridViewTextBoxColumn
     Friend WithEvents clmOpcionMes As DataGridViewCheckBoxColumn
@@ -503,4 +536,5 @@ Partial Class frmCollectDetail
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
+    Friend WithEvents btnClean As Button
 End Class
