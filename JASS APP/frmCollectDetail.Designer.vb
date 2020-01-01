@@ -35,6 +35,7 @@ Partial Class frmCollectDetail
         Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.grpYearDetail = New System.Windows.Forms.GroupBox()
+        Me.btnClean = New System.Windows.Forms.Button()
         Me.chkChangingUse = New System.Windows.Forms.CheckBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.txtChanging = New System.Windows.Forms.TextBox()
@@ -59,7 +60,6 @@ Partial Class frmCollectDetail
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPagadoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.btnClean = New System.Windows.Forms.Button()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -203,6 +203,18 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.TabIndex = 5
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
+        '
+        'btnClean
+        '
+        Me.btnClean.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnClean.Image = Global.JASS_APP.My.Resources.Resources.clear_32
+        Me.btnClean.Location = New System.Drawing.Point(6, 391)
+        Me.btnClean.Name = "btnClean"
+        Me.btnClean.Size = New System.Drawing.Size(105, 82)
+        Me.btnClean.TabIndex = 10
+        Me.btnClean.Text = "LIMPIAR"
+        Me.btnClean.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnClean.UseVisualStyleBackColor = True
         '
         'chkChangingUse
         '
@@ -461,18 +473,6 @@ Partial Class frmCollectDetail
         Me.clmSaldoMes.Name = "clmSaldoMes"
         Me.clmSaldoMes.ReadOnly = True
         Me.clmSaldoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'btnClean
-        '
-        Me.btnClean.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnClean.Image = Global.JASS_APP.My.Resources.Resources.clear_32
-        Me.btnClean.Location = New System.Drawing.Point(6, 391)
-        Me.btnClean.Name = "btnClean"
-        Me.btnClean.Size = New System.Drawing.Size(105, 82)
-        Me.btnClean.TabIndex = 10
-        Me.btnClean.Text = "LIMPIAR"
-        Me.btnClean.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
-        Me.btnClean.UseVisualStyleBackColor = True
         '
         'frmCollectDetail
         '

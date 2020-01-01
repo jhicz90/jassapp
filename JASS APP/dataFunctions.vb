@@ -1024,6 +1024,57 @@ Module dataFunctions
         Return vSaldoTotal
     End Function
 
+    Public Sub payAccount(dgAccount As DataGridView, amountPay As Decimal)
+        For index As Integer = 0 To dgAccount.Rows.Count - 1
+            If dgAccount.Item(3, index).Value = True Then
+                If dgAccount.Item(7, index).Value <= amountPay And amountPay > 0 Then
+                    If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(7, index).Value, dgAccount.Item(7, index).Value) Then
+                        amountPay -= dgAccount.Item(7, index).Value
+                    End If
+                ElseIf dgAccount.Item(7, index).Value > amountPay And amountPay > 0 Then
+                    If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(7, index).Value) Then
+                        amountPay = 0
+                    End If
+                Else
+                    Exit For
+                End If
+            End If
+        Next
+    End Sub
+
+    Public Function payAccountDetail(idAccountDetail As Integer, amountPay As Decimal, amountSaldo As Decimal) As Boolean
+        Dim cmdUpdateAccountDetail As New OleDbCommand
+
+        If Not (cnn.DataSource.Equals("")) Then
+            cmdUpdateAccountDetail.Connection = cnn
+            cmdUpdateAccountDetail.CommandType = CommandType.Text
+
+            If Not (idAccountDetail = Nothing) Then
+                cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET AMOUNT_SALDO = @amountsaldo" &
+                    " WHERE account_detail.ID_DETAIL_ACCOUNT = @idaccountdetail"
+                cmdUpdateAccountDetail.Parameters.AddWithValue("amountsaldo", CDec(amountSaldo - amountPay))
+                cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", idAccountDetail)
+
+                Try
+                    cmdUpdateAccountDetail.ExecuteNonQuery()
+                    cmdUpdateAccountDetail.Dispose()
+
+                    Return True
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al actualizar el registro", vbCritical, "Aviso")
+                    MsgBox(ex.Message)
+                    Return False
+                End Try
+            Else
+                MsgBox("No se envio el codigo de la linea", vbCritical, "Aviso")
+                Return False
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            Return False
+        End If
+    End Function
+
     Public Function getAccount(vCodLine As String, vCodAccount As String) As String()
         Dim cmdGetAccount As New OleDbCommand
         Dim dr As OleDbDataReader
