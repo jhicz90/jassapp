@@ -33,6 +33,7 @@ Module dataFunctions
 
                 If dr.HasRows Then
                     While dr.Read()
+                        frmMain.userNameLogin = dr(0).ToString
                         MsgBox("Bienvenid@ " + dr(0).ToString, vbInformation, "Aviso")
                     End While
                 Else
@@ -192,6 +193,34 @@ Module dataFunctions
             cmd.CommandType = CommandType.Text
 
             cmd.CommandText = "SELECT ID_TYPE_USER, NAME_TYPE FROM user_type"
+
+            Try
+                Dim ada As New OleDbDataAdapter(cmd)
+
+                ada.Fill(ds)
+                ada.Dispose()
+                cmd.Dispose()
+
+                Return ds
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End If
+    End Function
+
+    Public Function listUsersInAccount(vCodAccount As String) As DataSet
+        Dim ds As New DataSet
+        Dim cmd As New OleDbCommand
+
+        If cnn.DataSource.Equals("") Then
+            Return Nothing
+        Else
+            cmd.Connection = cnn
+            cmd.CommandType = CommandType.Text
+
+            cmd.CommandText = "SELECT user_lines.COD_USR_LINE AS iduser, (user_lines.USER_NAMES & "" "" & user_lines.USER_SURNAMES) AS fullname" &
+                " FROM user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE WHERE users_to_account.COD_ACCOUNT = @codaccount"
+            cmd.Parameters.AddWithValue("codaccount", vCodAccount)
 
             Try
                 Dim ada As New OleDbDataAdapter(cmd)
@@ -918,6 +947,50 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
+    Public Sub showPrintReceipt(dataReceipt() As String, dataConceptReceipt() As String)
+        Dim frm As New frmReceipt
+        frm.receiptDataStr = dataReceipt
+        frm.receiptConceptStr = dataConceptReceipt
+        frm.previewPrint = My.Settings.vPreviewPrint
+        frm.ShowDialog()
+    End Sub
+
+    Public Function lastCodReceipt() As String()
+        Dim cmdGetLastReceipt As New OleDbCommand
+        Dim dr As OleDbDataReader
+        Dim dataStr(1) As String
+        dataStr(0) = ""
+        dataStr(1) = ""
+
+        If Not cnn.DataSource.Equals("") Then
+            cmdGetLastReceipt.Connection = cnn
+            cmdGetLastReceipt.CommandType = CommandType.Text
+
+            cmdGetLastReceipt.CommandText = "SELECT DISTINCT TOP 1 payments.ID_PAY FROM payments ORDER BY payments.ID_PAY DESC"
+
+            Try
+                dr = cmdGetLastReceipt.ExecuteReader()
+
+                If dr.HasRows Then
+                    dr.Read()
+                    dataStr(0) = dr(0).ToString
+                    dataStr(1) = dr(0).ToString.PadLeft(7, "0")
+                Else
+                    dataStr(0) = "1"
+                    dataStr(1) = dataStr(0).PadLeft(7, "0")
+                End If
+
+                Return dataStr
+            Catch ex As Exception
+                MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
+                Return dataStr
+            End Try
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            Return dataStr
+        End If
+    End Function
+
     Public Sub getAccountCollect(vCodLine As String, vCodAccount As String, dgAccountYear As DataGridView)
         Dim cmdGetAccountCollect As New OleDbCommand
         Dim dr As OleDbDataReader
@@ -988,7 +1061,7 @@ Module dataFunctions
                                 Case 2
                                     vState = "Reposicion"
                                 Case 3
-                                    vState = "Servicio de " & MonthName(CInt(dr(5).ToString))
+                                    vState = "Servicio de " & MonthName(CInt(dr(5).ToString)) & " " & dr(1).ToString
                             End Select
                             dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, vState, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
                         End While
@@ -1024,8 +1097,11 @@ Module dataFunctions
         Return vSaldoTotal
     End Function
 
-    Public Sub payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing)
+    Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing)
         Dim rateYear As Integer = 0
+        Dim dataConceptReceipt(12) As String
+        Dim indexConcept As Integer = 0
+        Dim amountPayTotal As Decimal
 
         If dgAccount.Rows.Count > 0 Then
             For index As Integer = 0 To dgAccount.Rows.Count - 1
@@ -1034,10 +1110,20 @@ Module dataFunctions
                 If dgAccount.Item(4, index).Value = True Then
                     If dgAccount.Item(8, index).Value <= amountPay And amountPay > 0 Then
                         If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value, dgAccount.Item(8, index).Value) Then
+                            dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
+                            dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
+                            amountPayTotal += dgAccount.Item(8, index).Value
+                            indexConcept += 1
+
                             amountPay -= dgAccount.Item(8, index).Value
                         End If
                     ElseIf dgAccount.Item(8, index).Value > amountPay And amountPay > 0 Then
                         If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(8, index).Value) Then
+                            dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
+                            dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
+                            amountPayTotal += amountPay
+                            indexConcept += 1
+
                             amountPay = 0
                         End If
                     Else
@@ -1046,17 +1132,19 @@ Module dataFunctions
                 End If
             Next
 
+            dataConceptReceipt(12) = Format(amountPayTotal, "###,##0.00")
             getAccountYearUpdated(rateYear, vCodLine, vCodAccount)
+            Return dataConceptReceipt
+            'Recordar implementar un limite de pagos por concepto en un maximo de 6
+        Else
+            dataConceptReceipt = Nothing
+            Return dataConceptReceipt
         End If
-    End Sub
+    End Function
 
     Public Sub getAccountYearUpdated(rateYear As Integer, vCodLine As String, vCodAccount As String)
         Dim cmdGetAccountYearDetail, cmdUpdateAccountYear As New OleDbCommand
         Dim dr As OleDbDataReader
-
-        MsgBox(rateYear)
-        MsgBox(vCodLine)
-        MsgBox(vCodAccount)
 
         If Not cnn.DataSource.Equals("") Then
             cmdGetAccountYearDetail.Connection = cnn
@@ -1079,8 +1167,6 @@ Module dataFunctions
 
                         Dim saldoTotalYear As Decimal = 0
                         saldoTotalYear = Val(dr(0).ToString)
-
-                        MsgBox(saldoTotalYear)
 
                         cmdUpdateAccountYear.CommandText = "UPDATE account_line SET ACCOUNT_SALDO = @accountsaldo, ACCOUNT_UPDATED = @dateUpdated" &
                             " WHERE account_line.COD_ACCOUNT = @codaccount AND account_line.ACCOUNT_YEAR = @accountyear"
@@ -1198,7 +1284,9 @@ Module dataFunctions
             cmd.Connection = cnn
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT ID_LINE, COD_LINE, NAME_LINE, ID_SECTOR, ADDRESS, INSTALLDATE_LINE, DESCP_LINE, CREATE_LINE, UPDATE_LINE FROM lines WHERE COD_LINE LIKE '" & vCodLine & "'"
+            cmd.CommandText = "SELECT lines.ID_LINE, lines.COD_LINE, lines.NAME_LINE, lines.ID_SECTOR, sector.COD_SECTOR, sector.NAME_SECTOR, lines.ADDRESS, lines.INSTALLDATE_LINE, lines.DESCP_LINE, lines.CREATE_LINE, lines.UPDATE_LINE" &
+                " FROM lines INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR WHERE lines.COD_LINE = @codline"
+            cmd.Parameters.AddWithValue("codline", vCodLine)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -1207,16 +1295,18 @@ Module dataFunctions
                     dr.Read()
                     cmd.Dispose()
 
-                    Dim dataLine(8) As String
-                    dataLine(0) = dr(0).ToString
-                    dataLine(1) = dr(1).ToString
-                    dataLine(2) = dr(2).ToString
-                    dataLine(3) = dr(3).ToString
-                    dataLine(4) = dr(4).ToString
-                    dataLine(5) = Format(dr(5).ToString, "Short Date")
-                    dataLine(6) = dr(6).ToString
-                    dataLine(7) = Format(dr(7).ToString, "Short Date")
-                    dataLine(8) = Format(dr(8).ToString, "Short Date")
+                    Dim dataLine(10) As String
+                    dataLine(0) = dr(0).ToString 'Id de linea
+                    dataLine(1) = dr(1).ToString 'Codigo de linea
+                    dataLine(2) = dr(2).ToString 'Nombre de linea
+                    dataLine(3) = dr(3).ToString 'Id de sector
+                    dataLine(4) = dr(4).ToString 'Codigo de sector
+                    dataLine(5) = dr(5).ToString 'Nombre del sector
+                    dataLine(6) = dr(6).ToString 'Direccion de la linea
+                    dataLine(7) = Format(dr(7).ToString, "Short Date") 'Fecha de instalacion
+                    dataLine(8) = dr(8).ToString 'Descripcion de linea
+                    dataLine(9) = Format(dr(9).ToString, "Short Date") 'Fecha de registro
+                    dataLine(10) = Format(dr(10).ToString, "Short Date") 'Fecha de actualizacion
 
                     Return dataLine
                 Else
@@ -1228,11 +1318,11 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getUser(vCodeUser As String) As String()
+    Public Function getUser(vCodUser As String) As String()
         Dim cmd As New OleDbCommand
         Dim dr As OleDbDataReader
 
-        If cnn.DataSource.Equals("") Or IsNothing(vCodeUser) Then
+        If cnn.DataSource.Equals("") Or IsNothing(vCodUser) Then
             Return Nothing
         Else
             cmd.Connection = cnn
@@ -1240,16 +1330,16 @@ Module dataFunctions
 
             cmd.CommandText = "SELECT user_lines.COD_USR_LINE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_type.NAME_TYPE, user_lines.USER_DOCID, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL, user_lines.USER_CREATED, user_lines.USER_UPDATED
             FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
-            WHERE user_lines.COD_USR_LINE LIKE '" & vCodeUser & "'"
+            WHERE user_lines.COD_USR_LINE = @coduser"
+            cmd.Parameters.AddWithValue("coduser", vCodUser)
 
             Try
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
                     dr.Read()
-                    cmd.Dispose()
 
-                    Dim dataUser(15) As String
+                    Dim dataUser(10) As String
                     dataUser(0) = dr(0).ToString 'Codigo de usuario
                     dataUser(1) = dr(1).ToString 'Nombres
                     dataUser(2) = dr(2).ToString 'Apellidos
@@ -1262,25 +1352,16 @@ Module dataFunctions
                     dataUser(9) = dr(9).ToString 'Fecha creado
                     dataUser(10) = dr(10).ToString 'Fecha actualizado
 
-                    'If vRate = 0 Then
-                    '    dataUser(11) = 0
-                    '    dataUser(12) = False
-                    '    dataUser(13) = 0
-                    '    dataUser(14) = False
-                    '    dataUser(15) = 0
-                    'Else
-                    '    dataUser(11) = dr(11).ToString 'Codigo de tarifa
-                    '    dataUser(12) = Convert.ToBoolean(dr(12).ToString) 'Titular
-                    '    dataUser(13) = dr(11).ToString 'Codigo de linea
-                    '    dataUser(14) = Convert.ToBoolean(dr(14).ToString) 'Variable
-                    '    dataUser(15) = dr(15).ToString 'Precio de tarifa
-                    'End If
-
                     Return dataUser
                 Else
                     Return Nothing
                 End If
+
+                dr.Close()
+                cmd.Dispose()
             Catch ex As Exception
+                MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
                 Return Nothing
             End Try
         End If

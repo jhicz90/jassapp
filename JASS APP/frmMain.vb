@@ -1,4 +1,5 @@
 ﻿Public Class frmMain
+    Public userNameLogin As String = ""
     Public Sub New()
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
@@ -64,4 +65,8 @@
         frmAbout.ShowDialog()
     End Sub
 
+    Private Sub tsmiPreviewReceipt_Click(sender As Object, e As EventArgs) Handles tsmiPreviewReceipt.Click
+        tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
+        My.Settings.vPreviewPrint = Not My.Settings.vPreviewPrint
+    End Sub
 End Class

@@ -10,25 +10,34 @@
         dsRates = listRates()
 
         If Not dsRates.HasErrors Then
+            cbxRates.Enabled = True
             cbxRates.DataSource = dsRates.Tables(0)
             cbxRates.ValueMember = "ID_RATE"
             cbxRates.DisplayMember = "NAME_RATE"
+        Else
+            cbxRates.Enabled = False
         End If
 
         dsAvenues = listAvenues()
 
         If Not dsAvenues.HasErrors Then
+            cbxStreets.Enabled = True
             cbxStreets.DataSource = dsAvenues.Tables(0)
             cbxStreets.ValueMember = "ID_SECTOR"
             cbxStreets.DisplayMember = "NAME_SECTOR"
+        Else
+            cbxStreets.Enabled = False
         End If
 
         dsUserTypes = listUserTypes()
 
         If Not dsUserTypes.HasErrors Then
+            cbxTypeUser.Enabled = True
             cbxTypeUser.DataSource = dsUserTypes.Tables(0)
             cbxTypeUser.ValueMember = "ID_TYPE_USER"
             cbxTypeUser.DisplayMember = "NAME_TYPE"
+        Else
+            cbxTypeUser.Enabled = False
         End If
 
         newLine()

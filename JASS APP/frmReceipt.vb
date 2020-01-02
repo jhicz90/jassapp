@@ -1,6 +1,15 @@
 ﻿Public Class frmReceipt
+    Public receiptDataStr(6) As String
+    Public receiptConceptStr(12) As String
+    Public previewPrint As Boolean = False
     Private Sub frmReceipt_Load(sender As Object, e As EventArgs) Handles Me.Load
         printPrevReceipt.AutoZoom = True
+
+        printDialogReceipt.Document = printDocReceipt
+        If previewPrint = False Then
+            printDocReceipt.Print()
+            Close()
+        End If
     End Sub
 
     Private Sub printDocReceipt_PrintPage(sender As Object, e As Printing.PrintPageEventArgs) Handles printDocReceipt.PrintPage
@@ -17,30 +26,35 @@
         strFont.LineAlignment = StringAlignment.Center
 
         'Datos del usuario y recibo
-        e.Graphics.DrawString("2019-DIC94-05335", receiptFont, Brushes.Black, 415, 43)
-        e.Graphics.DrawString("0000001", receiptFont, Brushes.Black, 675, 43)
-        e.Graphics.DrawString("JOSE HANS IBAÑEZ CASTRO", receiptFontData, Brushes.Black, 450, 84)
-        e.Graphics.DrawString("46891419", receiptFontData, Brushes.Black, 450, 104)
-        e.Graphics.DrawString("SAN PEDRO", receiptFontData, Brushes.Black, 450, 124)
+        e.Graphics.DrawString(receiptDataStr(0), receiptFont, Brushes.Black, 415, 43) 'Codigo de linea
+        e.Graphics.DrawString(receiptDataStr(1), receiptFont, Brushes.Black, 675, 43) 'Numero de recibo
+        e.Graphics.DrawString(receiptDataStr(2), receiptFontData, Brushes.Black, 450, 84) 'Nombre de usuario
+        e.Graphics.DrawString(receiptDataStr(3), receiptFontData, Brushes.Black, 450, 104) 'Numero de documento de usuario
+        e.Graphics.DrawString(receiptDataStr(4), receiptFontData, Brushes.Black, 450, 124) 'Calle de la linea
 
         'Datos de los pago por concepto inicial es 188 +19.5
-        e.Graphics.DrawString("SERVICIO DE ENERO 2020", receiptFontData, Brushes.Black, 75, 188)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 188)
-        e.Graphics.DrawString("SERVICIO DE FEBRERO 2020", receiptFontData, Brushes.Black, 75, 208)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 208)
-        e.Graphics.DrawString("SERVICIO DE MARZO 2020", receiptFontData, Brushes.Black, 75, 227)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 227)
-        e.Graphics.DrawString("SERVICIO DE ABRIL 2020", receiptFontData, Brushes.Black, 75, 247)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 247)
-        e.Graphics.DrawString("SERVICIO DE MAYO 2020", receiptFontData, Brushes.Black, 75, 266)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 266)
-        e.Graphics.DrawString("SERVICIO DE JUNIO 2020", receiptFontData, Brushes.Black, 75, 286)
-        e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 286)
-        e.Graphics.DrawString("90.00", receiptFontData, Brushes.Black, 675, 305) 'TOTAL
+        For index As Integer = 0 To 5
+            e.Graphics.DrawString(receiptConceptStr(index), receiptFontData, Brushes.Black, 75, Math.Round(188 + (19.5 * index), 0))
+            e.Graphics.DrawString(receiptConceptStr(index + 6), receiptFontData, Brushes.Black, 675, Math.Round(188 + (19.5 * index), 0))
+        Next
+        'e.Graphics.DrawString("SERVICIO DE ENERO 2020", receiptFontData, Brushes.Black, 75, 188)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 188)
+        'e.Graphics.DrawString("SERVICIO DE FEBRERO 2020", receiptFontData, Brushes.Black, 75, 208)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 208)
+        'e.Graphics.DrawString("SERVICIO DE MARZO 2020", receiptFontData, Brushes.Black, 75, 227)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 227)
+        'e.Graphics.DrawString("SERVICIO DE ABRIL 2020", receiptFontData, Brushes.Black, 75, 247)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 247)
+        'e.Graphics.DrawString("SERVICIO DE MAYO 2020", receiptFontData, Brushes.Black, 75, 266)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 266)
+        'e.Graphics.DrawString("SERVICIO DE JUNIO 2020", receiptFontData, Brushes.Black, 75, 286)
+        'e.Graphics.DrawString("15.00", receiptFontData, Brushes.Black, 675, 286)
+        'e.Graphics.DrawString("90.00", receiptFontData, Brushes.Black, 675, 305)
+        e.Graphics.DrawString(receiptConceptStr(12), receiptFontData, Brushes.Black, 675, 305) 'TOTAL
 
         'Datos del recibo usuario de cobranza y fecha de emision de recibo
-        e.Graphics.DrawString("JOSE HANS", receiptFontData, Brushes.Black, 125, 345) 'USUARIO
-        e.Graphics.DrawString(Date.Today, receiptFontData, Brushes.Black, 665, 345) 'FECHA
+        e.Graphics.DrawString(receiptDataStr(5), receiptFontData, Brushes.Black, 125, 345) 'USUARIO
+        e.Graphics.DrawString(receiptDataStr(6), receiptFontData, Brushes.Black, 665, 345) 'FECHA
     End Sub
 
     Private Sub btnZoomIn_Click(sender As Object, e As EventArgs) Handles btnZoomIn.Click

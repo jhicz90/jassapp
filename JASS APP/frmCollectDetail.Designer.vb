@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmCollectDetail
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class frmCollectDetail
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar usando el Diseñador de Windows Forms.  
     'No lo modifique con el editor de código.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.txtNameLine = New System.Windows.Forms.TextBox()
         Me.txtCodLine = New System.Windows.Forms.TextBox()
@@ -35,6 +35,8 @@ Partial Class frmCollectDetail
         Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.grpYearDetail = New System.Windows.Forms.GroupBox()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.txtCodNumReceipt = New System.Windows.Forms.TextBox()
         Me.btnClean = New System.Windows.Forms.Button()
         Me.chkChangingUse = New System.Windows.Forms.CheckBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -61,7 +63,8 @@ Partial Class frmCollectDetail
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPagadoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.cbxUsersInAccount = New System.Windows.Forms.ComboBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -182,7 +185,8 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.grpYearDetail.Controls.Add(Me.Button1)
+        Me.grpYearDetail.Controls.Add(Me.Label9)
+        Me.grpYearDetail.Controls.Add(Me.txtCodNumReceipt)
         Me.grpYearDetail.Controls.Add(Me.btnClean)
         Me.grpYearDetail.Controls.Add(Me.chkChangingUse)
         Me.grpYearDetail.Controls.Add(Me.Label8)
@@ -207,6 +211,29 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
         '
+        'Label9
+        '
+        Me.Label9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(632, 22)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(101, 20)
+        Me.Label9.TabIndex = 27
+        Me.Label9.Text = "N° de Recibo"
+        '
+        'txtCodNumReceipt
+        '
+        Me.txtCodNumReceipt.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtCodNumReceipt.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtCodNumReceipt.Location = New System.Drawing.Point(739, 19)
+        Me.txtCodNumReceipt.Name = "txtCodNumReceipt"
+        Me.txtCodNumReceipt.ReadOnly = True
+        Me.txtCodNumReceipt.Size = New System.Drawing.Size(160, 26)
+        Me.txtCodNumReceipt.TabIndex = 26
+        Me.txtCodNumReceipt.Text = "#"
+        Me.txtCodNumReceipt.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
         'btnClean
         '
         Me.btnClean.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
@@ -223,11 +250,11 @@ Partial Class frmCollectDetail
         '
         Me.chkChangingUse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkChangingUse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkChangingUse.Location = New System.Drawing.Point(649, 255)
+        Me.chkChangingUse.Location = New System.Drawing.Point(649, 287)
         Me.chkChangingUse.Name = "chkChangingUse"
         Me.chkChangingUse.Size = New System.Drawing.Size(250, 70)
         Me.chkChangingUse.TabIndex = 8
-        Me.chkChangingUse.Text = "¿Usar el cambio sobrante como deposito?"
+        Me.chkChangingUse.Text = "¿Usar el cambio sobrante como deposito a debito?"
         Me.chkChangingUse.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chkChangingUse.UseVisualStyleBackColor = True
         '
@@ -236,7 +263,7 @@ Partial Class frmCollectDetail
         Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label8.AutoSize = True
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label8.Location = New System.Drawing.Point(729, 226)
+        Me.Label8.Location = New System.Drawing.Point(729, 258)
         Me.Label8.Name = "Label8"
         Me.Label8.Size = New System.Drawing.Size(63, 20)
         Me.Label8.TabIndex = 25
@@ -246,7 +273,7 @@ Partial Class frmCollectDetail
         '
         Me.txtChanging.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtChanging.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtChanging.Location = New System.Drawing.Point(801, 223)
+        Me.txtChanging.Location = New System.Drawing.Point(801, 255)
         Me.txtChanging.Name = "txtChanging"
         Me.txtChanging.ReadOnly = True
         Me.txtChanging.Size = New System.Drawing.Size(98, 26)
@@ -259,7 +286,7 @@ Partial Class frmCollectDetail
         Me.Label7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(729, 194)
+        Me.Label7.Location = New System.Drawing.Point(729, 226)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(66, 20)
         Me.Label7.TabIndex = 23
@@ -269,7 +296,7 @@ Partial Class frmCollectDetail
         '
         Me.txtCash.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtCash.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtCash.Location = New System.Drawing.Point(801, 191)
+        Me.txtCash.Location = New System.Drawing.Point(801, 223)
         Me.txtCash.Name = "txtCash"
         Me.txtCash.Size = New System.Drawing.Size(98, 26)
         Me.txtCash.TabIndex = 6
@@ -317,7 +344,7 @@ Partial Class frmCollectDetail
         Me.Label6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label6.AutoSize = True
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label6.Location = New System.Drawing.Point(648, 162)
+        Me.Label6.Location = New System.Drawing.Point(648, 194)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(147, 20)
         Me.Label6.TabIndex = 18
@@ -327,7 +354,7 @@ Partial Class frmCollectDetail
         '
         Me.txtMountPay.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtMountPay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtMountPay.Location = New System.Drawing.Point(801, 159)
+        Me.txtMountPay.Location = New System.Drawing.Point(801, 191)
         Me.txtMountPay.Name = "txtMountPay"
         Me.txtMountPay.Size = New System.Drawing.Size(98, 26)
         Me.txtMountPay.TabIndex = 5
@@ -339,7 +366,7 @@ Partial Class frmCollectDetail
         Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label5.AutoSize = True
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(654, 130)
+        Me.Label5.Location = New System.Drawing.Point(654, 162)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(141, 20)
         Me.Label5.TabIndex = 16
@@ -349,7 +376,7 @@ Partial Class frmCollectDetail
         '
         Me.txtSaldo.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtSaldo.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtSaldo.Location = New System.Drawing.Point(801, 127)
+        Me.txtSaldo.Location = New System.Drawing.Point(801, 159)
         Me.txtSaldo.Name = "txtSaldo"
         Me.txtSaldo.ReadOnly = True
         Me.txtSaldo.Size = New System.Drawing.Size(98, 26)
@@ -362,7 +389,7 @@ Partial Class frmCollectDetail
         Me.chkDebitUse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkDebitUse.Enabled = False
         Me.chkDebitUse.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkDebitUse.Location = New System.Drawing.Point(649, 51)
+        Me.chkDebitUse.Location = New System.Drawing.Point(649, 83)
         Me.chkDebitUse.Name = "chkDebitUse"
         Me.chkDebitUse.Size = New System.Drawing.Size(250, 70)
         Me.chkDebitUse.TabIndex = 3
@@ -375,7 +402,7 @@ Partial Class frmCollectDetail
         Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(645, 22)
+        Me.Label4.Location = New System.Drawing.Point(645, 54)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(150, 20)
         Me.Label4.TabIndex = 14
@@ -385,7 +412,7 @@ Partial Class frmCollectDetail
         '
         Me.txtDebitAccount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtDebitAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtDebitAccount.Location = New System.Drawing.Point(801, 19)
+        Me.txtDebitAccount.Location = New System.Drawing.Point(801, 51)
         Me.txtDebitAccount.Name = "txtDebitAccount"
         Me.txtDebitAccount.ReadOnly = True
         Me.txtDebitAccount.Size = New System.Drawing.Size(98, 26)
@@ -484,20 +511,33 @@ Partial Class frmCollectDetail
         Me.clmSaldoMes.ReadOnly = True
         Me.clmSaldoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
-        'Button1
+        'cbxUsersInAccount
         '
-        Me.Button1.Location = New System.Drawing.Point(421, 420)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 26
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.cbxUsersInAccount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbxUsersInAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxUsersInAccount.FormattingEnabled = True
+        Me.cbxUsersInAccount.Location = New System.Drawing.Point(657, 38)
+        Me.cbxUsersInAccount.Name = "cbxUsersInAccount"
+        Me.cbxUsersInAccount.Size = New System.Drawing.Size(260, 21)
+        Me.cbxUsersInAccount.TabIndex = 11
+        '
+        'Label10
+        '
+        Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(507, 42)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(144, 13)
+        Me.Label10.TabIndex = 12
+        Me.Label10.Text = "Usuarios asociados a cuenta"
         '
         'frmCollectDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(929, 711)
+        Me.Controls.Add(Me.Label10)
+        Me.Controls.Add(Me.cbxUsersInAccount)
         Me.Controls.Add(Me.grpYearDetail)
         Me.Controls.Add(Me.dtgAccountYear)
         Me.Controls.Add(Me.txtCodAccount)
@@ -557,5 +597,8 @@ Partial Class frmCollectDetail
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
-    Friend WithEvents Button1 As Button
+    Friend WithEvents txtCodNumReceipt As TextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents cbxUsersInAccount As ComboBox
+    Friend WithEvents Label10 As Label
 End Class

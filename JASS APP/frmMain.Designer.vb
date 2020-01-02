@@ -30,6 +30,8 @@ Partial Class frmMain
         Me.tsmiSharedLine = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiNewUser = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiPrint = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiConfigPrints = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiPreviewReceipt = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiConfig = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdRegister = New System.Windows.Forms.ToolStripDropDownButton()
@@ -73,7 +75,7 @@ Partial Class frmMain
         '
         Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiSharedLine, Me.tsmiNewUser})
         Me.tsmiNew.Name = "tsmiNew"
-        Me.tsmiNew.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiNew.Size = New System.Drawing.Size(180, 22)
         Me.tsmiNew.Text = "Nuevo"
         '
         'tsmiNewLine
@@ -107,14 +109,29 @@ Partial Class frmMain
         '
         'tsmiPrint
         '
+        Me.tsmiPrint.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiConfigPrints, Me.tsmiPreviewReceipt})
         Me.tsmiPrint.Name = "tsmiPrint"
-        Me.tsmiPrint.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiPrint.Size = New System.Drawing.Size(180, 22)
         Me.tsmiPrint.Text = "Impresora"
+        '
+        'tsmiConfigPrints
+        '
+        Me.tsmiConfigPrints.Name = "tsmiConfigPrints"
+        Me.tsmiConfigPrints.Size = New System.Drawing.Size(252, 22)
+        Me.tsmiConfigPrints.Text = "Configurar impresoras"
+        '
+        'tsmiPreviewReceipt
+        '
+        Me.tsmiPreviewReceipt.Checked = Global.JASS_APP.My.MySettings.Default.vPreviewPrint
+        Me.tsmiPreviewReceipt.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.tsmiPreviewReceipt.Name = "tsmiPreviewReceipt"
+        Me.tsmiPreviewReceipt.Size = New System.Drawing.Size(252, 22)
+        Me.tsmiPreviewReceipt.Text = "Previsualizar impresion de recibos"
         '
         'tsmiConfig
         '
         Me.tsmiConfig.Name = "tsmiConfig"
-        Me.tsmiConfig.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiConfig.Size = New System.Drawing.Size(180, 22)
         Me.tsmiConfig.Text = "Configuración"
         '
         'tsmiExit
@@ -122,7 +139,7 @@ Partial Class frmMain
         Me.tsmiExit.Name = "tsmiExit"
         Me.tsmiExit.ShortcutKeyDisplayString = "Alt + F4"
         Me.tsmiExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.tsmiExit.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiExit.Size = New System.Drawing.Size(180, 22)
         Me.tsmiExit.Text = "&Salir"
         '
         'tsdpdRegister
@@ -293,4 +310,6 @@ Partial Class frmMain
     Friend WithEvents tsdpdHelp As ToolStripDropDownButton
     Friend WithEvents tsmiAbout As ToolStripMenuItem
     Friend WithEvents tsmiNewUser As ToolStripMenuItem
+    Friend WithEvents tsmiConfigPrints As ToolStripMenuItem
+    Friend WithEvents tsmiPreviewReceipt As ToolStripMenuItem
 End Class

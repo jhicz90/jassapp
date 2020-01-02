@@ -1,10 +1,22 @@
 ﻿Public Class frmCollectDetail
+    Dim dsUsersInAccount As DataSet = Nothing
     Public vCodLine As String = Nothing
     Public vCodAccount As String = Nothing
     Public vNameLine As String = Nothing
+    Public vDataReceipt(1) As String
     Private vDebitAmount, vDebtAmount As Decimal
     Private Sub frmCollectDetail_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconCollect
+
+        dsUsersInAccount = listUsersInAccount(vCodAccount)
+
+        If Not dsUsersInAccount.HasErrors Then
+            cbxUsersInAccount.DataSource = dsUsersInAccount.Tables(0)
+            cbxUsersInAccount.ValueMember = "iduser"
+            cbxUsersInAccount.DisplayMember = "fullname"
+        Else
+            cbxUsersInAccount.Enabled = False
+        End If
 
         getAccountCollect(vCodLine, vCodAccount, dtgAccountYear)
 
@@ -20,6 +32,9 @@
         End If
 
         CollectInit()
+
+        vDataReceipt = lastCodReceipt()
+        txtCodNumReceipt.Text = vDataReceipt(1)
     End Sub
 
     Private Sub CollectInit()
@@ -33,6 +48,8 @@
         txtMountPay.Text = Format(0, "###,##0.00")
         txtCash.Text = Format(0, "###,##0.00")
         txtChanging.Text = Format(0, "###,##0.00")
+        vDataReceipt = lastCodReceipt()
+        txtCodNumReceipt.Text = vDataReceipt(1)
     End Sub
 
     Private Sub dtgAccountYear_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountYear.CellClick
@@ -117,15 +134,23 @@
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        frmReceipt.ShowDialog()
-    End Sub
-
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
         If Val(txtMountPay.Text) > 0 And Val(txtSaldo.Text) > 0 Then
-            payAccount(dtgAccountMounth, Val(txtMountPay.Text), vCodLine, vCodAccount)
+            Dim concepts(12) As String
+            Dim data(6) As String
+
+            data(0) = vCodLine
+            data(1) = vDataReceipt(1)
+            data(2) = cbxUsersInAccount.Text
+            data(3) = getUser(cbxUsersInAccount.SelectedValue)(5)
+            data(4) = getLine(vCodLine)(5)
+            data(5) = Strings.Left(frmMain.userNameLogin, 10)
+            data(6) = Date.Today
+            concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vCodLine, vCodAccount)
+
             getAccountCollectCharge(vCodAccount, dtgAccountMounth)
             getAccountCollect(vCodLine, vCodAccount, dtgAccountYear)
+            showPrintReceipt(data, concepts)
             cleanAll()
         End If
     End Sub

@@ -63,6 +63,18 @@ Namespace My
                 Return CType(Me("dbJASSConnectionString"),String)
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property vPreviewPrint() As Boolean
+            Get
+                Return CType(Me("vPreviewPrint"),Boolean)
+            End Get
+            Set
+                Me("vPreviewPrint") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
