@@ -53,6 +53,7 @@ Partial Class frmCollectDetail
         Me.txtDebitAccount = New System.Windows.Forms.TextBox()
         Me.dtgAccountMounth = New System.Windows.Forms.DataGridView()
         Me.clmIdDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmYearDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodCharge = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodMonth = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpcionMes = New System.Windows.Forms.DataGridViewCheckBoxColumn()
@@ -60,6 +61,7 @@ Partial Class frmCollectDetail
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPagadoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Button1 = New System.Windows.Forms.Button()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -180,6 +182,7 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grpYearDetail.Controls.Add(Me.Button1)
         Me.grpYearDetail.Controls.Add(Me.btnClean)
         Me.grpYearDetail.Controls.Add(Me.chkChangingUse)
         Me.grpYearDetail.Controls.Add(Me.Label8)
@@ -401,7 +404,7 @@ Partial Class frmCollectDetail
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountMounth.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgAccountMounth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdDetail, Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
+        Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdDetail, Me.clmYearDetail, Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
         Me.dtgAccountMounth.Location = New System.Drawing.Point(6, 19)
         Me.dtgAccountMounth.Name = "dtgAccountMounth"
         Me.dtgAccountMounth.ReadOnly = True
@@ -417,6 +420,13 @@ Partial Class frmCollectDetail
         Me.clmIdDetail.Name = "clmIdDetail"
         Me.clmIdDetail.ReadOnly = True
         Me.clmIdDetail.Visible = False
+        '
+        'clmYearDetail
+        '
+        Me.clmYearDetail.HeaderText = "Codigo Año"
+        Me.clmYearDetail.Name = "clmYearDetail"
+        Me.clmYearDetail.ReadOnly = True
+        Me.clmYearDetail.Visible = False
         '
         'clmCodCharge
         '
@@ -474,6 +484,15 @@ Partial Class frmCollectDetail
         Me.clmSaldoMes.ReadOnly = True
         Me.clmSaldoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(421, 420)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 26
+        Me.Button1.Text = "Button1"
+        Me.Button1.UseVisualStyleBackColor = True
+        '
         'frmCollectDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -528,7 +547,9 @@ Partial Class frmCollectDetail
     Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
     Friend WithEvents clmEstado As DataGridViewTextBoxColumn
     Friend WithEvents clmOpciones As DataGridViewButtonColumn
+    Friend WithEvents btnClean As Button
     Friend WithEvents clmIdDetail As DataGridViewTextBoxColumn
+    Friend WithEvents clmYearDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmCodCharge As DataGridViewTextBoxColumn
     Friend WithEvents clmCodMonth As DataGridViewTextBoxColumn
     Friend WithEvents clmOpcionMes As DataGridViewCheckBoxColumn
@@ -536,5 +557,5 @@ Partial Class frmCollectDetail
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
-    Friend WithEvents btnClean As Button
+    Friend WithEvents Button1 As Button
 End Class

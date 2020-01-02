@@ -970,7 +970,7 @@ Module dataFunctions
             cmdGetAccountCollectCharge.CommandType = CommandType.Text
 
             If Not (vCodAccount = Nothing) Then
-                cmdGetAccountCollectCharge.CommandText = "SELECT account_detail.ID_DETAIL_ACCOUNT, account_detail.COD_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.TYPE_CHARGE, account_detail.MONTH_DEB, account_detail.AMOUNT_DEB, account_detail.AMOUNT_SALDO 
+                cmdGetAccountCollectCharge.CommandText = "SELECT account_detail.ID_DETAIL_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.COD_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.TYPE_CHARGE, account_detail.MONTH_DEB, account_detail.AMOUNT_DEB, account_detail.AMOUNT_SALDO 
                 FROM account_detail WHERE account_detail.COD_ACCOUNT = @codaccount 
                 ORDER BY account_detail.TYPE_CHARGE ASC, account_detail.MONTH_DEB ASC, account_detail.ACCOUNT_DETAIL_CREATED ASC"
                 cmdGetAccountCollectCharge.Parameters.AddWithValue("codaccount", vCodAccount)
@@ -982,15 +982,15 @@ Module dataFunctions
                         dgAccountCharge.Rows.Clear()
                         While dr.Read
                             Dim vState As String = ""
-                            Select Case CInt(dr(3).ToString)
+                            Select Case CInt(dr(4).ToString)
                                 Case 1
                                     vState = "Instalacion"
                                 Case 2
                                     vState = "Reposicion"
                                 Case 3
-                                    vState = "Servicio de " & MonthName(CInt(dr(4).ToString))
+                                    vState = "Servicio de " & MonthName(CInt(dr(5).ToString))
                             End Select
-                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(3).ToString, dr(4).ToString, False, vState, Format(CDec(dr(5).ToString), "###,##0.00"), Format(CDec(dr(5).ToString) - CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString), "###,##0.00"))
+                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, vState, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1010,13 +1010,13 @@ Module dataFunctions
 
         If cleanAll Then
             For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
-                dgAccountCharge.Item(3, index).Value = False
+                dgAccountCharge.Item(4, index).Value = False
             Next
             vSaldoTotal = 0
         Else
             For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
-                If dgAccountCharge.Item(3, index).Value = True Then
-                    vSaldoTotal += CDec(dgAccountCharge.Item(7, index).Value)
+                If dgAccountCharge.Item(4, index).Value = True Then
+                    vSaldoTotal += CDec(dgAccountCharge.Item(8, index).Value)
                 End If
             Next
         End If
@@ -1024,32 +1024,96 @@ Module dataFunctions
         Return vSaldoTotal
     End Function
 
-    Public Sub payAccount(dgAccount As DataGridView, amountPay As Decimal)
-        For index As Integer = 0 To dgAccount.Rows.Count - 1
-            If dgAccount.Item(3, index).Value = True Then
-                If dgAccount.Item(7, index).Value <= amountPay And amountPay > 0 Then
-                    If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(7, index).Value, dgAccount.Item(7, index).Value) Then
-                        amountPay -= dgAccount.Item(7, index).Value
+    Public Sub payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing)
+        Dim rateYear As Integer = 0
+
+        If dgAccount.Rows.Count > 0 Then
+            For index As Integer = 0 To dgAccount.Rows.Count - 1
+                rateYear = dgAccount.Item(1, index).Value
+
+                If dgAccount.Item(4, index).Value = True Then
+                    If dgAccount.Item(8, index).Value <= amountPay And amountPay > 0 Then
+                        If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value, dgAccount.Item(8, index).Value) Then
+                            amountPay -= dgAccount.Item(8, index).Value
+                        End If
+                    ElseIf dgAccount.Item(8, index).Value > amountPay And amountPay > 0 Then
+                        If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(8, index).Value) Then
+                            amountPay = 0
+                        End If
+                    Else
+                        Exit For
                     End If
-                ElseIf dgAccount.Item(7, index).Value > amountPay And amountPay > 0 Then
-                    If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(7, index).Value) Then
-                        amountPay = 0
-                    End If
-                Else
-                    Exit For
                 End If
+            Next
+
+            getAccountYearUpdated(rateYear, vCodLine, vCodAccount)
+        End If
+    End Sub
+
+    Public Sub getAccountYearUpdated(rateYear As Integer, vCodLine As String, vCodAccount As String)
+        Dim cmdGetAccountYearDetail, cmdUpdateAccountYear As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        MsgBox(rateYear)
+        MsgBox(vCodLine)
+        MsgBox(vCodAccount)
+
+        If Not cnn.DataSource.Equals("") Then
+            cmdGetAccountYearDetail.Connection = cnn
+            cmdGetAccountYearDetail.CommandType = CommandType.Text
+            cmdUpdateAccountYear.Connection = cnn
+            cmdUpdateAccountYear.CommandType = CommandType.Text
+
+            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
+                cmdGetAccountYearDetail.CommandText = "SELECT DISTINCTROW Sum([account_detail].[AMOUNT_SALDO])" &
+                    " FROM account_detail WHERE account_detail.ACCOUNT_YEAR = @rateyear AND account_detail.COD_ACCOUNT = @codaccount"
+                cmdGetAccountYearDetail.Parameters.AddWithValue("rateyear", rateYear)
+                cmdGetAccountYearDetail.Parameters.AddWithValue("codaccount", vCodAccount)
+
+                Try
+                    dr = cmdGetAccountYearDetail.ExecuteReader()
+
+                    If dr.HasRows Then
+                        dr.Read()
+                        cmdGetAccountYearDetail.Dispose()
+
+                        Dim saldoTotalYear As Decimal = 0
+                        saldoTotalYear = Val(dr(0).ToString)
+
+                        MsgBox(saldoTotalYear)
+
+                        cmdUpdateAccountYear.CommandText = "UPDATE account_line SET ACCOUNT_SALDO = @accountsaldo, ACCOUNT_UPDATED = @dateUpdated" &
+                            " WHERE account_line.COD_ACCOUNT = @codaccount AND account_line.ACCOUNT_YEAR = @accountyear"
+                        cmdUpdateAccountYear.Parameters.AddWithValue("accountsaldo", saldoTotalYear)
+                        cmdUpdateAccountYear.Parameters.AddWithValue("dateUpdated", Date.Today)
+                        cmdUpdateAccountYear.Parameters.AddWithValue("codaccount", vCodAccount)
+                        cmdUpdateAccountYear.Parameters.AddWithValue("accountyear", rateYear)
+
+                        cmdUpdateAccountYear.ExecuteNonQuery()
+                        cmdUpdateAccountYear.Dispose()
+                    Else
+                        MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al obtener el registro", vbCritical, "Aviso")
+                    MsgBox(ex.Message)
+                End Try
+            Else
+                MsgBox("No se envio el codigo de la cuenta", vbCritical, "Aviso")
             End If
-        Next
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
     End Sub
 
     Public Function payAccountDetail(idAccountDetail As Integer, amountPay As Decimal, amountSaldo As Decimal) As Boolean
         Dim cmdUpdateAccountDetail As New OleDbCommand
 
-        If Not (cnn.DataSource.Equals("")) Then
+        If Not cnn.DataSource.Equals("") Then
             cmdUpdateAccountDetail.Connection = cnn
             cmdUpdateAccountDetail.CommandType = CommandType.Text
 
-            If Not (idAccountDetail = Nothing) Then
+            If Not idAccountDetail = Nothing Then
                 cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET AMOUNT_SALDO = @amountsaldo" &
                     " WHERE account_detail.ID_DETAIL_ACCOUNT = @idaccountdetail"
                 cmdUpdateAccountDetail.Parameters.AddWithValue("amountsaldo", CDec(amountSaldo - amountPay))
@@ -1079,7 +1143,7 @@ Module dataFunctions
         Dim cmdGetAccount As New OleDbCommand
         Dim dr As OleDbDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
+        If Not cnn.DataSource.Equals("") Then
             cmdGetAccount.Connection = cnn
             cmdGetAccount.CommandType = CommandType.Text
 

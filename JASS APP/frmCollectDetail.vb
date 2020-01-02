@@ -41,10 +41,10 @@
 
     Private Sub dtgAccountMounth_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellContentClick
         If dtgAccountMounth.Columns(e.ColumnIndex).Name = "clmOpcionMes" Then
-            If dtgAccountMounth.Item(3, e.RowIndex).Value = False And dtgAccountMounth.Item(7, e.RowIndex).Value > 0 Then
-                dtgAccountMounth.Item(3, e.RowIndex).Value = True
+            If dtgAccountMounth.Item(4, e.RowIndex).Value = False And dtgAccountMounth.Item(8, e.RowIndex).Value > 0 Then
+                dtgAccountMounth.Item(4, e.RowIndex).Value = True
             Else
-                dtgAccountMounth.Item(3, e.RowIndex).Value = False
+                dtgAccountMounth.Item(4, e.RowIndex).Value = False
             End If
             vDebtAmount = selectCharge(dtgAccountMounth)
             txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
@@ -53,10 +53,10 @@
 
     Private Sub dtgAccountMounth_KeyPress(sender As Object, e As KeyPressEventArgs) Handles dtgAccountMounth.KeyPress
         If e.KeyChar = ChrW(Keys.Space) Then
-            If dtgAccountMounth.Item(3, dtgAccountMounth.CurrentRow.Index).Value = False And dtgAccountMounth.Item(7, dtgAccountMounth.CurrentRow.Index).Value > 0 Then
-                dtgAccountMounth.Item(3, dtgAccountMounth.CurrentRow.Index).Value = True
+            If dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = False And dtgAccountMounth.Item(8, dtgAccountMounth.CurrentRow.Index).Value > 0 Then
+                dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = True
             Else
-                dtgAccountMounth.Item(3, dtgAccountMounth.CurrentRow.Index).Value = False
+                dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = False
             End If
             vDebtAmount = selectCharge(dtgAccountMounth)
             txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
@@ -117,10 +117,15 @@
         End If
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        frmReceipt.ShowDialog()
+    End Sub
+
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
-        If Val(txtMountPay.Text) > 0 Then
-            payAccount(dtgAccountMounth, Val(txtMountPay.Text))
+        If Val(txtMountPay.Text) > 0 And Val(txtSaldo.Text) > 0 Then
+            payAccount(dtgAccountMounth, Val(txtMountPay.Text), vCodLine, vCodAccount)
             getAccountCollectCharge(vCodAccount, dtgAccountMounth)
+            getAccountCollect(vCodLine, vCodAccount, dtgAccountYear)
             cleanAll()
         End If
     End Sub
