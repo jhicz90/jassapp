@@ -75,6 +75,18 @@ Namespace My
                 Me("vPreviewPrint") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property vUserNameLogin() As String
+            Get
+                Return CType(Me("vUserNameLogin"),String)
+            End Get
+            Set
+                Me("vUserNameLogin") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

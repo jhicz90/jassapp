@@ -1,11 +1,12 @@
 ﻿Public Class frmMain
-    Public userNameLogin As String = ""
     Public Sub New()
         ' Esta llamada es exigida por el diseñador.
         InitializeComponent()
 
         Icon = My.Resources.iconApp
         ' Agregue cualquier inicialización después de la llamada a InitializeComponent().
+
+        tsmiPreviewReceipt.Checked = My.Settings.vPreviewPrint
     End Sub
 
     Private Sub TsmiExit_Click(sender As Object, e As EventArgs) Handles tsmiExit.Click

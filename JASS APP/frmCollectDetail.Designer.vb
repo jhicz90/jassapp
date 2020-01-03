@@ -140,6 +140,7 @@ Partial Class frmCollectDetail
         Me.dtgAccountYear.ReadOnly = True
         Me.dtgAccountYear.RowHeadersVisible = False
         Me.dtgAccountYear.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dtgAccountYear.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtgAccountYear.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgAccountYear.Size = New System.Drawing.Size(905, 150)
         Me.dtgAccountYear.TabIndex = 4
@@ -318,7 +319,7 @@ Partial Class frmCollectDetail
         'btnSeePayments
         '
         Me.btnSeePayments.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnSeePayments.Image = Global.JASS_APP.My.Resources.Resources.payment_history_32
+        Me.btnSeePayments.Image = Global.JASS_APP.My.Resources.Resources.cashbook_32
         Me.btnSeePayments.Location = New System.Drawing.Point(228, 391)
         Me.btnSeePayments.Name = "btnSeePayments"
         Me.btnSeePayments.Size = New System.Drawing.Size(105, 82)
@@ -437,6 +438,7 @@ Partial Class frmCollectDetail
         Me.dtgAccountMounth.ReadOnly = True
         Me.dtgAccountMounth.RowHeadersVisible = False
         Me.dtgAccountMounth.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dtgAccountMounth.RowTemplate.DefaultCellStyle.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dtgAccountMounth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgAccountMounth.Size = New System.Drawing.Size(620, 366)
         Me.dtgAccountMounth.TabIndex = 1
@@ -483,12 +485,12 @@ Partial Class frmCollectDetail
         'clmCharge
         '
         Me.clmCharge.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmCharge.FillWeight = 150.0!
+        Me.clmCharge.FillWeight = 210.0!
         Me.clmCharge.HeaderText = "Cargo"
         Me.clmCharge.Name = "clmCharge"
         Me.clmCharge.ReadOnly = True
         Me.clmCharge.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.clmCharge.Width = 150
+        Me.clmCharge.Width = 210
         '
         'clmMontoMes
         '
@@ -588,6 +590,10 @@ Partial Class frmCollectDetail
     Friend WithEvents clmEstado As DataGridViewTextBoxColumn
     Friend WithEvents clmOpciones As DataGridViewButtonColumn
     Friend WithEvents btnClean As Button
+    Friend WithEvents txtCodNumReceipt As TextBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents cbxUsersInAccount As ComboBox
+    Friend WithEvents Label10 As Label
     Friend WithEvents clmIdDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmYearDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmCodCharge As DataGridViewTextBoxColumn
@@ -597,8 +603,4 @@ Partial Class frmCollectDetail
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
-    Friend WithEvents txtCodNumReceipt As TextBox
-    Friend WithEvents Label9 As Label
-    Friend WithEvents cbxUsersInAccount As ComboBox
-    Friend WithEvents Label10 As Label
 End Class

@@ -137,16 +137,18 @@
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
         If Val(txtMountPay.Text) > 0 And Val(txtSaldo.Text) > 0 Then
             Dim concepts(12) As String
-            Dim data(6) As String
+            Dim data(7) As String
 
             data(0) = vCodLine
             data(1) = vDataReceipt(1)
             data(2) = cbxUsersInAccount.Text
             data(3) = getUser(cbxUsersInAccount.SelectedValue)(5)
             data(4) = getLine(vCodLine)(5)
-            data(5) = Strings.Left(frmMain.userNameLogin, 10)
-            data(6) = Date.Today
-            concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vCodLine, vCodAccount)
+            data(5) = Strings.Left(My.Settings.vUserNameLogin, 10)
+            data(6) = Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt")
+            data(7) = vDataReceipt(0)
+
+            concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vCodLine, vCodAccount, data(7), data(1), data(2))
 
             getAccountCollectCharge(vCodAccount, dtgAccountMounth)
             getAccountCollect(vCodLine, vCodAccount, dtgAccountYear)

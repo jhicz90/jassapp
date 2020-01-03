@@ -165,6 +165,12 @@
     <Compile Include="frmReceipt.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmSeePays.Designer.vb">
+      <DependentUpon>frmSeePays.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmSeePays.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -218,6 +224,9 @@
     <EmbeddedResource Include="frmReceipt.resx">
       <DependentUpon>frmReceipt.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmSeePays.resx">
+      <DependentUpon>frmSeePays.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -241,6 +250,15 @@
     <Content Include="dbJASS.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\iconCashbook.ico" />
+    <None Include="Resources\cashbook.png" />
+    <None Include="Resources\cashbook-32.png" />
+    <None Include="Resources\iconReceipt.ico" />
+    <None Include="Resources\iconPrint.ico" />
+    <None Include="Resources\receipt.png" />
+    <None Include="Resources\receipt-32.png" />
+    <None Include="Resources\print.png" />
+    <None Include="Resources\print-32.png" />
     <None Include="Resources\payment-history-32.png" />
     <None Include="Resources\payment-history.png" />
     <None Include="Resources\general-ledger.png" />
