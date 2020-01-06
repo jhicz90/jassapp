@@ -136,6 +136,7 @@ Partial Class frmCollectDetail
         Me.dtgAccountYear.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtgAccountYear.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmYear, Me.clmMontoTotal, Me.clmSaldoTotal, Me.clmEstado, Me.clmOpciones})
         Me.dtgAccountYear.Location = New System.Drawing.Point(12, 64)
+        Me.dtgAccountYear.MultiSelect = False
         Me.dtgAccountYear.Name = "dtgAccountYear"
         Me.dtgAccountYear.ReadOnly = True
         Me.dtgAccountYear.RowHeadersVisible = False
@@ -434,6 +435,7 @@ Partial Class frmCollectDetail
         Me.dtgAccountMounth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtgAccountMounth.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdDetail, Me.clmYearDetail, Me.clmCodCharge, Me.clmCodMonth, Me.clmOpcionMes, Me.clmCharge, Me.clmMontoMes, Me.clmPagadoMes, Me.clmSaldoMes})
         Me.dtgAccountMounth.Location = New System.Drawing.Point(6, 19)
+        Me.dtgAccountMounth.MultiSelect = False
         Me.dtgAccountMounth.Name = "dtgAccountMounth"
         Me.dtgAccountMounth.ReadOnly = True
         Me.dtgAccountMounth.RowHeadersVisible = False

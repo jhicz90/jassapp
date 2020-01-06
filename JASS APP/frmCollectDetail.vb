@@ -54,6 +54,10 @@
 
     Private Sub dtgAccountYear_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountYear.CellClick
         getAccountCollectCharge(vCodAccount, dtgAccountMounth)
+        dtgAccountMounth.Focus()
+        If dtgAccountMounth.Rows.Count > 0 Then
+            dtgAccountMounth.Item(5, dtgAccountMounth.Rows.GetFirstRow(0)).Selected = True
+        End If
     End Sub
 
     Private Sub dtgAccountMounth_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellContentClick
@@ -70,10 +74,10 @@
 
     Private Sub dtgAccountMounth_KeyPress(sender As Object, e As KeyPressEventArgs) Handles dtgAccountMounth.KeyPress
         If e.KeyChar = ChrW(Keys.Space) Then
-            If dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = False And dtgAccountMounth.Item(8, dtgAccountMounth.CurrentRow.Index).Value > 0 Then
-                dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = True
+            If dtgAccountMounth.Item(4, dtgAccountMounth.SelectedRows(0).Index).Value = False And dtgAccountMounth.Item(8, dtgAccountMounth.SelectedRows(0).Index).Value > 0 Then
+                dtgAccountMounth.Item(4, dtgAccountMounth.SelectedRows(0).Index).Value = True
             Else
-                dtgAccountMounth.Item(4, dtgAccountMounth.CurrentRow.Index).Value = False
+                dtgAccountMounth.Item(4, dtgAccountMounth.SelectedRows(0).Index).Value = False
             End If
             vDebtAmount = selectCharge(dtgAccountMounth)
             txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
@@ -132,6 +136,10 @@
         If e.KeyChar = ChrW(Keys.Enter) Then
             btnPay.Focus()
         End If
+    End Sub
+
+    Private Sub btnSeePayments_Click(sender As Object, e As EventArgs) Handles btnSeePayments.Click
+        showAccountReceipts(vCodAccount)
     End Sub
 
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click

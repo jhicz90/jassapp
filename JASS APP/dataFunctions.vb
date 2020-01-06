@@ -955,6 +955,12 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
+    Public Sub showAccountReceipts(vCodAccount As String)
+        Dim frm As New frmSeePays
+        frm.vCodAccount = vCodAccount
+        frm.ShowDialog()
+    End Sub
+
     Public Function lastCodReceipt() As String()
         Dim cmdGetLastReceipt As New OleDbCommand
         Dim dr As OleDbDataReader
@@ -1097,37 +1103,42 @@ Module dataFunctions
         Return vSaldoTotal
     End Function
 
-    Public Sub receiptsHistory(dgHistory As DataGridView, vCodAccount As String)
-        Dim cmdGetReceiptsAccount As New OleDbCommand
+    Public Sub receiptsHistory(dgHistory As DataGridView, vCodAccount As String, Optional vSeeAll As Integer = 0, Optional vAccountYear As Integer = 0)
+        Dim cmdGetAccountReceipts As New OleDbCommand
         Dim dr As OleDbDataReader
 
         If Not (cnn.DataSource.Equals("")) Then
-            cmdGetReceiptsAccount.Connection = cnn
-            cmdGetReceiptsAccount.CommandType = CommandType.Text
+            cmdGetAccountReceipts.Connection = cnn
+            cmdGetAccountReceipts.CommandType = CommandType.Text
 
             If Not (vCodAccount = Nothing) Then
-                cmdGetReceiptsAccount.CommandText = ""
-                cmdGetReceiptsAccount.Parameters.AddWithValue("codaccount", vCodAccount)
+                Dim strCommand As String = "SELECT payments.ID_PAY, payments.COD_PAY, payments.COD_ACCOUNT, payments.ACCOUNT_YEAR, payments.PAY_CANCELED, payments.PAY_AMOUNT_TOTAL, payments.PAYER, payments.COLLECTOR, payments.PAY_CREATED, payments.PAY_UPDATED" &
+                    " FROM payments WHERE payments.COD_ACCOUNT = @codaccount"
+                If vSeeAll <> 0 Then
+                    '0: ver todos los recibos, 1: ver los no anulados, 2: ver los anulados
+                    strCommand = strCommand & " AND payments.PAY_CANCELED = @canceled"
+                End If
+                strCommand = strCommand & " ORDER BY payments.PAY_CREATED DESC"
+                cmdGetAccountReceipts.CommandText = strCommand
+                cmdGetAccountReceipts.Parameters.AddWithValue("codaccount", vCodAccount)
+                If vSeeAll <> 0 Then
+                    If vSeeAll = 1 Then
+                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", False)
+                    ElseIf vSeeAll = 2 Then
+                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", True)
+                    End If
+                End If
 
                 Try
-                    dr = cmdGetReceiptsAccount.ExecuteReader()
+                    dr = cmdGetAccountReceipts.ExecuteReader()
 
                     If dr.HasRows Then
                         dgHistory.Rows.Clear()
                         While dr.Read
-                            Dim vState As String = ""
-                            Select Case CInt(dr(4).ToString)
-                                Case 1
-                                    vState = "Instalacion"
-                                Case 2
-                                    vState = "Reposicion"
-                                Case 3
-                                    vState = "Servicio de " & MonthName(CInt(dr(5).ToString)) & " " & dr(1).ToString
-                            End Select
-                            dgHistory.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, vState, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
+                            dgHistory.Rows.Add(dr(0).ToString, dr(3).ToString, dr(1).ToString, Format(CDec(dr(5).ToString), "###,##0.00"), dr(6).ToString, dr(7).ToString, dr(8).ToString)
                         End While
                     Else
-                        MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
+                        MsgBox("No hay pagos que mostrar", vbCritical, "Aviso")
                     End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
@@ -1139,11 +1150,12 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing)
+    Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing) As String()
         Dim rateYear As Integer = 0
         Dim dataConceptReceipt(12) As String
         Dim indexConcept As Integer = 0
         Dim amountPayTotal As Decimal
+        Dim dgAccountCopy As DataGridView = dgAccount
 
         If dgAccount.Rows.Count > 0 Then
             For index As Integer = 0 To dgAccount.Rows.Count - 1
@@ -1153,7 +1165,7 @@ Module dataFunctions
                     If dgAccount.Item(8, index).Value <= amountPay And amountPay > 0 Then
                         If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value, dgAccount.Item(8, index).Value) Then
 
-                            payReceipt(vIdPay, vCodNumReceipt, vCodAccount, dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value, vNamePayer)
+                            payReceiptDetail(vIdPay, vCodAccount, dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value)
 
                             dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
                             dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
@@ -1165,7 +1177,7 @@ Module dataFunctions
                     ElseIf dgAccount.Item(8, index).Value > amountPay And amountPay > 0 Then
                         If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(8, index).Value) Then
 
-                            payReceipt(vIdPay, vCodNumReceipt, vCodAccount, dgAccount.Item(0, index).Value, amountPay, vNamePayer)
+                            payReceiptDetail(vIdPay, vCodAccount, dgAccount.Item(0, index).Value, amountPay)
 
                             dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
                             dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
@@ -1180,6 +1192,7 @@ Module dataFunctions
                 End If
             Next
 
+            payReceipt(vIdPay, vCodNumReceipt, vCodAccount, rateYear, amountPayTotal, vNamePayer)
             dataConceptReceipt(12) = Format(amountPayTotal, "###,##0.00")
             getAccountYearUpdated(rateYear, vCodLine, vCodAccount)
             Return dataConceptReceipt
@@ -1190,22 +1203,47 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub payReceipt(idPaymnent As Integer, vCodNumReceipt As String, vCodAccount As String, idDetailAccount As String, amountPay As Decimal, payerUser As String)
+    Public Sub payReceiptDetail(idPaymnent As Integer, vCodAccount As String, idDetailAccount As String, amountPay As Decimal)
         Dim insertPaymentDetail As New OleDbCommand
 
         If Not cnn.DataSource.Equals("") Then
             insertPaymentDetail.Connection = cnn
             insertPaymentDetail.CommandType = CommandType.Text
 
-            If Not (idPaymnent = Nothing And vCodNumReceipt = Nothing And vCodAccount = Nothing And idDetailAccount = Nothing And amountPay = Nothing And payerUser = Nothing) Then
-                insertPaymentDetail.CommandText = "INSERT INTO payments(ID_PAY, COD_PAY, COD_ACCOUNT, ID_DETAIL_ACCOUNT, PAY_AMOUNT, PAYER, COLLECTOR) VALUES(@idpay, @codpay, @codaccount, @iddetailaccount, @payamount, @payer, @collector)"
+            If Not (idPaymnent = Nothing And vCodAccount = Nothing And idDetailAccount = Nothing And amountPay = Nothing) Then
+                insertPaymentDetail.CommandText = "INSERT INTO payments_detail(ID_PAY, COD_ACCOUNT, ID_DETAIL_ACCOUNT, PAY_AMOUNT) VALUES(@idpay, @codaccount, @iddetailaccount, @payamount)"
                 insertPaymentDetail.Parameters.AddWithValue("idpay", idPaymnent)
-                insertPaymentDetail.Parameters.AddWithValue("codpay", vCodNumReceipt)
                 insertPaymentDetail.Parameters.AddWithValue("codaccount", vCodAccount)
                 insertPaymentDetail.Parameters.AddWithValue("iddetailaccount", idDetailAccount)
                 insertPaymentDetail.Parameters.AddWithValue("payamount", amountPay)
+
+                insertPaymentDetail.ExecuteNonQuery()
+                insertPaymentDetail.Dispose()
+            Else
+                MsgBox("Faltan datos para registrar el pago detalle", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub payReceipt(idPaymnent As Integer, vCodNumReceipt As String, vCodAccount As String, vAccountYear As Integer, amountPayTotal As Decimal, payerUser As String)
+        Dim insertPaymentDetail As New OleDbCommand
+
+        If Not cnn.DataSource.Equals("") Then
+            insertPaymentDetail.Connection = cnn
+            insertPaymentDetail.CommandType = CommandType.Text
+
+            If Not (idPaymnent = Nothing And vCodNumReceipt = Nothing And vCodAccount = Nothing And amountPayTotal = Nothing And payerUser = Nothing) Then
+                insertPaymentDetail.CommandText = "INSERT INTO payments(ID_PAY, COD_PAY, COD_ACCOUNT, ACCOUNT_YEAR, PAY_AMOUNT_TOTAL, PAYER, COLLECTOR, PAY_CREATED) VALUES(@idpay, @codpay, @codaccount, @accountyear, @payamounttotal, @payer, @collector, @payed)"
+                insertPaymentDetail.Parameters.AddWithValue("idpay", idPaymnent)
+                insertPaymentDetail.Parameters.AddWithValue("codpay", vCodNumReceipt)
+                insertPaymentDetail.Parameters.AddWithValue("codaccount", vCodAccount)
+                insertPaymentDetail.Parameters.AddWithValue("accountyear", vAccountYear)
+                insertPaymentDetail.Parameters.AddWithValue("payamounttotal", amountPayTotal)
                 insertPaymentDetail.Parameters.AddWithValue("payer", payerUser)
                 insertPaymentDetail.Parameters.AddWithValue("collector", My.Settings.vUserNameLogin)
+                insertPaymentDetail.Parameters.AddWithValue("payed", Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt"))
 
                 insertPaymentDetail.ExecuteNonQuery()
                 insertPaymentDetail.Dispose()
