@@ -3,6 +3,7 @@
 Public Class frmNewuser
     Public vFrmGet As Integer = 0
     Public vCodUser As String = Nothing
+    Public vCodAccount As String = Nothing
     Dim dsUserTypes As DataSet = Nothing
     Dim dataUserEdited(13) As String
     Public Sub frmNewuser_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -21,7 +22,7 @@ Public Class frmNewuser
         If IsNothing(vCodUser) Then
             Close()
         ElseIf vCodUser = "new" Then
-            newLine()
+            newUser()
         Else
             Dim dataUser() As String = getUser(vCodUser)
 
@@ -46,7 +47,7 @@ Public Class frmNewuser
         End If
     End Sub
 
-    Public Sub newLine()
+    Public Sub newUser()
         txtCodUser.Text = ""
         txtNames.Text = ""
         txtSurnames.Text = ""
@@ -100,12 +101,12 @@ Public Class frmNewuser
 
         If vFrmGet = 1 Then
             saveUserNew(dataUserEdited)
-            newLine()
+            newUser()
         ElseIf vFrmGet = 2 Then
             updateUser(dataUserEdited)
         ElseIf vFrmGet = 3 Then
-            saveUserNew(dataUserEdited, True)
-            newLine()
+            saveUserNew(dataUserEdited, True, vCodAccount)
+            newUser()
         End If
 
         Close()

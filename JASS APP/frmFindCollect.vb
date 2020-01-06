@@ -29,4 +29,10 @@
             showAccountCollect(dtgLines.Item(1, e.RowIndex).Value, dtgLines.Item(0, e.RowIndex).Value, dtgLines.Item(2, e.RowIndex).Value)
         End If
     End Sub
+
+    Private Sub txtFind_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtFind.KeyPress
+        If e.KeyChar = ChrW(Keys.Enter) And dtgLines.Rows.Count > 0 Then
+            showAccountCollect(dtgLines.Item(1, 0).Value, dtgLines.Item(0, 0).Value, dtgLines.Item(2, 0).Value)
+        End If
+    End Sub
 End Class

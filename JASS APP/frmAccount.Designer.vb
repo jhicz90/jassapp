@@ -54,6 +54,8 @@ Partial Class frmAccount
         Me.txtDateCreated = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
+        Me.btnSave = New System.Windows.Forms.Button()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.tabDataAccount.SuspendLayout()
         Me.tabpageAcounts.SuspendLayout()
@@ -166,7 +168,7 @@ Partial Class frmAccount
         Me.tabDataAccount.Location = New System.Drawing.Point(12, 176)
         Me.tabDataAccount.Name = "tabDataAccount"
         Me.tabDataAccount.SelectedIndex = 0
-        Me.tabDataAccount.Size = New System.Drawing.Size(760, 473)
+        Me.tabDataAccount.Size = New System.Drawing.Size(760, 417)
         Me.tabDataAccount.TabIndex = 4
         '
         'tabpageAcounts
@@ -175,7 +177,7 @@ Partial Class frmAccount
         Me.tabpageAcounts.Location = New System.Drawing.Point(4, 22)
         Me.tabpageAcounts.Name = "tabpageAcounts"
         Me.tabpageAcounts.Padding = New System.Windows.Forms.Padding(5)
-        Me.tabpageAcounts.Size = New System.Drawing.Size(752, 447)
+        Me.tabpageAcounts.Size = New System.Drawing.Size(752, 391)
         Me.tabpageAcounts.TabIndex = 0
         Me.tabpageAcounts.Text = "CUENTAS ANUALES"
         Me.tabpageAcounts.UseVisualStyleBackColor = True
@@ -198,7 +200,7 @@ Partial Class frmAccount
         Me.dtgAccountYear.RowHeadersVisible = False
         Me.dtgAccountYear.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccountYear.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccountYear.Size = New System.Drawing.Size(735, 389)
+        Me.dtgAccountYear.Size = New System.Drawing.Size(735, 333)
         Me.dtgAccountYear.TabIndex = 7
         '
         'DataGridViewTextBoxColumn1
@@ -265,7 +267,7 @@ Partial Class frmAccount
         Me.tabpageUsers.Location = New System.Drawing.Point(4, 22)
         Me.tabpageUsers.Name = "tabpageUsers"
         Me.tabpageUsers.Padding = New System.Windows.Forms.Padding(20)
-        Me.tabpageUsers.Size = New System.Drawing.Size(752, 447)
+        Me.tabpageUsers.Size = New System.Drawing.Size(752, 391)
         Me.tabpageUsers.TabIndex = 1
         Me.tabpageUsers.Text = "USUARIOS ASOCIADOS A LA CUENTA"
         Me.tabpageUsers.UseVisualStyleBackColor = True
@@ -288,7 +290,7 @@ Partial Class frmAccount
         Me.dtgUsersAccount.RowHeadersVisible = False
         Me.dtgUsersAccount.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgUsersAccount.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgUsersAccount.Size = New System.Drawing.Size(706, 373)
+        Me.dtgUsersAccount.Size = New System.Drawing.Size(706, 317)
         Me.dtgUsersAccount.TabIndex = 6
         '
         'clmCodUser
@@ -390,11 +392,38 @@ Partial Class frmAccount
         Me.Label3.TabIndex = 8
         Me.Label3.Text = "Fecha de creación"
         '
+        'btnSave
+        '
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSave.Image = Global.JASS_APP.My.Resources.Resources.save_32
+        Me.btnSave.Location = New System.Drawing.Point(466, 599)
+        Me.btnSave.Name = "btnSave"
+        Me.btnSave.Size = New System.Drawing.Size(150, 50)
+        Me.btnSave.TabIndex = 12
+        Me.btnSave.Text = "&Guardar"
+        Me.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnSave.UseVisualStyleBackColor = True
+        '
+        'btnCancel
+        '
+        Me.btnCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btnCancel.Image = Global.JASS_APP.My.Resources.Resources.cancel_32
+        Me.btnCancel.Location = New System.Drawing.Point(622, 599)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(150, 50)
+        Me.btnCancel.TabIndex = 13
+        Me.btnCancel.Text = "&Cancelar"
+        Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnCancel.UseVisualStyleBackColor = True
+        '
         'frmAccount
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 661)
+        Me.Controls.Add(Me.btnSave)
+        Me.Controls.Add(Me.btnCancel)
         Me.Controls.Add(Me.txtDateUpdated)
         Me.Controls.Add(Me.txtDateCreated)
         Me.Controls.Add(Me.Label4)
@@ -450,4 +479,6 @@ Partial Class frmAccount
     Friend WithEvents clmState As DataGridViewTextBoxColumn
     Friend WithEvents DataGridViewButtonColumn1 As DataGridViewButtonColumn
     Friend WithEvents DataGridViewButtonColumn2 As DataGridViewButtonColumn
+    Friend WithEvents btnSave As Button
+    Friend WithEvents btnCancel As Button
 End Class

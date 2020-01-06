@@ -26,14 +26,22 @@ Public Class frmEditLine
             Else
                 txtCodLine.Text = dataLine(1)
                 txtNameLine.Text = dataLine(2)
-                txtDateCreated.Text = Format(dataLine(7), "Short Date")
-                txtDateUpdated.Text = Format(dataLine(8), "Short Date")
-                txtAddressLine.Text = dataLine(4)
+                txtDateCreated.Text = Format(dataLine(9), "Short Date")
+                txtDateUpdated.Text = Format(dataLine(10), "Short Date")
+                txtAddressLine.Text = dataLine(6)
                 cbxStreets.SelectedValue = dataLine(3)
-                dtpInstallDate.Value = Format(dataLine(5), "Short Date")
-                txtDescpLine.Text = dataLine(6)
+                dtpInstallDate.Value = Format(dataLine(7), "Short Date")
+                txtDescpLine.Text = dataLine(8)
 
-                dataLineOriginal = dataLine
+                dataLineOriginal(0) = dataLine(0)
+                dataLineOriginal(1) = dataLine(1)
+                dataLineOriginal(2) = dataLine(2)
+                dataLineOriginal(3) = dataLine(3)
+                dataLineOriginal(4) = dataLine(6)
+                dataLineOriginal(5) = Format(dataLine(7), "Short Date")
+                dataLineOriginal(6) = dataLine(8)
+                dataLineOriginal(7) = Format(dataLine(9), "Short Date")
+                dataLineOriginal(8) = Format(dataLine(10), "Short Date")
                 listAccountLine(dataLine(1), dtgAccountLine)
             End If
         End If
