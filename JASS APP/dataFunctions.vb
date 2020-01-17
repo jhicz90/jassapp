@@ -1,7 +1,26 @@
 ﻿Imports System.Data.OleDb
+Imports MySql.Data.MySqlClient
 
 Module dataFunctions
     Public cnn As New OleDbConnection(My.Settings.dbJASSConnectionString)
+    Public cnnx As New MySqlConnection
+    Public cnnstr As New MySqlConnectionStringBuilder
+
+    Public Sub DatabaseConnect()
+        Try
+            cnnstr.Server = "localhost"
+            cnnstr.UserID = "root"
+            cnnstr.Password = ""
+            cnnstr.Database = "jassdb"
+            cnnx.ConnectionString = cnnstr.ToString
+            'cnnx.Open()
+            'cnnx.Close()
+            MsgBox("Conexión establecida.", vbInformation, "Aviso")
+        Catch ex As Exception
+            MsgBox("No pudo completarse la conección a la base de datos.", vbCritical, "Aviso")
+            Application.Exit()
+        End Try
+    End Sub
 
     Public Function dbConnection()
         Try
@@ -370,6 +389,76 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub listAccounts(txtBusq As String, typeBusq As Integer, dgAccounts As DataGridView)
+        Dim cmd As New OleDbCommand
+        Dim dr As OleDbDataReader
+
+        If cnn.DataSource.Equals("") Then
+            MsgBox("Error de conexion", vbExclamation, "Aviso")
+        Else
+            cmd.Connection = cnn
+            cmd.CommandType = CommandType.Text
+
+            Dim comand As String
+
+            Select Case typeBusq
+                Case 0
+                    'Buscar por nombre de la cuenta
+                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
+                    WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
+                Case 1
+                    'Buscar por nombre de usuario asociado a la cuenta
+                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
+                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
+                    WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
+                Case 2
+                    'Buscar por codigo de linea
+                    comand = "SELECT 
+                    (""""),
+                    VLINES.COD_LINE,
+                    VLINES.NAME_LINE,
+                    VSECTOR.NAME_SECTOR, 
+                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
+                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
+                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
+                    WHERE VLINES.COD_LINE LIKE '%" & txtBusq & "%'"
+                Case Else
+                    'Buscar a todos
+                    comand = "SELECT 
+                    (""""),
+                    VLINES.COD_LINE,
+                    VLINES.NAME_LINE,
+                    VSECTOR.NAME_SECTOR, 
+                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
+                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
+                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR"
+            End Select
+
+            cmd.CommandText = comand
+
+            Try
+                dr = cmd.ExecuteReader()
+
+                If dr.HasRows Then
+                    dgAccounts.Rows.Clear()
+                    While dr.Read()
+                        dgAccounts.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString)
+                    End While
+                Else
+                    dgAccounts.Rows.Clear()
+                End If
+
+                dr.Close()
+                cmd.Dispose()
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                dgAccounts.Rows.Clear()
+            End Try
+        End If
+    End Sub
+
     Public Sub listAccountLine(vCodLine As String, dgAccountLine As DataGridView)
         Dim cmd As New OleDbCommand
         Dim dr As OleDbDataReader
@@ -400,9 +489,11 @@ Module dataFunctions
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
+                dgAccountLine.Rows.Clear()
             End Try
         End If
     End Sub
+
     Public Sub listUserAccount(vCodLine As String, vCodAccount As String, dgUserAccount As DataGridView)
         Dim cmd As New OleDbCommand
         Dim dr As OleDbDataReader
@@ -434,6 +525,7 @@ Module dataFunctions
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
+                dgUserAccount.Rows.Clear()
             End Try
         End If
     End Sub
@@ -681,13 +773,18 @@ Module dataFunctions
 
         If Not (cnn.DataSource.Equals("")) Then
             Try
-                If dataUser(3).Trim <> "" Then
+                If dataUser(3).Trim <> "" And (dataUser(7).Trim = "" Or dataUser(7) = Nothing) Then
                     cmdFindUser.Connection = cnn
                     cmdFindUser.CommandType = CommandType.Text
                     cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
                     cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
                     dr = cmdFindUser.ExecuteReader
                     vFindUser = dr.HasRows
+
+                    If vFindUser Then
+                        MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
+                        Exit Sub
+                    End If
                 End If
 
                 cmdFindLine.Connection = cnn
@@ -696,6 +793,11 @@ Module dataFunctions
                 cmdFindLine.Parameters.AddWithValue("codline", dataLine(0))
                 dr = cmdFindLine.ExecuteReader
                 vFindLine = dr.HasRows
+
+                If vFindLine Then
+                    MsgBox("El codigo de linea ya esta en uso.", vbExclamation, "Aviso")
+                    Exit Sub
+                End If
 
                 If Not vFindUser And Not vFindLine Then
                     'Registrando un nuevo usuario
@@ -1003,6 +1105,18 @@ Module dataFunctions
             End If
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub showFindUsers(frmMdiParent As Form, vFrmGet As Integer)
+        Dim frm As New frmFindUsers
+        frm.MdiParent = frmMdiParent
+        frm.vFrmGet = vFrmGet
+
+        If IsNothing(frmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.Show()
         End If
     End Sub
 

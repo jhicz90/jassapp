@@ -57,8 +57,7 @@ Public Class frmEditLine
     End Sub
 
     Private Sub btnAddAccount_Click(sender As Object, e As EventArgs) Handles btnAddAccount.Click
-        frmFindUsers.vFrmGet = 2
-        frmFindUsers.ShowDialog()
+        'Buscar cuentas
     End Sub
 
     Private Sub frmEditLine_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

@@ -26,5 +26,6 @@ Public Class frmLogin
 
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles Me.Load
         dataFunctions.dbConnection()
+        DatabaseConnect()
     End Sub
 End Class

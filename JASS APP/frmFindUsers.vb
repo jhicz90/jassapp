@@ -23,14 +23,17 @@ Public Class frmFindUsers
                 lblRates.Visible = False
                 cbxRates.Visible = False
                 txtPriceRate.Visible = False
+                lblRatePrice.Visible = False
             Case 2
                 lblRates.Visible = True
                 cbxRates.Visible = True
                 txtPriceRate.Visible = True
+                lblRatePrice.Visible = True
             Case Else
                 lblRates.Visible = False
                 cbxRates.Visible = False
                 txtPriceRate.Visible = False
+                lblRatePrice.Visible = False
         End Select
 
         newFind()
@@ -94,5 +97,31 @@ Public Class frmFindUsers
     End Sub
     Private Sub frmFindUsers_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dispose()
+    End Sub
+
+    Private Sub txtFind_KeyPress(sender As Object, e As KeyPressEventArgs) Handles txtFind.KeyPress
+        If e.KeyChar = ChrW(Keys.Enter) And dtgUsers.Rows.Count > 0 Then
+            Dim dataUser(7) As String
+            dataUser(0) = dtgUsers.Item(0, 0).Value 'Codigo
+            dataUser(1) = dtgUsers.Item(2, 0).Value 'Doc
+            dataUser(2) = dtgUsers.Item(3, 0).Value 'Nombres
+            dataUser(3) = dtgUsers.Item(4, 0).Value 'Apellidos
+            dataUser(4) = dtgUsers.Item(5, 0).Value 'Tipo usuario
+            dataUser(5) = dtgUsers.Item(6, 0).Value 'Direccion
+            dataUser(6) = dtgUsers.Item(7, 0).Value 'Celular
+            dataUser(7) = dtgUsers.Item(8, 0).Value 'Telefono
+
+            Select Case vFrmGet
+                Case 1
+                    frmNewline.userFound(True, dataUser)
+                Case 2
+                    frmEditLine.userFound(True, dataUser, cbxRates.SelectedValue, Convert.ToDouble(txtPriceRate.Text))
+                Case Else
+                    Close()
+            End Select
+            Close()
+        ElseIf e.KeyChar = ChrW(Keys.Escape) Then
+            Close()
+        End If
     End Sub
 End Class

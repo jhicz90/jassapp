@@ -2,7 +2,7 @@
     Dim dsRates As DataSet = Nothing
     Dim dsAvenues As DataSet = Nothing
     Dim dsUserTypes As DataSet = Nothing
-    Public codUserLine As String = ""
+    Public codUser As String = ""
     Private Sub FrmNewline_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconNewline
         MdiParent = frmMain
@@ -88,9 +88,9 @@
             txtAddress.Text = ""
             txtTelephone.Text = ""
             txtCellphone.Text = ""
-            codUserLine = ""
+            codUser = ""
         Else
-            codUserLine = vDataUser(0)
+            codUser = vDataUser(0)
             txtNames.Text = vDataUser(2)
             txtSurnames.Text = vDataUser(3)
             txtDocID.Text = vDataUser(1)
@@ -139,7 +139,7 @@
             dataUser(4) = txtAddress.Text
             dataUser(5) = txtCellphone.Text
             dataUser(6) = txtTelephone.Text
-            dataUser(7) = codUserLine
+            dataUser(7) = codUser
 
             Try
                 saveLineNew(dataLine, dataUser, Convert.ToDouble(txtPriceRate.Text))
@@ -191,8 +191,7 @@
     End Sub
 
     Private Sub btnAddUser_Click(sender As Object, e As EventArgs) Handles btnAddUser.Click
-        frmFindUsers.vFrmGet = 1
-        frmFindUsers.ShowDialog()
+        showFindUsers(Nothing, 1)
     End Sub
 
     Private Sub btnDeleteUserFound_Click(sender As Object, e As EventArgs) Handles btnDeleteUserFound.Click

@@ -178,7 +178,7 @@ Partial Class frmFindLines
         Me.MinimumSize = New System.Drawing.Size(900, 500)
         Me.Name = "frmFindLines"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Lineas de servicio"
+        Me.Text = "Buscar Lineas de servicio"
         CType(Me.dtgLines, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()

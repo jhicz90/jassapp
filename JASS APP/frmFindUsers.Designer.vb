@@ -40,7 +40,7 @@ Partial Class frmFindUsers
         Me.Label1 = New System.Windows.Forms.Label()
         Me.lblRates = New System.Windows.Forms.Label()
         Me.txtPriceRate = New System.Windows.Forms.TextBox()
-        Me.Label12 = New System.Windows.Forms.Label()
+        Me.lblRatePrice = New System.Windows.Forms.Label()
         Me.cbxRates = New System.Windows.Forms.ComboBox()
         CType(Me.dtgUsers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -65,7 +65,7 @@ Partial Class frmFindUsers
         Me.dtgUsers.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgUsers.Size = New System.Drawing.Size(860, 370)
-        Me.dtgUsers.TabIndex = 13
+        Me.dtgUsers.TabIndex = 4
         '
         'clmCodUser
         '
@@ -151,7 +151,7 @@ Partial Class frmFindUsers
         Me.btnFind.Location = New System.Drawing.Point(729, 25)
         Me.btnFind.Name = "btnFind"
         Me.btnFind.Size = New System.Drawing.Size(143, 23)
-        Me.btnFind.TabIndex = 11
+        Me.btnFind.TabIndex = 2
         Me.btnFind.Text = "Buscar"
         Me.btnFind.UseVisualStyleBackColor = True
         '
@@ -161,7 +161,7 @@ Partial Class frmFindUsers
         Me.txtFind.Location = New System.Drawing.Point(205, 26)
         Me.txtFind.Name = "txtFind"
         Me.txtFind.Size = New System.Drawing.Size(518, 20)
-        Me.txtFind.TabIndex = 10
+        Me.txtFind.TabIndex = 1
         '
         'cbxCrit
         '
@@ -171,7 +171,7 @@ Partial Class frmFindUsers
         Me.cbxCrit.Location = New System.Drawing.Point(12, 25)
         Me.cbxCrit.Name = "cbxCrit"
         Me.cbxCrit.Size = New System.Drawing.Size(187, 21)
-        Me.cbxCrit.TabIndex = 9
+        Me.cbxCrit.TabIndex = 3
         '
         'Label2
         '
@@ -207,18 +207,18 @@ Partial Class frmFindUsers
         Me.txtPriceRate.Name = "txtPriceRate"
         Me.txtPriceRate.ReadOnly = True
         Me.txtPriceRate.Size = New System.Drawing.Size(95, 20)
-        Me.txtPriceRate.TabIndex = 16
+        Me.txtPriceRate.TabIndex = 6
         Me.txtPriceRate.TabStop = False
         Me.txtPriceRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'Label12
+        'lblRatePrice
         '
-        Me.Label12.AutoSize = True
-        Me.Label12.Location = New System.Drawing.Point(337, 431)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(61, 13)
-        Me.Label12.TabIndex = 17
-        Me.Label12.Text = "Tarifa (S/.):"
+        Me.lblRatePrice.AutoSize = True
+        Me.lblRatePrice.Location = New System.Drawing.Point(337, 431)
+        Me.lblRatePrice.Name = "lblRatePrice"
+        Me.lblRatePrice.Size = New System.Drawing.Size(61, 13)
+        Me.lblRatePrice.TabIndex = 17
+        Me.lblRatePrice.Text = "Tarifa (S/.):"
         '
         'cbxRates
         '
@@ -227,7 +227,7 @@ Partial Class frmFindUsers
         Me.cbxRates.Location = New System.Drawing.Point(81, 428)
         Me.cbxRates.Name = "cbxRates"
         Me.cbxRates.Size = New System.Drawing.Size(250, 21)
-        Me.cbxRates.TabIndex = 18
+        Me.cbxRates.TabIndex = 5
         '
         'frmFindUsers
         '
@@ -236,7 +236,7 @@ Partial Class frmFindUsers
         Me.ClientSize = New System.Drawing.Size(884, 461)
         Me.Controls.Add(Me.cbxRates)
         Me.Controls.Add(Me.txtPriceRate)
-        Me.Controls.Add(Me.Label12)
+        Me.Controls.Add(Me.lblRatePrice)
         Me.Controls.Add(Me.lblRates)
         Me.Controls.Add(Me.dtgUsers)
         Me.Controls.Add(Me.btnFind)
@@ -247,7 +247,7 @@ Partial Class frmFindUsers
         Me.MinimumSize = New System.Drawing.Size(900, 500)
         Me.Name = "frmFindUsers"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Usuarios"
+        Me.Text = "Buscar Usuarios"
         CType(Me.dtgUsers, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -272,6 +272,6 @@ Partial Class frmFindUsers
     Friend WithEvents clmOptions As DataGridViewButtonColumn
     Friend WithEvents lblRates As Label
     Friend WithEvents txtPriceRate As TextBox
-    Friend WithEvents Label12 As Label
+    Friend WithEvents lblRatePrice As Label
     Friend WithEvents cbxRates As ComboBox
 End Class
