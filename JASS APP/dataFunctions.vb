@@ -6,46 +6,34 @@ Module dataFunctions
     Public cnnx As New MySqlConnection
     Public cnnstr As New MySqlConnectionStringBuilder
 
-    Public Sub DatabaseConnect()
+    Public Function DatabaseConnect() As Boolean
         Try
-            cnnstr.Server = "localhost"
-            cnnstr.UserID = "root"
-            cnnstr.Password = ""
-            cnnstr.Database = "jassdb"
-            cnnx.ConnectionString = cnnstr.ToString
-            'cnnx.Open()
-            'cnnx.Close()
-            MsgBox("Conexión establecida.", vbInformation, "Aviso")
-        Catch ex As Exception
-            MsgBox("No pudo completarse la conección a la base de datos.", vbCritical, "Aviso")
-            Application.Exit()
-        End Try
-    End Sub
-
-    Public Function dbConnection()
-        Try
-            If cnn.State = ConnectionState.Closed Then
-                cnn.Open()
-                'MsgBox("Conectado con la base de datos", vbInformation, "Aviso")
+            If cnnx.State = ConnectionState.Closed Then
+                cnnstr.Server = "localhost"
+                cnnstr.UserID = "root"
+                cnnstr.Password = ""
+                cnnstr.Database = "jassdb"
+                cnnx.ConnectionString = cnnstr.ToString
+                cnnx.Open()
             End If
             Return True
         Catch ex As Exception
-            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            MsgBox("No pudo completarse la conección a la base de datos.", vbCritical, "Aviso")
             Return False
         End Try
     End Function
 
     Public Function userLogin(ByVal nameusr As String, ByVal passwd As String)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return False
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT NAMEUSER, USERLOG, PASSLOG FROM users_sys WHERE USERLOG = '" & nameusr & "' AND PASSLOG = '" & passwd & "'"
+            cmd.CommandText = "SELECT name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
 
             Try
                 dr = cmd.ExecuteReader()
@@ -105,29 +93,29 @@ Module dataFunctions
         Return strcode
     End Function
 
-    Public Function generateCodeLine(vSector As String) As String
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Function generateCodeLine(vIdSector As String) As String
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT COD_SECTOR FROM sector WHERE ID_SECTOR LIKE '" & vSector & "'"
+            cmd.CommandText = "SELECT code FROM streets WHERE idstreet LIKE '" & vIdSector & "'"
 
             Try
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
                     dr.Read()
-                    cmd.Dispose()
 
                     Dim codeLine As String = ""
                     Dim codeNum As String = CInt((10000 * Rnd()) + 1)
                     codeLine = Year(Today).ToString & "-" & Trim(dr(0).ToString) & "-" & codeNum.PadLeft(5, "0")
 
+                    cmd.Dispose()
                     Return codeLine
                 Else
                     Return Nothing
@@ -151,18 +139,18 @@ Module dataFunctions
     End Function
     Public Function listRates() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New OleDbCommand
+        Dim cmd As New MySqlCommand
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT ID_RATE, NAME_RATE FROM rates"
+            cmd.CommandText = "SELECT idrate, name FROM rates"
 
             Try
-                Dim ada As New OleDbDataAdapter(cmd)
+                Dim ada As New MySqlDataAdapter(cmd)
 
                 ada.Fill(ds)
                 ada.Dispose()
@@ -177,18 +165,18 @@ Module dataFunctions
 
     Public Function listAvenues() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New OleDbCommand
+        Dim cmd As New MySqlCommand
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT ID_SECTOR, NAME_SECTOR FROM sector ORDER BY NAME_SECTOR"
+            cmd.CommandText = "SELECT idstreet, name FROM streets ORDER BY name"
 
             Try
-                Dim ada As New OleDbDataAdapter(cmd)
+                Dim ada As New MySqlDataAdapter(cmd)
 
                 ada.Fill(ds)
                 ada.Dispose()
@@ -203,18 +191,18 @@ Module dataFunctions
 
     Public Function listUserTypes() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New OleDbCommand
+        Dim cmd As New MySqlCommand
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT ID_TYPE_USER, NAME_TYPE FROM user_type"
+            cmd.CommandText = "SELECT idusertype, name FROM user_type"
 
             Try
-                Dim ada As New OleDbDataAdapter(cmd)
+                Dim ada As New MySqlDataAdapter(cmd)
 
                 ada.Fill(ds)
                 ada.Dispose()
@@ -531,16 +519,16 @@ Module dataFunctions
     End Sub
 
     Public Function getPriceRate(idRate As String) As String()
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT PRICE_RATE, DESC_RATE, VARIABLE FROM rates WHERE ID_RATE LIKE '" & idRate & "'"
+            cmd.CommandText = "SELECT price, description, variable FROM rates WHERE idrate LIKE '" & idRate & "'"
 
             Try
                 dr = cmd.ExecuteReader()
@@ -564,16 +552,16 @@ Module dataFunctions
     End Function
 
     Public Function getAveSector(idAvenue As String) As String()
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT COD_SECTOR, NAME_SECTOR FROM sector WHERE ID_SECTOR LIKE '" & idAvenue & "'"
+            cmd.CommandText = "SELECT code, name FROM streets WHERE idstreet LIKE '" & idAvenue & "'"
 
             Try
                 dr = cmd.ExecuteReader()
@@ -595,24 +583,24 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getCodeLine(vSector As Integer) As String
-        Dim cmd As New OleDbCommand
+    Public Function getCodeLine(vIdSector As Integer) As String
+        Dim cmd As New MySqlCommand
         Dim codeLine As String
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
             Try
                 Dim vResult As Boolean
                 Do
-                    codeLine = generateCodeLine(vSector)
+                    codeLine = generateCodeLine(vIdSector)
                     If codeLine = Nothing Then
                         Return Nothing
                     End If
-                    Dim dr As OleDbDataReader
-                    cmd.Connection = cnn
+                    Dim dr As MySqlDataReader
+                    cmd.Connection = cnnx
                     cmd.CommandType = CommandType.Text
-                    cmd.CommandText = "SELECT COD_LINE FROM lines WHERE COD_LINE LIKE '" & codeLine & "'"
+                    cmd.CommandText = "SELECT code FROM service_line WHERE code LIKE '" & codeLine & "'"
                     dr = cmd.ExecuteReader()
                     vResult = dr.HasRows
                     dr.Close()

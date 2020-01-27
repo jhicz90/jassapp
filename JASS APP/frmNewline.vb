@@ -12,8 +12,8 @@
         If Not dsRates.HasErrors Then
             cbxRates.Enabled = True
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "ID_RATE"
-            cbxRates.DisplayMember = "NAME_RATE"
+            cbxRates.ValueMember = "idrate"
+            cbxRates.DisplayMember = "name"
         Else
             cbxRates.Enabled = False
         End If
@@ -23,8 +23,8 @@
         If Not dsAvenues.HasErrors Then
             cbxStreets.Enabled = True
             cbxStreets.DataSource = dsAvenues.Tables(0)
-            cbxStreets.ValueMember = "ID_SECTOR"
-            cbxStreets.DisplayMember = "NAME_SECTOR"
+            cbxStreets.ValueMember = "idstreet"
+            cbxStreets.DisplayMember = "name"
         Else
             cbxStreets.Enabled = False
         End If
@@ -34,8 +34,8 @@
         If Not dsUserTypes.HasErrors Then
             cbxTypeUser.Enabled = True
             cbxTypeUser.DataSource = dsUserTypes.Tables(0)
-            cbxTypeUser.ValueMember = "ID_TYPE_USER"
-            cbxTypeUser.DisplayMember = "NAME_TYPE"
+            cbxTypeUser.ValueMember = "idusertype"
+            cbxTypeUser.DisplayMember = "name"
         Else
             cbxTypeUser.Enabled = False
         End If
@@ -55,7 +55,7 @@
         txtNames.Text = ""
         txtSurnames.Text = ""
         txtDocID.Text = ""
-        cbxTypeUser.SelectedIndex = 0
+        'cbxTypeUser.SelectedIndex = 0
         txtAddress.Text = ""
         txtTelephone.Text = ""
         txtCellphone.Text = ""
@@ -84,7 +84,7 @@
             txtNames.Text = ""
             txtSurnames.Text = ""
             txtDocID.Text = ""
-            cbxTypeUser.SelectedIndex = 0
+            'cbxTypeUser.SelectedIndex = 0
             txtAddress.Text = ""
             txtTelephone.Text = ""
             txtCellphone.Text = ""

@@ -11,8 +11,8 @@ Public Class frmLogin
     ' como el nombre de usuario, nombre para mostrar, etc.
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
-        If dataFunctions.dbConnection() Then
-            If dataFunctions.userLogin(UsernameTextBox.Text, PasswordTextBox.Text) = True Then
+        If DatabaseConnect() Then
+            If userLogin(UsernameTextBox.Text, PasswordTextBox.Text) = True Then
                 Me.DialogResult = DialogResult.OK
             End If
         Else
@@ -25,7 +25,6 @@ Public Class frmLogin
     End Sub
 
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles Me.Load
-        dataFunctions.dbConnection()
-        DatabaseConnect()
+        'DatabaseConnect()
     End Sub
 End Class
