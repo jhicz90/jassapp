@@ -215,22 +215,22 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function listUsersInAccount(vCodAccount As String) As DataSet
+    Public Function listUsersInAccount(vIdInternalLine As String) As DataSet
         Dim ds As New DataSet
-        Dim cmd As New OleDbCommand
+        Dim cmd As New MySqlCommand
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT user_lines.COD_USR_LINE AS iduser, (user_lines.USER_NAMES & "" "" & user_lines.USER_SURNAMES) AS fullname" &
-                " FROM user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE WHERE users_to_account.COD_ACCOUNT = @codaccount"
-            cmd.Parameters.AddWithValue("codaccount", vCodAccount)
+            cmd.CommandText = "SELECT users_line.internalline, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname " &
+            "FROM users_line INNER JOIN user_reg ON users_line.userreg = user_reg.iduserreg WHERE users_line.internalline = @idinternalline"
+            cmd.Parameters.AddWithValue("idinternalline", vIdInternalLine)
 
             Try
-                Dim ada As New OleDbDataAdapter(cmd)
+                Dim ada As New MySqlDataAdapter(cmd)
 
                 ada.Fill(ds)
                 ada.Dispose()
@@ -244,13 +244,13 @@ Module dataFunctions
     End Function
 
     Public Sub listUsers(txtBusq As String, typeBusq As Integer, dgUsers As DataGridView)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
             Dim comand As String
@@ -258,21 +258,21 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT user_lines.COD_USR_LINE, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID,
-                    user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL
-                    FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
-                    WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
+                    WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT user_lines.COD_USR_LINE, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID,
-                    user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL
-                    FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
-                    WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
+                    WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
-                    comand = "SELECT user_lines.COD_USR_LINE, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID,
-                    user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL
-                    FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE"
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype"
             End Select
 
             cmd.CommandText = comand
@@ -298,13 +298,13 @@ Module dataFunctions
     End Sub
 
     Public Sub listLinesService(txtBusq As String, typeBusq As Integer, dgLinesService As DataGridView)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
             Dim comand As String
@@ -312,46 +312,57 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
-                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
-                    WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT internal_line.idinternalline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names & "" "" & user_reg.surnames) AS fullname, user_reg.docid " &
+                    "FROM service_line " &
+                    "INNER JOIN streets On streets.idstreet = service_line.street " &
+                    "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
+                    "INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline " &
+                    "INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg " &
+                    "WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
-                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
-                    WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT internal_line.idinternalline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names & "" "" & user_reg.surnames) AS fullname, user_reg.docid " &
+                    "FROM service_line " &
+                    "INNER JOIN streets On streets.idstreet = service_line.street " &
+                    "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
+                    "INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline " &
+                    "INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg " &
+                    "WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case 2
                     'Buscar por codigo de linea
-                    comand = "SELECT 
-                    (""""),
-                    VLINES.COD_LINE,
-                    VLINES.NAME_LINE,
-                    VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
-                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
-                    WHERE VLINES.COD_LINE LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT " &
+                    "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.code, " &
+                    "SERVLINE.name, " &
+                    "SECTOR.name, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
+                    "FROM service_line SERVLINE " &
+                    "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
+                    "WHERE SERVLINE.code LIKE '%" & txtBusq & "%'"
                 Case 3
                     'Buscar por nombre de linea
-                    comand = "SELECT 
-                    (""""),
-                    VLINES.COD_LINE,
-                    VLINES.NAME_LINE,
-                    VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
-                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
-                    WHERE VLINES.NAME_LINE LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT " &
+                    "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.code, " &
+                    "SERVLINE.name, " &
+                    "SECTOR.name, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
+                    "FROM service_line SERVLINE " &
+                    "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
+                    "WHERE SERVLINE.name LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
-                    comand = "SELECT 
-                    (""""),
-                    VLINES.COD_LINE,
-                    VLINES.NAME_LINE,
-                    VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
-                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR"
+                    comand = "SELECT " &
+                    "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.code, " &
+                    "SERVLINE.name, " &
+                    "SECTOR.name, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
+                    "FROM service_line SERVLINE " &
+                    "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
             End Select
 
             cmd.CommandText = comand
@@ -378,13 +389,13 @@ Module dataFunctions
     End Sub
 
     Public Sub listAccounts(txtBusq As String, typeBusq As Integer, dgAccounts As DataGridView)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
             Dim comand As String
@@ -392,35 +403,57 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombre de la cuenta
-                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
-                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
-                    WHERE user_lines.USER_NAMES LIKE '%" & txtBusq & "%' OR user_lines.USER_SURNAMES LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT " &
+                    "internal_line.idinternalline, " &
+                    "service_line.code, " &
+                    "service_line.name, " &
+                    "streets.name, " &
+                    "CONCAT(user_reg.names, "" "",user_reg.surnames) AS fullname, " &
+                    "user_reg.docid " &
+                    "FROM internal_line " &
+                    "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
+                    "INNER JOIN streets ON streets.idstreet = service_line.street" &
+                    "INNER JOIN users_line ON internal_line.idinternalline = users_line.internalline" &
+                    "INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg" &
+                    "WHERE user_reg.names LIKE '%" & txtBusq & "%' Or user_reg.surnames Like '%" & txtBusq & "'%"
                 Case 1
                     'Buscar por nombre de usuario asociado a la cuenta
-                    comand = "SELECT lines_to_account.COD_ACCOUNT, lines.COD_LINE, lines.NAME_LINE, sector.NAME_SECTOR, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID
-                    FROM ((lines INNER JOIN lines_to_account ON lines.COD_LINE = lines_to_account.COD_LINE) INNER JOIN (user_lines INNER JOIN users_to_account ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR
-                    WHERE user_lines.USER_DOCID LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT " &
+                    "internal_line.idinternalline, " &
+                    "service_line.code, " &
+                    "service_line.name, " &
+                    "streets.name, " &
+                    "CONCAT(user_reg.names, "" "",user_reg.surnames) AS fullname, " &
+                    "user_reg.docid " &
+                    "FROM internal_line " &
+                    "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
+                    "INNER JOIN streets ON streets.idstreet = service_line.street" &
+                    "INNER JOIN users_line ON internal_line.idinternalline = users_line.internalline" &
+                    "INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg" &
+                    "WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case 2
                     'Buscar por codigo de linea
-                    comand = "SELECT 
-                    (""""),
-                    VLINES.COD_LINE,
-                    VLINES.NAME_LINE,
-                    VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
-                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR
-                    WHERE VLINES.COD_LINE LIKE '%" & txtBusq & "%'"
+                    comand = "SELECT " &
+                    "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.code, " &
+                    "SERVLINE.name, " &
+                    "SECTOR.name, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
+                    "FROM service_line SERVLINE " &
+                    "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
+                    "WHERE SERVLINE.code LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
-                    comand = "SELECT 
-                    (""""),
-                    VLINES.COD_LINE,
-                    VLINES.NAME_LINE,
-                    VSECTOR.NAME_SECTOR, 
-                    (SELECT TOP 1 TRIM(user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS FULLNAME,
-                    (SELECT TOP 1 user_lines.USER_DOCID FROM lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT WHERE lines_to_account.COD_LINE = VLINES.COD_LINE) AS DOCID
-                    FROM sector VSECTOR INNER JOIN lines VLINES ON VSECTOR.ID_SECTOR = VLINES.ID_SECTOR"
+                    comand = "SELECT " &
+                    "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.code, " &
+                    "SERVLINE.name, " &
+                    "SECTOR.name, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
+                    "FROM service_line SERVLINE " &
+                    "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
             End Select
 
             cmd.CommandText = comand
@@ -447,19 +480,26 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub listAccountLine(vCodLine As String, dgAccountLine As DataGridView)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub listAccountLine(vIdLine As String, dgAccountLine As DataGridView)
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-            cmd.CommandText = "SELECT lines_to_account.COD_LINE, rates.ID_RATE, lines_to_account.COD_ACCOUNT, (SELECT TOP 1 (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) FROM users_to_account INNER JOIN user_lines ON user_lines.COD_USR_LINE = users_to_account.COD_USR_LINE WHERE users_to_account.COD_ACCOUNT = lines_to_account.COD_ACCOUNT), rates.NAME_RATE 
-            FROM lines_to_account INNER JOIN rates ON lines_to_account.ID_RATE = rates.ID_RATE
-            WHERE lines_to_account.COD_LINE = @codline"
-            cmd.Parameters.AddWithValue("codline", vCodLine)
+            cmd.CommandText = "SELECT 
+            INTERLINE.idinternalline, 
+            rates.idrate, 
+            service_line.code, 
+            (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
+            rates.name 
+            FROM internal_line INTERLINE 
+            INNER JOIN rates ON internal_line.rate = rates.idrate 
+            INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline 
+            WHERE service_line.idserviceline = @idserviceline"
+            cmd.Parameters.AddWithValue("idserviceline", vIdLine)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -482,20 +522,29 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub listUserAccount(vCodLine As String, vCodAccount As String, dgUserAccount As DataGridView)
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub listUserAccount(vIdLine As String, vIdInterline As String, dgUserAccount As DataGridView)
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-            cmd.CommandText = "SELECT lines_to_account.COD_ACCOUNT, lines_to_account.COD_LINE, user_lines.COD_USR_LINE, (user_lines.USER_NAMES & ' ' & user_lines.USER_SURNAMES) AS FULLNAME, user_lines.USER_DOCID, user_type.NAME_TYPE 
-            FROM (lines_to_account INNER JOIN (users_to_account INNER JOIN user_lines ON users_to_account.COD_USR_LINE = user_lines.COD_USR_LINE) ON lines_to_account.COD_ACCOUNT = users_to_account.COD_ACCOUNT) INNER JOIN user_type ON user_lines.USER_TYPE = user_type.ID_TYPE_USER 
-            WHERE lines_to_account.COD_LINE = @codline AND lines_to_account.COD_ACCOUNT = @codaccount"
-            cmd.Parameters.AddWithValue("codline", vCodLine)
-            cmd.Parameters.AddWithValue("codaccount", vCodAccount)
+            cmd.CommandText = "SELECT
+            internal_line.idinternalline,
+            internal_line.serviceline,
+            user_reg.iduserreg,
+            CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname,
+            user_reg.docid,
+            user_type.name 
+            FROM internal_line
+            INNER JOIN users_line ON internal_line.idinternalline = users_line.internalline
+            INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg
+            INNER JOIN user_type ON user_type.idusertype = user_reg.usertype
+            WHERE internal_line.serviceline = @idserviceline AND internal_line.idinternalline = @idinternalline"
+            cmd.Parameters.AddWithValue("idserviceline", vIdLine)
+            cmd.Parameters.AddWithValue("idinternalline", vIdInterline)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -614,32 +663,30 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub addUserToLine(vCodLine As String, dataUser() As String, vRates As Integer, Optional vPriceRate As Double = 0)
-        Dim cmdInsertLineUser As New OleDbCommand
-        Dim cmdFindLineUser As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub addUserToLine(vIdInternalLine As String, dataUser() As String, vIdRate As Integer, Optional vPriceRate As Double = 0)
+        Dim cmdInsertLineUser As New MySqlCommand
+        Dim cmdFindLineUser As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
-            If vCodLine.Length > 0 And vCodLine <> "" Or vRates <> 0 Then
-                cmdFindLineUser.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            If vIdInternalLine.Length > 0 And vIdInternalLine <> "" Or vIdRate <> 0 Then
+                cmdFindLineUser.Connection = cnnx
                 cmdFindLineUser.CommandType = CommandType.Text
 
-                cmdFindLineUser.CommandText = "SELECT * FROM lines_to_users WHERE COD_LINE LIKE '" & vCodLine & "' AND COD_USR_LINE LIKE '" & dataUser(0) & "'"
+                cmdFindLineUser.CommandText = "SELECT * FROM users_line WHERE users_line.internalline = @idinternalline AND users_line.userreg = @iduserreg"
+                cmdFindLineUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                cmdFindLineUser.Parameters.AddWithValue("iduserreg", dataUser(0))
 
                 Try
                     dr = cmdFindLineUser.ExecuteReader()
 
                     If Not (dr.HasRows) Then
-                        cmdInsertLineUser.Connection = cnn
+                        cmdInsertLineUser.Connection = cnnx
                         cmdInsertLineUser.CommandType = CommandType.Text
 
-                        Dim vResult As String = "false"
-
-                        If MsgBox("¿Desea insertar este usuario como titular?", MsgBoxStyle.YesNo + vbInformation, "Aviso") = MsgBoxResult.Yes Then
-                            vResult = "true"
-                        End If
-
-                        cmdInsertLineUser.CommandText = "INSERT INTO lines_to_users(COD_LINE, COD_USR_LINE, TITULAR_LINE, ID_RATE, PRICE_RATE) VALUES('" & vCodLine & "','" & dataUser(0) & "', " & vResult & ",'" & vRates & "','" & vPriceRate & "')"
+                        cmdInsertLineUser.CommandText = "INSERT INTO users_line(internalline, userreg) VALUES(@idinternalline,@iduserreg)"
+                        cmdInsertLineUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                        cmdInsertLineUser.Parameters.AddWithValue("iduserreg", dataUser(0))
 
                         Try
                             dr = cmdInsertLineUser.ExecuteReader()
@@ -665,68 +712,39 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub saveUserNew(dataUser() As String, Optional vLineToUser As Boolean = False, Optional vCodAccount As String = Nothing)
-        Dim codUser As String = generateCode(15, True, True, True)
+    Public Sub saveUserNew(dataUser() As String, Optional vLineToUser As Boolean = False, Optional vIdInternalLine As String = Nothing)
+        'Dim codUser As String = generateCode(15, True, True, True)
 
-        Dim cmdInsertUser As New OleDbCommand
-        Dim cmdInsertLineUser As New OleDbCommand
-        Dim cmdLastInsertLineUser As New OleDbCommand
-        Dim cmdUpdateCodeLineUser As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmdInsertUser As New MySqlCommand
+        Dim cmdInsertLineUser As New MySqlCommand
+        Dim cmdLastInsertLineUser As New MySqlCommand
+        Dim cmdUpdateCodeLineUser As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdInsertUser.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdInsertUser.Connection = cnnx
             cmdInsertUser.CommandType = CommandType.Text
 
-            cmdInsertUser.CommandText = "INSERT INTO user_lines(COD_USR_LINE, USER_NAMES, USER_SURNAMES, USER_TYPE, USER_DOCID, USER_ADRSS, USER_CEL, USER_TEL) VALUES(@coduserline, @nameuser, @surnameuser, @typeuser, @dociduser, @addressuser, @celluser, @teleuser)"
-            cmdInsertUser.Parameters.AddWithValue("coduserline", codUser)
-            cmdInsertUser.Parameters.AddWithValue("nameuser", dataUser(1))
-            cmdInsertUser.Parameters.AddWithValue("surnameuser", dataUser(2))
-            cmdInsertUser.Parameters.AddWithValue("typeuser", dataUser(3))
-            cmdInsertUser.Parameters.AddWithValue("dociduser", dataUser(4))
-            cmdInsertUser.Parameters.AddWithValue("addressuser", dataUser(5))
-            cmdInsertUser.Parameters.AddWithValue("celluser", dataUser(6))
-            cmdInsertUser.Parameters.AddWithValue("teleuser", dataUser(7))
+            cmdInsertUser.CommandText = "INSERT INTO user_reg(names, surnames, usertype, docid, address, cellphone, telephone) VALUES(@names, @surnames, @usertype, @docid, @address, @cellphone, @telephone)"
+            'cmdInsertUser.Parameters.AddWithValue("iduserreg", codUser)
+            cmdInsertUser.Parameters.AddWithValue("names", dataUser(1))
+            cmdInsertUser.Parameters.AddWithValue("surnames", dataUser(2))
+            cmdInsertUser.Parameters.AddWithValue("usertype", dataUser(3))
+            cmdInsertUser.Parameters.AddWithValue("docid", dataUser(4))
+            cmdInsertUser.Parameters.AddWithValue("address", dataUser(5))
+            cmdInsertUser.Parameters.AddWithValue("cellphone", dataUser(6))
+            cmdInsertUser.Parameters.AddWithValue("telephone", dataUser(7))
 
             Try
                 dr = cmdInsertUser.ExecuteReader()
 
-                If vLineToUser = True Then
-                    cmdInsertLineUser.Connection = cnn
+                If vLineToUser = True And Not IsNothing(vIdInternalLine) Then
+                    cmdInsertLineUser.Connection = cnnx
                     cmdInsertLineUser.CommandType = CommandType.Text
-                    cmdInsertLineUser.CommandText = "INSERT INTO users_to_account(COD_USR_LINE, COD_ACCOUNT) VALUES(@coduserline, @codaccount)"
-                    cmdInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
-                    cmdInsertLineUser.Parameters.AddWithValue("codaccount", vCodAccount)
+                    cmdInsertLineUser.CommandText = "INSERT INTO users_line(internalline, userreg) VALUES(@idinternalline, (SELECT MAX(user_reg.iduserreg) AS id FROM user_reg))"
+                    cmdInsertLineUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
 
                     cmdInsertLineUser.ExecuteNonQuery()
-
-                    'cmdInsertLineUser.Connection = cnn
-                    'cmdInsertLineUser.CommandType = CommandType.Text
-                    'cmdInsertLineUser.CommandText = "INSERT INTO lines_to_users(COD_LINE, COD_USR_LINE, TITULAR_LINE, ID_RATE, PRICE_RATE) VALUES(@codline, @coduserline, @titular, @codrate, @pricerate)"
-                    'cmdInsertLineUser.Parameters.AddWithValue("codline", dataUser(12))
-                    'cmdInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
-                    'cmdInsertLineUser.Parameters.AddWithValue("titular", Convert.ToBoolean(dataUser(13)))
-                    'cmdInsertLineUser.Parameters.AddWithValue("codrate", dataUser(10))
-                    'cmdInsertLineUser.Parameters.AddWithValue("pricerate", dataUser(11))
-
-                    'cmdInsertLineUser.ExecuteNonQuery()
-
-                    'cmdLastInsertLineUser.Connection = cnn
-                    'cmdLastInsertLineUser.CommandType = CommandType.Text
-                    'cmdLastInsertLineUser.CommandText = "SELECT lines_to_users.ID_ACCOUNT FROM lines_to_users WHERE COD_LINE LIKE @codline AND COD_USR_LINE LIKE @coduserline"
-                    'cmdLastInsertLineUser.Parameters.AddWithValue("codline", dataUser(12))
-                    'cmdLastInsertLineUser.Parameters.AddWithValue("coduserline", codUser)
-
-                    'dr = cmdLastInsertLineUser.ExecuteReader()
-
-                    'If dr.HasRows Then
-                    '    dr.Read()
-                    '    cmdUpdateCodeLineUser.Connection = cnn
-                    '    cmdUpdateCodeLineUser.CommandType = CommandType.Text
-                    '    cmdUpdateCodeLineUser.CommandText = "UPDATE lines_to_users SET lines_to_users.COD_ACCOUNT = @codaccount WHERE lines_to_users.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
-                    '    cmdUpdateCodeLineUser.Parameters.AddWithValue("codaccount", "C" & dr(0).ToString.PadLeft(6, "0"))
-                    '    cmdUpdateCodeLineUser.ExecuteNonQuery()
-                    'End If
                 End If
 
                 dr.Close()
@@ -749,20 +767,20 @@ Module dataFunctions
         Dim codUser As String = generateCode(15, True, True, True)
         Dim vFindUser, vFindLine As Boolean
 
-        Dim cmdFindLine As New OleDbCommand
-        Dim cmdFindUser As New OleDbCommand
-        Dim cmdInsertLine As New OleDbCommand
-        Dim cmdInsertUser As New OleDbCommand
-        Dim cmdInsertLineAccount As New OleDbCommand
-        Dim cmdLastInsertLineUser As New OleDbCommand
-        Dim cmdUpdateCodeLineAccount As New OleDbCommand
-        Dim cmdInsertAccountUser As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmdFindLine As New MySqlCommand
+        Dim cmdFindUser As New MySqlCommand
+        Dim cmdInsertLine As New MySqlCommand
+        Dim cmdInsertUser As New MySqlCommand
+        Dim cmdInsertLineAccount As New MySqlCommand
+        Dim cmdLastInsertLineUser As New MySqlCommand
+        Dim cmdUpdateCodeLineAccount As New MySqlCommand
+        Dim cmdInsertAccountUser As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
+        If Not (cnnx.DataSource.Equals("")) Then
             Try
                 If dataUser(3).Trim <> "" And (dataUser(7).Trim = "" Or dataUser(7) = Nothing) Then
-                    cmdFindUser.Connection = cnn
+                    cmdFindUser.Connection = cnnx
                     cmdFindUser.CommandType = CommandType.Text
                     cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
                     cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
@@ -775,7 +793,7 @@ Module dataFunctions
                     End If
                 End If
 
-                cmdFindLine.Connection = cnn
+                cmdFindLine.Connection = cnnx
                 cmdFindLine.CommandType = CommandType.Text
                 cmdFindLine.CommandText = "SELECT * FROM lines WHERE lines.COD_LINE LIKE @codline"
                 cmdFindLine.Parameters.AddWithValue("codline", dataLine(0))
@@ -789,7 +807,7 @@ Module dataFunctions
 
                 If Not vFindUser And Not vFindLine Then
                     'Registrando un nuevo usuario
-                    cmdInsertUser.Connection = cnn
+                    cmdInsertUser.Connection = cnnx
                     cmdInsertUser.CommandType = CommandType.Text
 
                     cmdInsertUser.CommandText = "INSERT INTO user_lines(COD_USR_LINE, USER_NAMES, USER_SURNAMES, USER_TYPE, USER_DOCID, USER_ADRSS, USER_CEL, USER_TEL) VALUES(@coduserline, @nameuser, @surnameuser, @typeuser, @dociduser, @addressuser, @celluser, @teleuser)"
@@ -807,7 +825,7 @@ Module dataFunctions
                     End If
 
                     'Registrando una nueva linea
-                    cmdInsertLine.Connection = cnn
+                    cmdInsertLine.Connection = cnnx
                     cmdInsertLine.CommandType = CommandType.Text
 
                     If (dataLine(1) = "" Or dataLine(1) = Nothing) Then
@@ -823,7 +841,7 @@ Module dataFunctions
                     cmdInsertLine.Parameters.AddWithValue("descpline", dataLine(6))
 
                     'Registrando una linea-cuenta
-                    cmdInsertLineAccount.Connection = cnn
+                    cmdInsertLineAccount.Connection = cnnx
                     cmdInsertLineAccount.CommandType = CommandType.Text
 
                     cmdInsertLineAccount.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
@@ -836,7 +854,7 @@ Module dataFunctions
                     cmdInsertLineAccount.ExecuteNonQuery()
 
                     'Buscando y cambiando el codigo de cuenta
-                    cmdLastInsertLineUser.Connection = cnn
+                    cmdLastInsertLineUser.Connection = cnnx
                     cmdLastInsertLineUser.CommandType = CommandType.Text
 
                     cmdLastInsertLineUser.CommandText = "SELECT lines_to_account.ID_ACCOUNT FROM lines_to_account WHERE lines_to_account.COD_LINE LIKE @codline AND lines_to_account.COD_ACCOUNT LIKE @codaccount"
@@ -849,7 +867,7 @@ Module dataFunctions
                     If dr.HasRows Then
                         dr.Read()
                         codAccount = "C" & dr(0).ToString.PadLeft(6, "0")
-                        cmdUpdateCodeLineAccount.Connection = cnn
+                        cmdUpdateCodeLineAccount.Connection = cnnx
                         cmdUpdateCodeLineAccount.CommandType = CommandType.Text
                         cmdUpdateCodeLineAccount.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
                         cmdUpdateCodeLineAccount.Parameters.AddWithValue("codaccount", codAccount)
@@ -864,7 +882,7 @@ Module dataFunctions
                         codLineUser = dataUser(7)
                     End If
 
-                    cmdInsertAccountUser.Connection = cnn
+                    cmdInsertAccountUser.Connection = cnnx
                     cmdInsertAccountUser.CommandType = CommandType.Text
 
                     cmdInsertAccountUser.CommandText = "INSERT INTO users_to_account(COD_USR_LINE, COD_ACCOUNT) VALUES(@coduserline, @codaccount)"
