@@ -835,9 +835,8 @@ Module dataFunctions
                     'Buscando y cambiando el codigo de cuenta
                     cmdLastInsertLineUser.Connection = cnnx
                     cmdLastInsertLineUser.CommandType = CommandType.Text
-
-                    cmdLastInsertLineUser.CommandText = "UPDATE internal_line SET internal_line.code = (SELECT LPAD(MAX(internal_line.idinternalline),6,""0"") AS id FROM internal_line) WHERE internal_line.idinternalline LIKE (SELECT MAX(internal_line.idinternalline) AS id FROM internal_line)"
-
+                    cmdLastInsertLineUser.CommandText = "UPDATE internal_line SET internal_line.code = (SELECT CONCAT(""C"",LPAD(LAST_INSERT_ID(),6,""0""))) WHERE internal_line.idinternalline LIKE LAST_INSERT_ID()"
+                    'cmdLastInsertLineUser.CommandText = "UPDATE internal_line SET internal_line.code = (SELECT LPAD(MAX(internal_line.idinternalline),6,""0"") AS id FROM internal_line) WHERE internal_line.idinternalline LIKE (SELECT MAX(internal_line.idinternalline) AS id FROM internal_line)"
                     cmdLastInsertLineUser.ExecuteNonQuery()
 
                     'Dim codAccount As String = ""
@@ -888,50 +887,42 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function saveAccountNew(vCodLine As String, vCodRate As Integer, vPriceRate As Decimal) As String
-        Dim cmdInsertLineAccount As New OleDbCommand
-        Dim cmdLastInsertLineUser As New OleDbCommand
-        Dim cmdUpdateCodeLineAccount As New OleDbCommand
-        Dim cmdInsertAccountUser As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Function saveAccountNew(vIdLine As String, vIdRate As Integer, vPriceRate As Decimal) As String
+        Dim cmdInsertLineAccount As New MySqlCommand
+        Dim cmdLastInsertLineUser As New MySqlCommand
+        Dim cmdIdInternalLine As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
+        If Not (cnnx.DataSource.Equals("")) Then
             Try
                 'Registrando una linea-cuenta
-                cmdInsertLineAccount.Connection = cnn
+                cmdInsertLineAccount.Connection = cnnx
                 cmdInsertLineAccount.CommandType = CommandType.Text
-
-                cmdInsertLineAccount.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
-                cmdInsertLineAccount.Parameters.AddWithValue("codaccount", "new")
-                cmdInsertLineAccount.Parameters.AddWithValue("codline", vCodLine)
-                cmdInsertLineAccount.Parameters.AddWithValue("codrate", vCodRate)
+                cmdInsertLineAccount.CommandText = "INSERT INTO internal_line(code, serviceline, rate, pricerate) VALUES(@code, @serviceline, @rate, @pricerate)"
+                cmdInsertLineAccount.Parameters.AddWithValue("code", "new")
+                cmdInsertLineAccount.Parameters.AddWithValue("serviceline", vIdLine)
+                cmdInsertLineAccount.Parameters.AddWithValue("rate", vIdRate)
                 cmdInsertLineAccount.Parameters.AddWithValue("pricerate", vPriceRate)
-
                 cmdInsertLineAccount.ExecuteNonQuery()
 
                 'Buscando y cambiando el codigo de cuenta
-                cmdLastInsertLineUser.Connection = cnn
+                cmdLastInsertLineUser.Connection = cnnx
                 cmdLastInsertLineUser.CommandType = CommandType.Text
+                cmdLastInsertLineUser.CommandText = "UPDATE internal_line SET internal_line.code = (SELECT CONCAT(""C"",LPAD(LAST_INSERT_ID(),6,""0""))) WHERE internal_line.idinternalline LIKE LAST_INSERT_ID()"
+                cmdLastInsertLineUser.ExecuteNonQuery()
 
-                cmdLastInsertLineUser.CommandText = "SELECT lines_to_account.ID_ACCOUNT FROM lines_to_account WHERE lines_to_account.COD_LINE LIKE @codline AND lines_to_account.COD_ACCOUNT LIKE @codaccount"
-                cmdLastInsertLineUser.Parameters.AddWithValue("codline", vCodLine)
-                cmdLastInsertLineUser.Parameters.AddWithValue("codaccount", "new")
-
-                dr = cmdLastInsertLineUser.ExecuteReader()
+                'Obteniendo el id del ultimo registrado
+                cmdIdInternalLine.Connection = cnnx
+                cmdIdInternalLine.CommandType = CommandType.Text
+                cmdIdInternalLine.CommandText = "SELECT MAX(internal_line.idinternalline) AS id, internal_line.code FROM internal_line"
+                dr = cmdIdInternalLine.ExecuteReader()
 
                 If dr.HasRows Then
                     dr.Read()
-                    Dim codAccount As String = "C" & dr(0).ToString.PadLeft(6, "0")
+                    Dim IdInternalLine As String = dr(0).ToString
+                    MsgBox("La nueva cuenta de la linea: " & dr(1).ToString & " se registro correctamente.")
 
-                    cmdUpdateCodeLineAccount.Connection = cnn
-                    cmdUpdateCodeLineAccount.CommandType = CommandType.Text
-                    cmdUpdateCodeLineAccount.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
-                    cmdUpdateCodeLineAccount.Parameters.AddWithValue("codaccount", codAccount)
-                    cmdUpdateCodeLineAccount.ExecuteNonQuery()
-
-                    MsgBox("La nueva cuenta de la linea: " & vCodLine & " se registro correctamente.")
-
-                    Return codAccount
+                    Return IdInternalLine
                 Else
                     Return Nothing
                 End If
@@ -944,22 +935,6 @@ Module dataFunctions
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
             Return Nothing
         End If
-
-        'Registrando la cuenta-usuario
-        'Dim codLineUser As String = ""
-        'If dataUser(7).Length = 0 And dataUser(7) = "" Then
-        '    codLineUser = codUser
-        'Else
-        '    codLineUser = dataUser(7)
-        'End If
-
-        'cmdInsertAccountUser.Connection = cnn
-        'cmdInsertAccountUser.CommandType = CommandType.Text
-
-        'cmdInsertAccountUser.CommandText = "INSERT INTO users_to_account(COD_USR_LINE, COD_ACCOUNT) VALUES(@coduserline, @codaccount)"
-        'cmdInsertAccountUser.Parameters.AddWithValue("coduserline", codLineUser)
-        'cmdInsertAccountUser.Parameters.AddWithValue("codaccount", codAccount)
-        'cmdInsertAccountUser.ExecuteNonQuery()
     End Function
 
     Public Sub updateLine(dataLine() As String)
@@ -1006,7 +981,7 @@ Module dataFunctions
             cmdUpdateLine.CommandType = CommandType.Text
 
             If Not (dataUser(0) = Nothing) Then
-                cmdUpdateLine.CommandText = "UPDATE user_lines SET USER_NAMES = @namesuser, USER_SURNAMES = @surnamesuser, USER_TYPE = @typeuser, USER_DOCID = @dociduser, USER_ADRSS = @addrsuser, USER_CEL = @celuser, USER_TEL = @teluser, USER_CREATED = @createduser, USER_UPDATED = @updateduser " &
+                cmdUpdateLine.CommandText = "UPDATE user_lines SET USER_NAMES = ¿-, USER_SURNAMES = @surnamesuser, USER_TYPE = @typeuser, USER_DOCID = @dociduser, USER_ADRSS = @addrsuser, USER_CEL = @celuser, USER_TEL = @teluser, USER_CREATED = @createduser, USER_UPDATED = @updateduser " &
                     "WHERE user_lines.COD_USR_LINE = @coduser"
 
                 cmdUpdateLine.Parameters.AddWithValue("namesuser", dataUser(1))
