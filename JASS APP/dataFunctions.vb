@@ -139,23 +139,16 @@ Module dataFunctions
     End Function
     Public Function listRates() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT idrate, name FROM rates"
-
             Try
-                Dim ada As New MySqlDataAdapter(cmd)
-
+                cnnx.Close()
+                cnnx.Open()
+                ada.SelectCommand = New MySqlCommand("SELECT idrate, name FROM rates", cnnx)
                 ada.Fill(ds)
-                ada.Dispose()
-                cmd.Dispose()
-
                 Return ds
             Catch ex As Exception
                 Return Nothing
@@ -165,23 +158,16 @@ Module dataFunctions
 
     Public Function listAvenues() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT idstreet, name FROM streets ORDER BY name"
-
             Try
-                Dim ada As New MySqlDataAdapter(cmd)
-
+                cnnx.Close()
+                cnnx.Open()
+                ada.SelectCommand = New MySqlCommand("SELECT idstreet, name FROM streets ORDER BY name", cnnx)
                 ada.Fill(ds)
-                ada.Dispose()
-                cmd.Dispose()
-
                 Return ds
             Catch ex As Exception
                 Return Nothing
@@ -191,23 +177,16 @@ Module dataFunctions
 
     Public Function listUserTypes() As DataSet
         Dim ds As New DataSet
-        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT idusertype, name FROM user_type"
-
             Try
-                Dim ada As New MySqlDataAdapter(cmd)
-
+                cnnx.Close()
+                cnnx.Open()
+                ada.SelectCommand = New MySqlCommand("SELECT idusertype, name FROM user_type", cnnx)
                 ada.Fill(ds)
-                ada.Dispose()
-                cmd.Dispose()
-
                 Return ds
             Catch ex As Exception
                 Return Nothing
@@ -233,8 +212,8 @@ Module dataFunctions
                 Dim ada As New MySqlDataAdapter(cmd)
 
                 ada.Fill(ds)
-                ada.Dispose()
                 cmd.Dispose()
+                ada.Dispose()
 
                 Return ds
             Catch ex As Exception
@@ -763,8 +742,7 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub saveLineNew(dataLine() As String, dataUser() As String, Optional vPriceRate As Double = 0)
-        Dim codUser As String = generateCode(15, True, True, True)
+    Public Function saveLineNew(dataLine() As String, dataUser() As String, Optional vPriceRate As Double = 0) As Boolean
         Dim vFindUser, vFindLine As Boolean
 
         Dim cmdFindLine As New MySqlCommand
@@ -782,43 +760,44 @@ Module dataFunctions
                 If dataUser(3).Trim <> "" And (dataUser(7).Trim = "" Or dataUser(7) = Nothing) Then
                     cmdFindUser.Connection = cnnx
                     cmdFindUser.CommandType = CommandType.Text
-                    cmdFindUser.CommandText = "SELECT * FROM user_lines WHERE user_lines.USER_DOCID LIKE @dociduser"
-                    cmdFindUser.Parameters.AddWithValue("dociduser", dataUser(3))
+                    cmdFindUser.CommandText = "SELECT * FROM user_reg WHERE user_reg.docid LIKE @docid"
+                    cmdFindUser.Parameters.AddWithValue("docid", dataUser(3))
                     dr = cmdFindUser.ExecuteReader
                     vFindUser = dr.HasRows
 
                     If vFindUser Then
                         MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
-                        Exit Sub
+                        Return False
                     End If
+                    dr.Close()
                 End If
 
                 cmdFindLine.Connection = cnnx
                 cmdFindLine.CommandType = CommandType.Text
-                cmdFindLine.CommandText = "SELECT * FROM lines WHERE lines.COD_LINE LIKE @codline"
-                cmdFindLine.Parameters.AddWithValue("codline", dataLine(0))
+                cmdFindLine.CommandText = "SELECT * FROM service_line WHERE service_line.code LIKE @codeserviceline"
+                cmdFindLine.Parameters.AddWithValue("codeserviceline", dataLine(0))
                 dr = cmdFindLine.ExecuteReader
                 vFindLine = dr.HasRows
 
                 If vFindLine Then
                     MsgBox("El codigo de linea ya esta en uso.", vbExclamation, "Aviso")
-                    Exit Sub
+                    Return False
                 End If
+                dr.Close()
 
                 If Not vFindUser And Not vFindLine Then
                     'Registrando un nuevo usuario
                     cmdInsertUser.Connection = cnnx
                     cmdInsertUser.CommandType = CommandType.Text
 
-                    cmdInsertUser.CommandText = "INSERT INTO user_lines(COD_USR_LINE, USER_NAMES, USER_SURNAMES, USER_TYPE, USER_DOCID, USER_ADRSS, USER_CEL, USER_TEL) VALUES(@coduserline, @nameuser, @surnameuser, @typeuser, @dociduser, @addressuser, @celluser, @teleuser)"
-                    cmdInsertUser.Parameters.AddWithValue("coduserline", codUser)
-                    cmdInsertUser.Parameters.AddWithValue("nameuser", dataUser(0))
-                    cmdInsertUser.Parameters.AddWithValue("surnameuser", dataUser(1))
-                    cmdInsertUser.Parameters.AddWithValue("typeuser", dataUser(2))
-                    cmdInsertUser.Parameters.AddWithValue("dociduser", dataUser(3))
-                    cmdInsertUser.Parameters.AddWithValue("addressuser", dataUser(4))
-                    cmdInsertUser.Parameters.AddWithValue("celluser", dataUser(5))
-                    cmdInsertUser.Parameters.AddWithValue("teleuser", dataUser(6))
+                    cmdInsertUser.CommandText = "INSERT INTO user_reg(names, surnames, usertype, docid, address, cellphone, telephone) VALUES(@names, @surnames, @usertype, @docid, @address, @cellphone, @telephone)"
+                    cmdInsertUser.Parameters.AddWithValue("names", dataUser(0))
+                    cmdInsertUser.Parameters.AddWithValue("surnames", dataUser(1))
+                    cmdInsertUser.Parameters.AddWithValue("usertype", dataUser(2))
+                    cmdInsertUser.Parameters.AddWithValue("docid", dataUser(3))
+                    cmdInsertUser.Parameters.AddWithValue("address", dataUser(4))
+                    cmdInsertUser.Parameters.AddWithValue("cellphone", dataUser(5))
+                    cmdInsertUser.Parameters.AddWithValue("telephone", dataUser(6))
 
                     If dataUser(7).Length = 0 And dataUser(7) = "" Then
                         cmdInsertUser.ExecuteNonQuery()
@@ -832,22 +811,22 @@ Module dataFunctions
                         dataLine(1) = dataLine(0)
                     End If
 
-                    cmdInsertLine.CommandText = "INSERT INTO lines(COD_LINE, NAME_LINE, ID_SECTOR, ADDRESS, INSTALLDATE_LINE, DESCP_LINE) VALUES(@codline, @nameline, @codsector, @address, @installdate, @descpline)"
-                    cmdInsertLine.Parameters.AddWithValue("codline", dataLine(0))
-                    cmdInsertLine.Parameters.AddWithValue("nameline", dataLine(1))
-                    cmdInsertLine.Parameters.AddWithValue("codsector", dataLine(2))
+                    cmdInsertLine.CommandText = "INSERT INTO service_line(code, name, street, address, installdate, description) VALUES(@code, @name, @street, @address, @installdate, @description)"
+                    cmdInsertLine.Parameters.AddWithValue("code", dataLine(0))
+                    cmdInsertLine.Parameters.AddWithValue("name", dataLine(1))
+                    cmdInsertLine.Parameters.AddWithValue("street", dataLine(2))
                     cmdInsertLine.Parameters.AddWithValue("address", dataLine(3))
                     cmdInsertLine.Parameters.AddWithValue("installdate", dataLine(5))
-                    cmdInsertLine.Parameters.AddWithValue("descpline", dataLine(6))
+                    cmdInsertLine.Parameters.AddWithValue("description", dataLine(6))
 
                     'Registrando una linea-cuenta
                     cmdInsertLineAccount.Connection = cnnx
                     cmdInsertLineAccount.CommandType = CommandType.Text
 
-                    cmdInsertLineAccount.CommandText = "INSERT INTO lines_to_account(COD_ACCOUNT, COD_LINE, ID_RATE, PRICE_RATE) VALUES(@codaccount, @codline, @codrate, @pricerate)"
-                    cmdInsertLineAccount.Parameters.AddWithValue("codaccount", "new")
-                    cmdInsertLineAccount.Parameters.AddWithValue("codline", dataLine(0))
-                    cmdInsertLineAccount.Parameters.AddWithValue("codrate", dataLine(4))
+                    cmdInsertLineAccount.CommandText = "INSERT INTO internal_line(code, serviceline, rate, pricerate) VALUES(@code, (SELECT MAX(service_line.idserviceline) AS id FROM service_line), @rate, @pricerate)"
+                    cmdInsertLineAccount.Parameters.AddWithValue("code", "new")
+                    cmdInsertLineAccount.Parameters.AddWithValue("serviceline", dataLine(0))
+                    cmdInsertLineAccount.Parameters.AddWithValue("rate", dataLine(4))
                     cmdInsertLineAccount.Parameters.AddWithValue("pricerate", vPriceRate)
 
                     cmdInsertLine.ExecuteNonQuery()
@@ -857,37 +836,25 @@ Module dataFunctions
                     cmdLastInsertLineUser.Connection = cnnx
                     cmdLastInsertLineUser.CommandType = CommandType.Text
 
-                    cmdLastInsertLineUser.CommandText = "SELECT lines_to_account.ID_ACCOUNT FROM lines_to_account WHERE lines_to_account.COD_LINE LIKE @codline AND lines_to_account.COD_ACCOUNT LIKE @codaccount"
-                    cmdLastInsertLineUser.Parameters.AddWithValue("codline", dataLine(0))
-                    cmdLastInsertLineUser.Parameters.AddWithValue("codaccount", "new")
+                    cmdLastInsertLineUser.CommandText = "UPDATE internal_line SET internal_line.code = (SELECT LPAD(MAX(internal_line.idinternalline),6,""0"") AS id FROM internal_line) WHERE internal_line.idinternalline LIKE (SELECT MAX(internal_line.idinternalline) AS id FROM internal_line)"
 
-                    dr = cmdLastInsertLineUser.ExecuteReader()
+                    cmdLastInsertLineUser.ExecuteNonQuery()
 
-                    Dim codAccount As String = ""
-                    If dr.HasRows Then
-                        dr.Read()
-                        codAccount = "C" & dr(0).ToString.PadLeft(6, "0")
-                        cmdUpdateCodeLineAccount.Connection = cnnx
-                        cmdUpdateCodeLineAccount.CommandType = CommandType.Text
-                        cmdUpdateCodeLineAccount.CommandText = "UPDATE lines_to_account SET lines_to_account.COD_ACCOUNT = @codaccount WHERE lines_to_account.ID_ACCOUNT LIKE '" & dr(0).ToString & "'"
-                        cmdUpdateCodeLineAccount.Parameters.AddWithValue("codaccount", codAccount)
-                        cmdUpdateCodeLineAccount.ExecuteNonQuery()
-                    End If
+                    'Dim codAccount As String = ""
+                    'codAccount = "C" & dr(0).ToString.PadLeft(6, "0")
 
                     'Registrando la cuenta-usuario
-                    Dim codLineUser As String = ""
+                    Dim userCmd As String
                     If dataUser(7).Length = 0 And dataUser(7) = "" Then
-                        codLineUser = codUser
+                        userCmd = "INSERT INTO users_line(internalline, userreg) VALUES((SELECT MAX(internal_line.idinternalline) AS id FROM internal_line), (SELECT MAX(user_reg.iduserreg) AS id FROM user_reg))"
                     Else
-                        codLineUser = dataUser(7)
+                        userCmd = "INSERT INTO users_line(internalline, userreg) VALUES((SELECT MAX(internal_line.idinternalline) AS id FROM internal_line), '" & dataUser(7) & "')"
                     End If
 
                     cmdInsertAccountUser.Connection = cnnx
                     cmdInsertAccountUser.CommandType = CommandType.Text
 
-                    cmdInsertAccountUser.CommandText = "INSERT INTO users_to_account(COD_USR_LINE, COD_ACCOUNT) VALUES(@coduserline, @codaccount)"
-                    cmdInsertAccountUser.Parameters.AddWithValue("coduserline", codLineUser)
-                    cmdInsertAccountUser.Parameters.AddWithValue("codaccount", codAccount)
+                    cmdInsertAccountUser.CommandText = userCmd
                     cmdInsertAccountUser.ExecuteNonQuery()
 
                     dr.Close()
@@ -900,6 +867,7 @@ Module dataFunctions
                     cmdInsertAccountUser.Dispose()
 
                     MsgBox("La linea se guardo exitosamente", vbInformation, "Aviso")
+                    Return True
                 Else
                     If vFindUser Then
                         MsgBox("El numero de documento ya esta registrado", vbExclamation, "Aviso")
@@ -907,16 +875,18 @@ Module dataFunctions
                     If vFindLine Then
                         MsgBox("El codigo de linea ya esta en uso", vbExclamation, "Aviso")
                     End If
-                    Exit Sub
+                    Return False
                 End If
             Catch ex As Exception
                 MsgBox("Ocurrio un error al guardar el registro", vbCritical, "Aviso")
                 MsgBox(ex.Message)
+                Return False
             End Try
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            Return False
         End If
-    End Sub
+    End Function
 
     Public Function saveAccountNew(vCodLine As String, vCodRate As Integer, vPriceRate As Decimal) As String
         Dim cmdInsertLineAccount As New OleDbCommand

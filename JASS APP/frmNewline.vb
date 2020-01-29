@@ -141,13 +141,11 @@
             dataUser(6) = txtTelephone.Text
             dataUser(7) = codUser
 
-            Try
-                saveLineNew(dataLine, dataUser, Convert.ToDouble(txtPriceRate.Text))
-            Catch ex As Exception
-                Close()
-            Finally
+            If saveLineNew(dataLine, dataUser, Convert.ToDouble(txtPriceRate.Text)) Then
                 newLine()
-            End Try
+            Else
+                Close()
+            End If
         Else
             MsgBox("Faltan datos de la Persona titular", vbExclamation, "Aviso")
         End If
