@@ -23,6 +23,15 @@ Partial Class frmFindUsers
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.dtgUsers = New System.Windows.Forms.DataGridView()
+        Me.btnFind = New System.Windows.Forms.Button()
+        Me.txtFind = New System.Windows.Forms.TextBox()
+        Me.cbxCrit = New System.Windows.Forms.ComboBox()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblRates = New System.Windows.Forms.Label()
+        Me.txtPriceRate = New System.Windows.Forms.TextBox()
+        Me.lblRatePrice = New System.Windows.Forms.Label()
+        Me.cbxRates = New System.Windows.Forms.ComboBox()
         Me.clmCodUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmDocId = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -33,15 +42,6 @@ Partial Class frmFindUsers
         Me.clmCellphone = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmTelephone = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOptions = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.btnFind = New System.Windows.Forms.Button()
-        Me.txtFind = New System.Windows.Forms.TextBox()
-        Me.cbxCrit = New System.Windows.Forms.ComboBox()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.lblRates = New System.Windows.Forms.Label()
-        Me.txtPriceRate = New System.Windows.Forms.TextBox()
-        Me.lblRatePrice = New System.Windows.Forms.Label()
-        Me.cbxRates = New System.Windows.Forms.ComboBox()
         CType(Me.dtgUsers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -66,85 +66,6 @@ Partial Class frmFindUsers
         Me.dtgUsers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dtgUsers.Size = New System.Drawing.Size(860, 370)
         Me.dtgUsers.TabIndex = 4
-        '
-        'clmCodUser
-        '
-        Me.clmCodUser.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmCodUser.FillWeight = 120.0!
-        Me.clmCodUser.HeaderText = "Codigo de Linea"
-        Me.clmCodUser.Name = "clmCodUser"
-        Me.clmCodUser.ReadOnly = True
-        Me.clmCodUser.Visible = False
-        Me.clmCodUser.Width = 120
-        '
-        'clmUser
-        '
-        Me.clmUser.FillWeight = 33.03412!
-        Me.clmUser.HeaderText = "Usuario"
-        Me.clmUser.Name = "clmUser"
-        Me.clmUser.ReadOnly = True
-        '
-        'clmDocId
-        '
-        Me.clmDocId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmDocId.FillWeight = 150.0!
-        Me.clmDocId.HeaderText = "Doc. de Identidad"
-        Me.clmDocId.Name = "clmDocId"
-        Me.clmDocId.ReadOnly = True
-        Me.clmDocId.Width = 150
-        '
-        'clmNames
-        '
-        Me.clmNames.HeaderText = "Nombres"
-        Me.clmNames.Name = "clmNames"
-        Me.clmNames.ReadOnly = True
-        Me.clmNames.Visible = False
-        '
-        'clmSurnames
-        '
-        Me.clmSurnames.HeaderText = "Apellidos"
-        Me.clmSurnames.Name = "clmSurnames"
-        Me.clmSurnames.ReadOnly = True
-        Me.clmSurnames.Visible = False
-        '
-        'clmTypeUser
-        '
-        Me.clmTypeUser.HeaderText = "Tipo de usuario"
-        Me.clmTypeUser.Name = "clmTypeUser"
-        Me.clmTypeUser.ReadOnly = True
-        Me.clmTypeUser.Visible = False
-        '
-        'clmAddress
-        '
-        Me.clmAddress.HeaderText = "Direccion"
-        Me.clmAddress.Name = "clmAddress"
-        Me.clmAddress.ReadOnly = True
-        Me.clmAddress.Visible = False
-        '
-        'clmCellphone
-        '
-        Me.clmCellphone.HeaderText = "Celular"
-        Me.clmCellphone.Name = "clmCellphone"
-        Me.clmCellphone.ReadOnly = True
-        Me.clmCellphone.Visible = False
-        '
-        'clmTelephone
-        '
-        Me.clmTelephone.HeaderText = "Telefono"
-        Me.clmTelephone.Name = "clmTelephone"
-        Me.clmTelephone.ReadOnly = True
-        Me.clmTelephone.Visible = False
-        '
-        'clmOptions
-        '
-        Me.clmOptions.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmOptions.FillWeight = 75.0!
-        Me.clmOptions.HeaderText = ""
-        Me.clmOptions.Name = "clmOptions"
-        Me.clmOptions.ReadOnly = True
-        Me.clmOptions.Text = "Seleccionar"
-        Me.clmOptions.UseColumnTextForButtonValue = True
-        Me.clmOptions.Width = 75
         '
         'btnFind
         '
@@ -229,6 +150,85 @@ Partial Class frmFindUsers
         Me.cbxRates.Size = New System.Drawing.Size(250, 21)
         Me.cbxRates.TabIndex = 5
         '
+        'clmCodUser
+        '
+        Me.clmCodUser.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmCodUser.FillWeight = 120.0!
+        Me.clmCodUser.HeaderText = "Codigo de Usuario"
+        Me.clmCodUser.Name = "clmCodUser"
+        Me.clmCodUser.ReadOnly = True
+        Me.clmCodUser.Visible = False
+        Me.clmCodUser.Width = 120
+        '
+        'clmUser
+        '
+        Me.clmUser.FillWeight = 33.03412!
+        Me.clmUser.HeaderText = "Usuario"
+        Me.clmUser.Name = "clmUser"
+        Me.clmUser.ReadOnly = True
+        '
+        'clmDocId
+        '
+        Me.clmDocId.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmDocId.FillWeight = 150.0!
+        Me.clmDocId.HeaderText = "Doc. de Identidad"
+        Me.clmDocId.Name = "clmDocId"
+        Me.clmDocId.ReadOnly = True
+        Me.clmDocId.Width = 150
+        '
+        'clmNames
+        '
+        Me.clmNames.HeaderText = "Nombres"
+        Me.clmNames.Name = "clmNames"
+        Me.clmNames.ReadOnly = True
+        Me.clmNames.Visible = False
+        '
+        'clmSurnames
+        '
+        Me.clmSurnames.HeaderText = "Apellidos"
+        Me.clmSurnames.Name = "clmSurnames"
+        Me.clmSurnames.ReadOnly = True
+        Me.clmSurnames.Visible = False
+        '
+        'clmTypeUser
+        '
+        Me.clmTypeUser.HeaderText = "Tipo de usuario"
+        Me.clmTypeUser.Name = "clmTypeUser"
+        Me.clmTypeUser.ReadOnly = True
+        Me.clmTypeUser.Visible = False
+        '
+        'clmAddress
+        '
+        Me.clmAddress.HeaderText = "Direccion"
+        Me.clmAddress.Name = "clmAddress"
+        Me.clmAddress.ReadOnly = True
+        Me.clmAddress.Visible = False
+        '
+        'clmCellphone
+        '
+        Me.clmCellphone.HeaderText = "Celular"
+        Me.clmCellphone.Name = "clmCellphone"
+        Me.clmCellphone.ReadOnly = True
+        Me.clmCellphone.Visible = False
+        '
+        'clmTelephone
+        '
+        Me.clmTelephone.HeaderText = "Telefono"
+        Me.clmTelephone.Name = "clmTelephone"
+        Me.clmTelephone.ReadOnly = True
+        Me.clmTelephone.Visible = False
+        '
+        'clmOptions
+        '
+        Me.clmOptions.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmOptions.FillWeight = 75.0!
+        Me.clmOptions.HeaderText = ""
+        Me.clmOptions.Name = "clmOptions"
+        Me.clmOptions.ReadOnly = True
+        Me.clmOptions.Text = "Seleccionar"
+        Me.clmOptions.UseColumnTextForButtonValue = True
+        Me.clmOptions.Width = 75
+        '
         'frmFindUsers
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -260,6 +260,10 @@ Partial Class frmFindUsers
     Friend WithEvents cbxCrit As ComboBox
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
+    Friend WithEvents lblRates As Label
+    Friend WithEvents txtPriceRate As TextBox
+    Friend WithEvents lblRatePrice As Label
+    Friend WithEvents cbxRates As ComboBox
     Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
     Friend WithEvents clmUser As DataGridViewTextBoxColumn
     Friend WithEvents clmDocId As DataGridViewTextBoxColumn
@@ -270,8 +274,4 @@ Partial Class frmFindUsers
     Friend WithEvents clmCellphone As DataGridViewTextBoxColumn
     Friend WithEvents clmTelephone As DataGridViewTextBoxColumn
     Friend WithEvents clmOptions As DataGridViewButtonColumn
-    Friend WithEvents lblRates As Label
-    Friend WithEvents txtPriceRate As TextBox
-    Friend WithEvents lblRatePrice As Label
-    Friend WithEvents cbxRates As ComboBox
 End Class

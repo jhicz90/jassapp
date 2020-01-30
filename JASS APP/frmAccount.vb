@@ -1,38 +1,38 @@
 ﻿Public Class frmAccount
-    Public vCodLine As String = Nothing
-    Public vCodAccount As String = "new"
+    Public vIdServiceLine As Integer = 0
+    Public vIdInternalLine As Integer = 0
     Dim dsRates As DataSet = Nothing
     Private Sub frmAccount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconEditpipe
 
-        loadAccount(vCodLine, vCodAccount)
+        loadAccount(vIdServiceLine, vIdInternalLine)
     End Sub
 
-    Private Sub loadAccount(vCodLine As String, vCodAccount As String)
+    Private Sub loadAccount(vIdLine As String, vIdInternal As String)
         dsRates = listRates()
 
         If Not dsRates.HasErrors Then
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "ID_RATE"
-            cbxRates.DisplayMember = "NAME_RATE"
+            cbxRates.ValueMember = "idrate"
+            cbxRates.DisplayMember = "name"
         End If
 
-        If vCodAccount <> "new" Then
-            If vCodLine.Equals(Nothing) Or vCodAccount.Equals(Nothing) Then
+        If vIdInternal <> "new" Then
+            If vIdLine.Equals(Nothing) Or vIdInternal.Equals(Nothing) Then
                 MsgBox("Faltan datos de la cuenta", vbCritical, "Aviso")
                 Close()
             Else
-                Dim dataAccount() As String = getAccount(vCodLine, vCodAccount)
+                Dim dataAccount() As String = getAccount(vIdLine, vIdInternal)
 
                 If IsNothing(dataAccount) Then
                     Close()
                 Else
-                    txtCodAccount.Text = dataAccount(0)
-                    txtCodLine.Text = dataAccount(1)
-                    cbxRates.SelectedValue = dataAccount(2)
-                    txtPriceRate.Text = dataAccount(3)
-                    txtDateCreated.Text = Format(dataAccount(4), "Short Date")
-                    txtDateUpdated.Text = Format(dataAccount(5), "Short Date")
+                    txtCodAccount.Text = dataAccount(2)
+                    txtCodLine.Text = dataAccount(3)
+                    cbxRates.SelectedValue = dataAccount(4)
+                    txtPriceRate.Text = dataAccount(5)
+                    txtDateCreated.Text = Format(dataAccount(6), "Short Date")
+                    txtDateUpdated.Text = Format(dataAccount(7), "Short Date")
 
                     listUserAccount(dataAccount(1), dataAccount(0), dtgUsersAccount)
                 End If
@@ -42,7 +42,7 @@
             Text = "Cuenta de Servicio"
         Else
             txtCodAccount.Text = ""
-            txtCodLine.Text = vCodLine
+            txtCodLine.Text = ""
             txtDateCreated.Text = ""
             txtDateUpdated.Text = ""
             tabDataAccount.Enabled = False
@@ -66,16 +66,16 @@
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        If vCodAccount <> "new" Then
+        If vIdServiceLine <> "new" Then
             'Update account
         Else
-            vCodAccount = saveAccountNew(vCodLine, cbxRates.SelectedValue, Val(txtPriceRate.Text))
-            loadAccount(vCodLine, vCodAccount)
+            vIdInternalLine = saveAccountNew(vIdServiceLine, cbxRates.SelectedValue, Val(txtPriceRate.Text))
+            loadAccount(vIdServiceLine, vIdInternalLine)
         End If
     End Sub
 
     Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewUser.Click
-        showNewUser("new", vCodAccount, 3)
-        listUserAccount(vCodLine, vCodAccount, dtgUsersAccount)
+        showNewUser("new", vIdInternalLine, 3)
+        listUserAccount(vIdServiceLine, vIdInternalLine, dtgUsersAccount)
     End Sub
 End Class

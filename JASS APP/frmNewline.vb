@@ -129,7 +129,7 @@
             dataLine(2) = cbxStreets.SelectedValue
             dataLine(3) = txtAddressLine.Text
             dataLine(4) = cbxRates.SelectedValue
-            dataLine(5) = dtpInstallDate.Value
+            dataLine(5) = Format(dtpInstallDate.Value, "yyyy-MM-dd")
             dataLine(6) = txtDescpLine.Text
 
             dataUser(0) = txtNames.Text

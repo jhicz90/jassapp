@@ -238,19 +238,19 @@ Module dataFunctions
                 Case 0
                     'Buscar por nombres
                     comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
-                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
                     comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
-                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
                     comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
-                    user_reg.names, user_reg.surnames, user_type.name, user_reg.address, user_reg.cellphone, user_reg.telephone
+                    user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype"
             End Select
 
@@ -291,7 +291,7 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT internal_line.idinternalline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names & "" "" & user_reg.surnames) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -300,7 +300,7 @@ Module dataFunctions
                     "WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT internal_line.idinternalline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names & "" "" & user_reg.surnames) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -310,7 +310,8 @@ Module dataFunctions
                 Case 2
                     'Buscar por codigo de linea
                     comand = "SELECT " &
-                    "(SELECT "" "") AS idinternalline, " &
+                    "(SELECT """") AS idinternalline, " &
+                    "SERVLINE.idserviceline, " &
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
@@ -323,6 +324,7 @@ Module dataFunctions
                     'Buscar por nombre de linea
                     comand = "SELECT " &
                     "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.idserviceline, " &
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
@@ -335,6 +337,7 @@ Module dataFunctions
                     'Buscar a todos
                     comand = "SELECT " &
                     "(SELECT "" "") AS idinternalline, " &
+                    "SERVLINE.idserviceline, " &
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
@@ -352,7 +355,7 @@ Module dataFunctions
                 If dr.HasRows Then
                     dgLinesService.Rows.Clear()
                     While dr.Read()
-                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString)
+                        dgLinesService.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString)
                     End While
                 Else
                     dgLinesService.Rows.Clear()
@@ -471,12 +474,12 @@ Module dataFunctions
             cmd.CommandText = "SELECT 
             INTERLINE.idinternalline, 
             rates.idrate, 
-            service_line.code, 
+            INTERLINE.code, 
             (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
             rates.name 
             FROM internal_line INTERLINE 
-            INNER JOIN rates ON internal_line.rate = rates.idrate 
-            INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline 
+            INNER JOIN rates ON INTERLINE.rate = rates.idrate 
+            INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
             WHERE service_line.idserviceline = @idserviceline"
             cmd.Parameters.AddWithValue("idserviceline", vIdLine)
 
@@ -938,22 +941,21 @@ Module dataFunctions
     End Function
 
     Public Sub updateLine(dataLine() As String)
-        Dim cmdUpdateLine As New OleDbCommand
+        Dim cmdUpdateLine As New MySqlCommand
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdUpdateLine.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdUpdateLine.Connection = cnnx
             cmdUpdateLine.CommandType = CommandType.Text
 
             If Not (dataLine(0) = Nothing) Then
-                cmdUpdateLine.CommandText = "UPDATE lines SET NAME_LINE = @nameline, ID_SECTOR = @idsector, ADDRESS = @address, INSTALLDATE_LINE = @installdateline, DESCP_LINE = @descpline, UPDATE_LINE = @updateline " &
-                    "WHERE lines.COD_LINE = @codline"
-                cmdUpdateLine.Parameters.AddWithValue("nameline", dataLine(2))
-                cmdUpdateLine.Parameters.AddWithValue("idsector", dataLine(3))
+                cmdUpdateLine.CommandText = "UPDATE service_line SET name = @name, street = @street, ADDRESS = @address, installdate = @installdate, description = @description " &
+                    "WHERE service_line.idserviceline = @idserviceline"
+                cmdUpdateLine.Parameters.AddWithValue("name", dataLine(2))
+                cmdUpdateLine.Parameters.AddWithValue("street", dataLine(3))
                 cmdUpdateLine.Parameters.AddWithValue("address", dataLine(4))
-                cmdUpdateLine.Parameters.AddWithValue("installdateline", dataLine(5))
-                cmdUpdateLine.Parameters.AddWithValue("descpline", dataLine(6))
-                cmdUpdateLine.Parameters.AddWithValue("updateline", dataLine(8))
-                cmdUpdateLine.Parameters.AddWithValue("codline", dataLine(1))
+                cmdUpdateLine.Parameters.AddWithValue("installdate", dataLine(5))
+                cmdUpdateLine.Parameters.AddWithValue("description", dataLine(6))
+                cmdUpdateLine.Parameters.AddWithValue("idserviceline", dataLine(1))
 
                 Try
                     cmdUpdateLine.ExecuteNonQuery()
@@ -973,40 +975,32 @@ Module dataFunctions
     End Sub
 
     Public Sub updateUser(dataUser() As String)
-        Dim cmdUpdateLine As New OleDbCommand
-        Dim cmdUpdateUserToLine As New OleDbCommand
+        Dim cmdUpdateLine As New MySqlCommand
+        Dim cmdUpdateUserToLine As New MySqlCommand
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdUpdateLine.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdUpdateLine.Connection = cnnx
             cmdUpdateLine.CommandType = CommandType.Text
 
             If Not (dataUser(0) = Nothing) Then
-                cmdUpdateLine.CommandText = "UPDATE user_lines SET USER_NAMES = ¿-, USER_SURNAMES = @surnamesuser, USER_TYPE = @typeuser, USER_DOCID = @dociduser, USER_ADRSS = @addrsuser, USER_CEL = @celuser, USER_TEL = @teluser, USER_CREATED = @createduser, USER_UPDATED = @updateduser " &
-                    "WHERE user_lines.COD_USR_LINE = @coduser"
+                cmdUpdateLine.CommandText = "UPDATE user_reg SET names = @names, surnames = @surnamesuser, usertype = @usertype, docid = @docid, address = @address, cellphone = @cellphone, telephone = @telephone " &
+                    "WHERE user_reg.iduserreg = @iduserreg"
 
-                cmdUpdateLine.Parameters.AddWithValue("namesuser", dataUser(1))
-                cmdUpdateLine.Parameters.AddWithValue("surnamesuser", dataUser(2))
-                cmdUpdateLine.Parameters.AddWithValue("typeuser", dataUser(3))
-                cmdUpdateLine.Parameters.AddWithValue("dociduser", dataUser(4))
-                cmdUpdateLine.Parameters.AddWithValue("addrsuser", dataUser(5))
-                cmdUpdateLine.Parameters.AddWithValue("celuser", dataUser(6))
-                cmdUpdateLine.Parameters.AddWithValue("teluser", dataUser(7))
-                cmdUpdateLine.Parameters.AddWithValue("createduser", dataUser(8))
-                cmdUpdateLine.Parameters.AddWithValue("updateduser", dataUser(9))
-                cmdUpdateLine.Parameters.AddWithValue("coduser", dataUser(0))
+                cmdUpdateLine.Parameters.AddWithValue("names", dataUser(1))
+                cmdUpdateLine.Parameters.AddWithValue("surnames", dataUser(2))
+                cmdUpdateLine.Parameters.AddWithValue("usertype", dataUser(3))
+                cmdUpdateLine.Parameters.AddWithValue("docid", dataUser(4))
+                cmdUpdateLine.Parameters.AddWithValue("address", dataUser(5))
+                cmdUpdateLine.Parameters.AddWithValue("cellphone", dataUser(6))
+                cmdUpdateLine.Parameters.AddWithValue("telephone", dataUser(7))
+                cmdUpdateLine.Parameters.AddWithValue("iduserreg", dataUser(0))
 
                 If (dataUser(12) <> Nothing) Then
-                    cmdUpdateUserToLine.Connection = cnn
+                    cmdUpdateUserToLine.Connection = cnnx
                     cmdUpdateUserToLine.CommandType = CommandType.Text
-
-                    cmdUpdateUserToLine.CommandText = "UPDATE lines_to_users SET ID_RATE = @codrate, TITULAR_LINE = @titular, PRICE_RATE = @pricerate " &
-                    "WHERE lines_to_users.COD_USR_LINE = @coduser AND lines_to_users.COD_LINE = @codline"
-
-                    cmdUpdateUserToLine.Parameters.AddWithValue("codrate", dataUser(10))
-                    cmdUpdateUserToLine.Parameters.AddWithValue("titular", Convert.ToBoolean(dataUser(13)))
-                    cmdUpdateUserToLine.Parameters.AddWithValue("pricerate", dataUser(11))
-                    cmdUpdateUserToLine.Parameters.AddWithValue("coduser", dataUser(0))
-                    cmdUpdateUserToLine.Parameters.AddWithValue("codline", dataUser(12))
+                    cmdUpdateUserToLine.CommandText = "UPDATE users_line SET internalline = @idinternalline, userreg = @iduserreg"
+                    cmdUpdateUserToLine.Parameters.AddWithValue("iduserreg", dataUser(0))
+                    cmdUpdateUserToLine.Parameters.AddWithValue("idinternalline", dataUser(12))
 
                     cmdUpdateUserToLine.ExecuteNonQuery()
                     cmdUpdateUserToLine.Dispose()
@@ -1029,18 +1023,18 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub deleteUserToLine(vCodLine As String, vCodUser As String)
-        Dim cmdDeleteLineUser As New OleDbCommand
+    Public Sub deleteUserToLine(vIdLine As String, vIdUser As String)
+        Dim cmdDeleteLineUser As New MySqlCommand
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdDeleteLineUser.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdDeleteLineUser.Connection = cnnx
             cmdDeleteLineUser.CommandType = CommandType.Text
 
-            If Not (vCodLine = Nothing And vCodUser = Nothing) Then
-                cmdDeleteLineUser.CommandText = "DELETE * FROM lines_to_users " &
-                    "WHERE lines_to_users.COD_LINE = @codline AND lines_to_users.COD_USR_LINE = @codusrline"
-                cmdDeleteLineUser.Parameters.AddWithValue("codline", vCodLine)
-                cmdDeleteLineUser.Parameters.AddWithValue("codusrline", vCodUser)
+            If Not (vIdLine = Nothing And vIdUser = Nothing) Then
+                cmdDeleteLineUser.CommandText = "DELETE * FROM users_line " &
+                    "WHERE users_line.internalline = @idinternalline AND users_line.userreg = @iduserreg"
+                cmdDeleteLineUser.Parameters.AddWithValue("idinternalline", vIdLine)
+                cmdDeleteLineUser.Parameters.AddWithValue("iduserreg", vIdUser)
 
                 Try
                     cmdDeleteLineUser.ExecuteNonQuery()
@@ -1071,16 +1065,16 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub showEditLine(vCodLine As String)
+    Public Sub showEditLine(vIdServiceLine As String)
         Dim frm As New frmEditLine
-        frm.vCodEditLine = vCodLine
+        frm.vIdServiceLine = vIdServiceLine
         frm.ShowDialog()
     End Sub
 
-    Public Sub showAccount(vCodLine As String, vCodAccount As String)
+    Public Sub showAccount(vIdServiceLine As String, vIdInternalLine As String)
         Dim frm As New frmAccount
-        frm.vCodLine = vCodLine
-        frm.vCodAccount = vCodAccount
+        frm.vIdServiceLine = vIdServiceLine
+        frm.vIdInternalLine = vIdInternalLine
         frm.ShowDialog()
     End Sub
 
@@ -1125,7 +1119,7 @@ Module dataFunctions
             cmdGetLastReceipt.Connection = cnn
             cmdGetLastReceipt.CommandType = CommandType.Text
 
-            cmdGetLastReceipt.CommandText = "SELECT DISTINCT TOP 1 payments.ID_PAY FROM payments ORDER BY payments.ID_PAY DESC"
+            cmdGetLastReceipt.CommandText = "SELECT MAX(payments.idpayment) FROM payments"
 
             Try
                 dr = cmdGetLastReceipt.ExecuteReader()
@@ -1150,19 +1144,25 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub getAccountCollect(vCodLine As String, vCodAccount As String, dgAccountYear As DataGridView)
-        Dim cmdGetAccountCollect As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub getAccountCollect(vIdLine As String, vIdInternalLine As String, dgAccountYear As DataGridView)
+        Dim cmdGetAccountCollect As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdGetAccountCollect.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdGetAccountCollect.Connection = cnnx
             cmdGetAccountCollect.CommandType = CommandType.Text
 
-            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
-                cmdGetAccountCollect.CommandText = "SELECT account_line.ACCOUNT_YEAR, account_line.ACCOUNT_DEBTOTAL, account_line.ACCOUNT_SALDO 
-                FROM account_line WHERE account_line.COD_ACCOUNT = @codaccount 
-                ORDER BY account_line.ACCOUNT_YEAR DESC"
-                cmdGetAccountCollect.Parameters.AddWithValue("codaccount", vCodAccount)
+            If Not (vIdLine = Nothing And vIdInternalLine = Nothing) Then
+                cmdGetAccountCollect.CommandText = "SELECT 
+                account_line.idaccountline, 
+                years_rate.year AS numyear, 
+                account_line.debttotal, 
+                account_line.saldototal 
+                FROM account_line 
+                INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate 
+                WHERE account_line.internalline = @idinternalline 
+                ORDER BY numyear DESC"
+                cmdGetAccountCollect.Parameters.AddWithValue("idinternalline", vIdInternalLine)
 
                 Try
                     dr = cmdGetAccountCollect.ExecuteReader()
@@ -1193,19 +1193,29 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub getAccountCollectCharge(vCodAccount As String, dgAccountCharge As DataGridView)
-        Dim cmdGetAccountCollectCharge As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub getAccountCollectCharge(vIdAccountLine As String, dgAccountCharge As DataGridView)
+        Dim cmdGetAccountCollectCharge As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdGetAccountCollectCharge.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdGetAccountCollectCharge.Connection = cnnx
             cmdGetAccountCollectCharge.CommandType = CommandType.Text
 
-            If Not (vCodAccount = Nothing) Then
-                cmdGetAccountCollectCharge.CommandText = "SELECT account_detail.ID_DETAIL_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.COD_ACCOUNT, account_detail.ACCOUNT_YEAR, account_detail.TYPE_CHARGE, account_detail.MONTH_DEB, account_detail.AMOUNT_DEB, account_detail.AMOUNT_SALDO 
-                FROM account_detail WHERE account_detail.COD_ACCOUNT = @codaccount 
-                ORDER BY account_detail.TYPE_CHARGE ASC, account_detail.MONTH_DEB ASC, account_detail.ACCOUNT_DETAIL_CREATED ASC"
-                cmdGetAccountCollectCharge.Parameters.AddWithValue("codaccount", vCodAccount)
+            If Not (vIdAccountLine = Nothing) Then
+                cmdGetAccountCollectCharge.CommandText = "SELECT 
+                account_detail.idaccountdetail, 
+                years_rate.year, 
+                account_detail.accountline, 
+                rate_types.name, 
+                account_detail.month, 
+                account_detail.debttotal, 
+                account_detail.saldototal 
+                FROM account_detail 
+                INNER JOIN years_rate ON years_rate.idyearrate = account_detail.yearrate 
+                INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
+                WHERE account_detail.accountline = @idaccountline 
+                ORDER BY account_detail.idaccountdetail ASC"
+                cmdGetAccountCollectCharge.Parameters.AddWithValue("idaccountline", vIdAccountLine)
 
                 Try
                     dr = cmdGetAccountCollectCharge.ExecuteReader()
@@ -1213,16 +1223,7 @@ Module dataFunctions
                     If dr.HasRows Then
                         dgAccountCharge.Rows.Clear()
                         While dr.Read
-                            Dim vState As String = ""
-                            Select Case CInt(dr(4).ToString)
-                                Case 1
-                                    vState = "Instalacion"
-                                Case 2
-                                    vState = "Reposicion"
-                                Case 3
-                                    vState = "Servicio de " & MonthName(CInt(dr(5).ToString)) & " " & dr(1).ToString
-                            End Select
-                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, vState, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
+                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, dr(4).ToString, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1491,35 +1492,47 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getAccount(vCodLine As String, vCodAccount As String) As String()
-        Dim cmdGetAccount As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Function getAccount(vIdServiceLine As String, vIdInternalLine As String) As String()
+        Dim cmdGetAccount As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not cnn.DataSource.Equals("") Then
-            cmdGetAccount.Connection = cnn
+        If Not cnnx.DataSource.Equals("") Then
+            cmdGetAccount.Connection = cnnx
             cmdGetAccount.CommandType = CommandType.Text
 
-            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
-                cmdGetAccount.CommandText = "SELECT lines_to_account.COD_ACCOUNT, lines_to_account.COD_LINE, lines_to_account.ID_RATE, lines_to_account.PRICE_RATE, lines_to_account.ACCOUNT_CREATED, lines_to_account.ACCOUNT_UPDATED 
-                FROM lines_to_account WHERE lines_to_account.COD_ACCOUNT = @codaccount AND lines_to_account.COD_LINE = @codline"
-                cmdGetAccount.Parameters.AddWithValue("codaccount", vCodAccount)
-                cmdGetAccount.Parameters.AddWithValue("codline", vCodLine)
+            If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
+                cmdGetAccount.CommandText = "SELECT 
+                internal_line.idinternalline, 
+                internal_line.serviceline, 
+                internal_line.code, 
+                service_line.code, 
+                internal_line.rate, 
+                internal_line.pricerate, 
+                internal_line.created, 
+                internal_line.updated 
+                FROM internal_line 
+                INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline 
+                WHERE internal_line.serviceline = @idserviceline AND internal_line.idinternalline = @idinternalline"
+                cmdGetAccount.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                cmdGetAccount.Parameters.AddWithValue("idserviceline", vIdServiceLine)
 
                 Try
                     dr = cmdGetAccount.ExecuteReader()
 
                     If dr.HasRows Then
                         dr.Read()
+
+                        Dim dataAccount(7) As String
+                        dataAccount(0) = dr(0).ToString 'Id de internalline
+                        dataAccount(1) = dr(1).ToString 'Id de serviceline
+                        dataAccount(2) = dr(2).ToString 'Code de internalline
+                        dataAccount(3) = dr(3).ToString 'Code de serviceline
+                        dataAccount(4) = dr(4).ToString 'Id de rate
+                        dataAccount(5) = dr(5).ToString 'Precio rate
+                        dataAccount(6) = Format(dr(6).ToString, "Short Date")
+                        dataAccount(7) = Format(dr(7).ToString, "Short Date")
+
                         cmdGetAccount.Dispose()
-
-                        Dim dataAccount(5) As String
-                        dataAccount(0) = dr(0).ToString
-                        dataAccount(1) = dr(1).ToString
-                        dataAccount(2) = dr(2).ToString
-                        dataAccount(3) = dr(3).ToString
-                        dataAccount(4) = Format(dr(4).ToString, "Short Date")
-                        dataAccount(5) = Format(dr(5).ToString, "Short Date")
-
                         Return dataAccount
                     Else
                         MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
@@ -1540,26 +1553,37 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getLine(vCodLine As String) As String()
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Function getLine(vIdServiceLine As String) As String()
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Then
+        If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT lines.ID_LINE, lines.COD_LINE, lines.NAME_LINE, lines.ID_SECTOR, sector.COD_SECTOR, sector.NAME_SECTOR, lines.ADDRESS, lines.INSTALLDATE_LINE, lines.DESCP_LINE, lines.CREATE_LINE, lines.UPDATE_LINE" &
-                " FROM lines INNER JOIN sector ON lines.ID_SECTOR = sector.ID_SECTOR WHERE lines.COD_LINE = @codline"
-            cmd.Parameters.AddWithValue("codline", vCodLine)
+            cmd.CommandText = "SELECT 
+            service_line.idserviceline, 
+            service_line.code AS servicecode, 
+            service_line.name AS servicename, 
+            service_line.street, 
+            streets.code AS streetcode, 
+            streets.name AS streetname, 
+            service_line.address, 
+            service_line.installdate, 
+            service_line.description, 
+            service_line.created, 
+            service_line.updated 
+            FROM service_line 
+            INNER JOIN streets ON streets.idstreet = service_line.street 
+            WHERE service_line.idserviceline = @idserviceline"
+            cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
 
             Try
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
                     dr.Read()
-                    cmd.Dispose()
 
                     Dim dataLine(10) As String
                     dataLine(0) = dr(0).ToString 'Id de linea
@@ -1574,6 +1598,7 @@ Module dataFunctions
                     dataLine(9) = Format(dr(9).ToString, "Short Date") 'Fecha de registro
                     dataLine(10) = Format(dr(10).ToString, "Short Date") 'Fecha de actualizacion
 
+                    cmd.Dispose()
                     Return dataLine
                 Else
                     Return Nothing

@@ -1,7 +1,7 @@
 ﻿Imports System.ComponentModel
 
 Public Class frmEditLine
-    Public vCodEditLine As String = Nothing
+    Public vIdServiceLine As String = Nothing
     Dim dsAvenues As DataSet = Nothing
     Dim dataLineOriginal(8) As String
     Dim dataLineEdited(8) As String
@@ -12,14 +12,14 @@ Public Class frmEditLine
 
         If Not (dsAvenues.Equals(Nothing)) Then
             cbxStreets.DataSource = dsAvenues.Tables(0)
-            cbxStreets.ValueMember = "ID_SECTOR"
-            cbxStreets.DisplayMember = "NAME_SECTOR"
+            cbxStreets.ValueMember = "idstreet"
+            cbxStreets.DisplayMember = "name"
         End If
 
-        If vCodEditLine.Equals(Nothing) Then
+        If vIdServiceLine.Equals(Nothing) Then
             Close()
         Else
-            Dim dataLine() As String = getLine(vCodEditLine)
+            Dim dataLine() As String = getLine(vIdServiceLine)
 
             If IsNothing(dataLine) Then
                 Close()
@@ -42,7 +42,7 @@ Public Class frmEditLine
                 dataLineOriginal(6) = dataLine(8)
                 dataLineOriginal(7) = Format(dataLine(9), "Short Date")
                 dataLineOriginal(8) = Format(dataLine(10), "Short Date")
-                listAccountLine(dataLine(1), dtgAccountLine)
+                listAccountLine(dataLine(0), dtgAccountLine)
             End If
         End If
     End Sub
@@ -115,8 +115,8 @@ Public Class frmEditLine
                 End Try
             End If
         ElseIf dtgAccountLine.Columns(e.ColumnIndex).Name = "clmEdit" Then
-            showAccount(dtgAccountLine.Item(0, e.RowIndex).Value, dtgAccountLine.Item(2, e.RowIndex).Value)
-            listAccountLine(txtCodLine.Text, dtgAccountLine)
+            showAccount(dataLineOriginal(0), dtgAccountLine.Item(0, e.RowIndex).Value)
+            listAccountLine(dataLineOriginal(0), dtgAccountLine)
         End If
     End Sub
 

@@ -91,7 +91,7 @@ Partial Class frmLogin
         Me.PasswordTextBox.PasswordChar = Global.Microsoft.VisualBasic.ChrW(42)
         Me.PasswordTextBox.Size = New System.Drawing.Size(198, 22)
         Me.PasswordTextBox.TabIndex = 3
-        Me.PasswordTextBox.Text = "admin"
+        Me.PasswordTextBox.Text = "852456"
         '
         'OK
         '

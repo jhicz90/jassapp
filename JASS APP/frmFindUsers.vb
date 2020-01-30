@@ -13,8 +13,8 @@ Public Class frmFindUsers
 
         If Not dsRates.HasErrors Then
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "ID_RATE"
-            cbxRates.DisplayMember = "NAME_RATE"
+            cbxRates.ValueMember = "idrate"
+            cbxRates.DisplayMember = "name"
         End If
 
         'vFrmGet: Cuando es 1 es para buscar sin ingresar tarifa, cuando es 2 es para buscar e ingresar tarifa

@@ -50,9 +50,9 @@ Partial Class frmEditLine
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmCodRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdInternalLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmCodeInternalLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
@@ -221,7 +221,7 @@ Partial Class frmEditLine
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountLine.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgAccountLine.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountLine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodLine, Me.clmCodRate, Me.clmAccount, Me.clmNames, Me.clmRate, Me.clmEdit, Me.clmDelete})
+        Me.dtgAccountLine.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdInternalLine, Me.clmIdRate, Me.clmCodeInternalLine, Me.clmNames, Me.clmRate, Me.clmEdit, Me.clmDelete})
         Me.dtgAccountLine.Location = New System.Drawing.Point(23, 86)
         Me.dtgAccountLine.Name = "dtgAccountLine"
         Me.dtgAccountLine.ReadOnly = True
@@ -390,25 +390,25 @@ Partial Class frmEditLine
         Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'clmCodLine
+        'clmIdInternalLine
         '
-        Me.clmCodLine.HeaderText = "Codigo de linea"
-        Me.clmCodLine.Name = "clmCodLine"
-        Me.clmCodLine.ReadOnly = True
-        Me.clmCodLine.Visible = False
+        Me.clmIdInternalLine.HeaderText = "Codigo de cuenta"
+        Me.clmIdInternalLine.Name = "clmIdInternalLine"
+        Me.clmIdInternalLine.ReadOnly = True
+        Me.clmIdInternalLine.Visible = False
         '
-        'clmCodRate
+        'clmIdRate
         '
-        Me.clmCodRate.HeaderText = "Codigo de Tarifa"
-        Me.clmCodRate.Name = "clmCodRate"
-        Me.clmCodRate.ReadOnly = True
-        Me.clmCodRate.Visible = False
+        Me.clmIdRate.HeaderText = "Codigo de Tarifa"
+        Me.clmIdRate.Name = "clmIdRate"
+        Me.clmIdRate.ReadOnly = True
+        Me.clmIdRate.Visible = False
         '
-        'clmAccount
+        'clmCodeInternalLine
         '
-        Me.clmAccount.HeaderText = "Codigo de Cuenta"
-        Me.clmAccount.Name = "clmAccount"
-        Me.clmAccount.ReadOnly = True
+        Me.clmCodeInternalLine.HeaderText = "Codigo de Linea - Cuenta"
+        Me.clmCodeInternalLine.Name = "clmCodeInternalLine"
+        Me.clmCodeInternalLine.ReadOnly = True
         '
         'clmNames
         '
@@ -502,9 +502,9 @@ Partial Class frmEditLine
     Friend WithEvents Panel3 As Panel
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
-    Friend WithEvents clmCodLine As DataGridViewTextBoxColumn
-    Friend WithEvents clmCodRate As DataGridViewTextBoxColumn
-    Friend WithEvents clmAccount As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdInternalLine As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdRate As DataGridViewTextBoxColumn
+    Friend WithEvents clmCodeInternalLine As DataGridViewTextBoxColumn
     Friend WithEvents clmNames As DataGridViewTextBoxColumn
     Friend WithEvents clmRate As DataGridViewTextBoxColumn
     Friend WithEvents clmEdit As DataGridViewButtonColumn
