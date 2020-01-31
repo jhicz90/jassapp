@@ -2,8 +2,8 @@
 
 Public Class frmNewuser
     Public vFrmGet As Integer = 0
-    Public vCodUser As String = Nothing
-    Public vCodAccount As String = Nothing
+    Public vIdUserReg As String = Nothing
+    Public vIdInternalLine As String = Nothing
     Dim dsUserTypes As DataSet = Nothing
     Dim dataUserEdited(13) As String
     Public Sub frmNewuser_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -13,22 +13,22 @@ Public Class frmNewuser
 
         If Not (dsUserTypes.Equals(Nothing)) Then
             cbxTypeUser.DataSource = dsUserTypes.Tables(0)
-            cbxTypeUser.ValueMember = "ID_TYPE_USER"
-            cbxTypeUser.DisplayMember = "NAME_TYPE"
+            cbxTypeUser.ValueMember = "idusertype"
+            cbxTypeUser.DisplayMember = "name"
         End If
 
         cbxTypeUser.SelectedIndex = 0
 
-        If IsNothing(vCodUser) Then
+        If IsNothing(vIdUserReg) Then
             Close()
-        ElseIf vCodUser = "new" Then
+        ElseIf vIdUserReg = "new" Then
             newUser()
         Else
-            Dim dataUser() As String = getUser(vCodUser)
+            Dim dataUser() As String = getUser(vIdUserReg)
 
-            If vCodUser.Length = 0 Then
+            If vIdInternalLine.Length = 0 Then
                 Close()
-            ElseIf Not IsNothing(dataUser) And vCodUser.Length > 0 Then
+            ElseIf Not IsNothing(dataUser) And vIdInternalLine.Length > 0 Then
                 txtCodUser.Text = dataUser(0)
                 txtNames.Text = dataUser(1)
                 txtSurnames.Text = dataUser(2)
@@ -105,11 +105,11 @@ Public Class frmNewuser
         ElseIf vFrmGet = 2 Then
             updateUser(dataUserEdited)
         ElseIf vFrmGet = 3 Then
-            saveUserNew(dataUserEdited, True, vCodAccount)
+            saveUserNew(dataUserEdited, True, vIdInternalLine)
             newUser()
         End If
 
-        Close()
+        'Close()
     End Sub
 
     Private Sub frmNewuser_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing

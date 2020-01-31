@@ -56,6 +56,7 @@ Partial Class frmAccount
         Me.Label3 = New System.Windows.Forms.Label()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
+        Me.btnFindUser = New System.Windows.Forms.Button()
         Me.GroupBox1.SuspendLayout()
         Me.tabDataAccount.SuspendLayout()
         Me.tabpageAcounts.SuspendLayout()
@@ -262,6 +263,7 @@ Partial Class frmAccount
         '
         'tabpageUsers
         '
+        Me.tabpageUsers.Controls.Add(Me.btnFindUser)
         Me.tabpageUsers.Controls.Add(Me.dtgUsersAccount)
         Me.tabpageUsers.Controls.Add(Me.btnNewUser)
         Me.tabpageUsers.Location = New System.Drawing.Point(4, 22)
@@ -417,6 +419,17 @@ Partial Class frmAccount
         Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
+        'btnFindUser
+        '
+        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
+        Me.btnFindUser.Location = New System.Drawing.Point(169, 23)
+        Me.btnFindUser.Name = "btnFindUser"
+        Me.btnFindUser.Size = New System.Drawing.Size(140, 48)
+        Me.btnFindUser.TabIndex = 7
+        Me.btnFindUser.Text = "Usuario existente"
+        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnFindUser.UseVisualStyleBackColor = True
+        '
         'frmAccount
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -481,4 +494,5 @@ Partial Class frmAccount
     Friend WithEvents DataGridViewButtonColumn2 As DataGridViewButtonColumn
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
+    Friend WithEvents btnFindUser As Button
 End Class

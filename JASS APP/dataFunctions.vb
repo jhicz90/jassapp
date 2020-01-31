@@ -511,6 +511,8 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
             cmd.CommandText = "SELECT
@@ -540,7 +542,6 @@ Module dataFunctions
                     dgUserAccount.Rows.Clear()
                 End If
                 dr.Close()
-                cmd.Dispose()
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
@@ -570,7 +571,7 @@ Module dataFunctions
                     dataPrice(0) = dr(0).ToString
                     dataPrice(1) = dr(1).ToString
                     dataPrice(2) = dr(2).ToString
-                    dr.Close()
+
                     cmd.Dispose()
                     Return dataPrice
                 Else
@@ -602,7 +603,7 @@ Module dataFunctions
                     Dim dataAvenue(1) As String
                     dataAvenue(0) = dr(0).ToString
                     dataAvenue(1) = dr(1).ToString
-                    dr.Close()
+
                     cmd.Dispose()
                     Return dataAvenue
                 Else
@@ -634,7 +635,7 @@ Module dataFunctions
                     cmd.CommandText = "SELECT code FROM service_line WHERE code LIKE '" & codeLine & "'"
                     dr = cmd.ExecuteReader()
                     vResult = dr.HasRows
-                    dr.Close()
+
                     cmd.Dispose()
                 Loop While vResult
 
@@ -663,6 +664,7 @@ Module dataFunctions
                     dr = cmdFindLineUser.ExecuteReader()
 
                     If Not (dr.HasRows) Then
+                        dr.Close()
                         cmdInsertLineUser.Connection = cnnx
                         cmdInsertLineUser.CommandType = CommandType.Text
 
@@ -670,18 +672,13 @@ Module dataFunctions
                         cmdInsertLineUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
                         cmdInsertLineUser.Parameters.AddWithValue("iduserreg", dataUser(0))
 
-                        Try
-                            dr = cmdInsertLineUser.ExecuteReader()
-                            dr.Close()
-                            cmdInsertLineUser.Dispose()
+                        dr = cmdInsertLineUser.ExecuteReader()
+                        dr.Close()
 
-                            MsgBox("El usuario se agrego exitosamente", vbInformation, "Aviso")
-                        Catch ex As Exception
-                            MsgBox("Ocurrio un error al guardar el registro", vbExclamation, "Aviso")
-                            MsgBox(ex.Message)
-                        End Try
+                        MsgBox("El usuario se agrego exitosamente", vbInformation, "Aviso")
                     Else
                         MsgBox("El usuario ya esta enlazado a la linea de servicio", vbInformation, "Aviso")
+                        Exit Sub
                     End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error al guardar el registro", vbExclamation, "Aviso")
@@ -695,45 +692,51 @@ Module dataFunctions
     End Sub
 
     Public Sub saveUserNew(dataUser() As String, Optional vLineToUser As Boolean = False, Optional vIdInternalLine As String = Nothing)
-        'Dim codUser As String = generateCode(15, True, True, True)
-
+        Dim cmdFindUser As New MySqlCommand
         Dim cmdInsertUser As New MySqlCommand
         Dim cmdInsertLineUser As New MySqlCommand
-        Dim cmdLastInsertLineUser As New MySqlCommand
-        Dim cmdUpdateCodeLineUser As New MySqlCommand
         Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
-            cmdInsertUser.Connection = cnnx
-            cmdInsertUser.CommandType = CommandType.Text
-
-            cmdInsertUser.CommandText = "INSERT INTO user_reg(names, surnames, usertype, docid, address, cellphone, telephone) VALUES(@names, @surnames, @usertype, @docid, @address, @cellphone, @telephone)"
-            'cmdInsertUser.Parameters.AddWithValue("iduserreg", codUser)
-            cmdInsertUser.Parameters.AddWithValue("names", dataUser(1))
-            cmdInsertUser.Parameters.AddWithValue("surnames", dataUser(2))
-            cmdInsertUser.Parameters.AddWithValue("usertype", dataUser(3))
-            cmdInsertUser.Parameters.AddWithValue("docid", dataUser(4))
-            cmdInsertUser.Parameters.AddWithValue("address", dataUser(5))
-            cmdInsertUser.Parameters.AddWithValue("cellphone", dataUser(6))
-            cmdInsertUser.Parameters.AddWithValue("telephone", dataUser(7))
-
             Try
+                cmdFindUser.Connection = cnnx
+                cmdFindUser.CommandType = CommandType.Text
+                cmdFindUser.CommandText = "SELECT user_reg.docid FROM user_reg WHERE user_reg.docid LIKE @docid"
+                cmdFindUser.Parameters.AddWithValue("docid", dataUser(4))
+                dr = cmdFindUser.ExecuteReader
+                Dim vDuplicateDoc As Boolean = dr.HasRows
+                dr.Close()
+
+                If vDuplicateDoc Then
+                    MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
+                    Exit Sub
+                End If
+
+                cmdInsertUser.Connection = cnnx
+                cmdInsertUser.CommandType = CommandType.Text
+                cmdInsertUser.CommandText = "INSERT INTO user_reg(names, surnames, usertype, docid, address, cellphone, telephone) VALUES(@names, @surnames, @usertype, @docid, @address, @cellphone, @telephone)"
+                'cmdInsertUser.Parameters.AddWithValue("iduserreg", codUser)
+                cmdInsertUser.Parameters.AddWithValue("names", dataUser(1))
+                cmdInsertUser.Parameters.AddWithValue("surnames", dataUser(2))
+                cmdInsertUser.Parameters.AddWithValue("usertype", dataUser(3))
+                cmdInsertUser.Parameters.AddWithValue("docid", dataUser(4))
+                cmdInsertUser.Parameters.AddWithValue("address", dataUser(5))
+                cmdInsertUser.Parameters.AddWithValue("cellphone", dataUser(6))
+                cmdInsertUser.Parameters.AddWithValue("telephone", dataUser(7))
+
                 dr = cmdInsertUser.ExecuteReader()
+                dr.Close()
 
                 If vLineToUser = True And Not IsNothing(vIdInternalLine) Then
                     cmdInsertLineUser.Connection = cnnx
                     cmdInsertLineUser.CommandType = CommandType.Text
                     cmdInsertLineUser.CommandText = "INSERT INTO users_line(internalline, userreg) VALUES(@idinternalline, (SELECT MAX(user_reg.iduserreg) AS id FROM user_reg))"
                     cmdInsertLineUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
-
                     cmdInsertLineUser.ExecuteNonQuery()
                 End If
 
-                dr.Close()
                 cmdInsertUser.Dispose()
                 cmdInsertLineUser.Dispose()
-                cmdLastInsertLineUser.Dispose()
-                cmdUpdateCodeLineUser.Dispose()
 
                 MsgBox("El usuario se guardo exitosamente", vbInformation, "Aviso")
             Catch ex As Exception
@@ -819,7 +822,7 @@ Module dataFunctions
                     cmdInsertLine.Parameters.AddWithValue("name", dataLine(1))
                     cmdInsertLine.Parameters.AddWithValue("street", dataLine(2))
                     cmdInsertLine.Parameters.AddWithValue("address", dataLine(3))
-                    cmdInsertLine.Parameters.AddWithValue("installdate", dataLine(5))
+                    cmdInsertLine.Parameters.AddWithValue("installdate", Format(CDate(dataLine(5)), "yyyy-MM-dd"))
                     cmdInsertLine.Parameters.AddWithValue("description", dataLine(6))
 
                     'Registrando una linea-cuenta
@@ -917,7 +920,7 @@ Module dataFunctions
                 'Obteniendo el id del ultimo registrado
                 cmdIdInternalLine.Connection = cnnx
                 cmdIdInternalLine.CommandType = CommandType.Text
-                cmdIdInternalLine.CommandText = "SELECT MAX(internal_line.idinternalline) AS id, internal_line.code FROM internal_line"
+                cmdIdInternalLine.CommandText = "SELECT MAX(internal_line.idinternalline) AS id, MAX(internal_line.code) AS accountcode FROM internal_line"
                 dr = cmdIdInternalLine.ExecuteReader()
 
                 If dr.HasRows Then
@@ -953,13 +956,12 @@ Module dataFunctions
                 cmdUpdateLine.Parameters.AddWithValue("name", dataLine(2))
                 cmdUpdateLine.Parameters.AddWithValue("street", dataLine(3))
                 cmdUpdateLine.Parameters.AddWithValue("address", dataLine(4))
-                cmdUpdateLine.Parameters.AddWithValue("installdate", dataLine(5))
+                cmdUpdateLine.Parameters.AddWithValue("installdate", Format(CDate(dataLine(5)), "yyyy-MM-dd"))
                 cmdUpdateLine.Parameters.AddWithValue("description", dataLine(6))
-                cmdUpdateLine.Parameters.AddWithValue("idserviceline", dataLine(1))
+                cmdUpdateLine.Parameters.AddWithValue("idserviceline", dataLine(0))
 
                 Try
                     cmdUpdateLine.ExecuteNonQuery()
-                    cmdUpdateLine.Dispose()
 
                     MsgBox("La linea se actualizo exitosamente", vbInformation, "Aviso")
                 Catch ex As Exception
@@ -1053,10 +1055,11 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub showFindUsers(frmMdiParent As Form, vFrmGet As Integer)
+    Public Sub showFindUsers(frmMdiParent As Form, vFrmGet As Integer, vFrmIn As Form)
         Dim frm As New frmFindUsers
         frm.MdiParent = frmMdiParent
         frm.vFrmGet = vFrmGet
+        frm.vFrmIn = vFrmIn
 
         If IsNothing(frmMdiParent) Then
             frm.ShowDialog()
@@ -1100,26 +1103,28 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showNewUser(vCodUser As String, vCodAccount As String, vFrmGet As Integer)
+    Public Sub showNewUser(vIdUserReg As String, vIdInternalLine As String, vFrmGet As Integer)
         Dim frm As New frmNewuser
-        frm.vCodUser = vCodUser
+        frm.vIdUserReg = vIdUserReg
         frm.vFrmGet = vFrmGet
-        frm.vCodAccount = vCodAccount
+        frm.vIdInternalLine = vIdInternalLine
         frm.ShowDialog()
     End Sub
 
     Public Function lastCodReceipt() As String()
-        Dim cmdGetLastReceipt As New OleDbCommand
-        Dim dr As OleDbDataReader
+        Dim cmdGetLastReceipt As New MySqlCommand
+        Dim dr As MySqlDataReader
         Dim dataStr(1) As String
         dataStr(0) = ""
         dataStr(1) = ""
 
-        If Not cnn.DataSource.Equals("") Then
-            cmdGetLastReceipt.Connection = cnn
+        If Not cnnx.DataSource.Equals("") Then
+            cnnx.Close()
+            cnnx.Open()
+            cmdGetLastReceipt.Connection = cnnx
             cmdGetLastReceipt.CommandType = CommandType.Text
 
-            cmdGetLastReceipt.CommandText = "SELECT MAX(payments.idpayment) FROM payments"
+            cmdGetLastReceipt.CommandText = "SELECT MAX(payments.idpayment) AS id FROM payments"
 
             Try
                 dr = cmdGetLastReceipt.ExecuteReader()
@@ -1497,10 +1502,9 @@ Module dataFunctions
         Dim dr As MySqlDataReader
 
         If Not cnnx.DataSource.Equals("") Then
-            cmdGetAccount.Connection = cnnx
-            cmdGetAccount.CommandType = CommandType.Text
-
             If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
+                cmdGetAccount.Connection = cnnx
+                cmdGetAccount.CommandType = CommandType.Text
                 cmdGetAccount.CommandText = "SELECT 
                 internal_line.idinternalline, 
                 internal_line.serviceline, 
@@ -1593,10 +1597,10 @@ Module dataFunctions
                     dataLine(4) = dr(4).ToString 'Codigo de sector
                     dataLine(5) = dr(5).ToString 'Nombre del sector
                     dataLine(6) = dr(6).ToString 'Direccion de la linea
-                    dataLine(7) = Format(dr(7).ToString, "Short Date") 'Fecha de instalacion
+                    dataLine(7) = dr(7).ToString 'Fecha de instalacion
                     dataLine(8) = dr(8).ToString 'Descripcion de linea
-                    dataLine(9) = Format(dr(9).ToString, "Short Date") 'Fecha de registro
-                    dataLine(10) = Format(dr(10).ToString, "Short Date") 'Fecha de actualizacion
+                    dataLine(9) = dr(9).ToString 'Fecha de registro
+                    dataLine(10) = dr(10).ToString 'Fecha de actualizacion
 
                     cmd.Dispose()
                     Return dataLine
@@ -1609,20 +1613,31 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function getUser(vCodUser As String) As String()
-        Dim cmd As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Function getUser(vIdUserReg As String) As String()
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If cnn.DataSource.Equals("") Or IsNothing(vCodUser) Then
+        If cnnx.DataSource.Equals("") Or IsNothing(vIdUserReg) Then
             Return Nothing
         Else
-            cmd.Connection = cnn
+            cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT user_lines.COD_USR_LINE, user_lines.USER_NAMES, user_lines.USER_SURNAMES, user_lines.USER_TYPE, user_type.NAME_TYPE, user_lines.USER_DOCID, user_lines.USER_ADRSS, user_lines.USER_CEL, user_lines.USER_TEL, user_lines.USER_CREATED, user_lines.USER_UPDATED
-            FROM user_type INNER JOIN user_lines ON user_type.ID_TYPE_USER = user_lines.USER_TYPE
-            WHERE user_lines.COD_USR_LINE = @coduser"
-            cmd.Parameters.AddWithValue("coduser", vCodUser)
+            cmd.CommandText = "SELECT
+            user_reg.iduserreg,
+            user_reg.names,
+            user_reg.surnames,
+            user_reg.usertype,
+            user_type.name,
+            user_reg.docid,
+            user_reg.address,
+            user_reg.cellphone,
+            user_reg.telephone,
+            user_reg.created,
+            user_reg.updated
+            FROM user_reg
+            INNER JOIN user_type ON user_type.idusertype = user_reg.usertype
+            WHERE user_reg.iduserreg = @iduserreg"
+            cmd.Parameters.AddWithValue("iduserreg", vIdUserReg)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -1643,6 +1658,7 @@ Module dataFunctions
                     dataUser(9) = dr(9).ToString 'Fecha creado
                     dataUser(10) = dr(10).ToString 'Fecha actualizado
 
+                    cmd.Dispose()
                     Return dataUser
                 Else
                     Return Nothing

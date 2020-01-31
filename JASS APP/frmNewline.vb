@@ -129,7 +129,7 @@
             dataLine(2) = cbxStreets.SelectedValue
             dataLine(3) = txtAddressLine.Text
             dataLine(4) = cbxRates.SelectedValue
-            dataLine(5) = Format(dtpInstallDate.Value, "yyyy-MM-dd")
+            dataLine(5) = dtpInstallDate.Value
             dataLine(6) = txtDescpLine.Text
 
             dataUser(0) = txtNames.Text
@@ -189,7 +189,7 @@
     End Sub
 
     Private Sub btnAddUser_Click(sender As Object, e As EventArgs) Handles btnAddUser.Click
-        showFindUsers(Nothing, 1)
+        showFindUsers(Nothing, 1, Me)
     End Sub
 
     Private Sub btnDeleteUserFound_Click(sender As Object, e As EventArgs) Handles btnDeleteUserFound.Click

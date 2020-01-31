@@ -19,7 +19,8 @@ Public Class frmEditLine
         If vIdServiceLine.Equals(Nothing) Then
             Close()
         Else
-            Dim dataLine() As String = getLine(vIdServiceLine)
+            Dim dataLine() As String = Nothing
+            dataLine = getLine(vIdServiceLine)
 
             If IsNothing(dataLine) Then
                 Close()
@@ -90,10 +91,10 @@ Public Class frmEditLine
         dataLineEdited(2) = txtNameLine.Text
         dataLineEdited(3) = cbxStreets.SelectedValue
         dataLineEdited(4) = txtAddressLine.Text
-        dataLineEdited(5) = Format(dtpInstallDate.Value, "Short Date")
+        dataLineEdited(5) = dtpInstallDate.Value
         dataLineEdited(6) = txtDescpLine.Text
-        dataLineEdited(7) = Format(txtDateCreated.Text, "Short Date")
-        dataLineEdited(8) = Format(Today, "Short Date")
+        dataLineEdited(7) = txtDateCreated.Text
+        dataLineEdited(8) = Today
 
         Try
             updateLine(dataLineEdited)
@@ -121,7 +122,7 @@ Public Class frmEditLine
     End Sub
 
     Private Sub btnNewAccount_Click(sender As Object, e As EventArgs) Handles btnNewAccount.Click
-        showAccount(txtCodLine.Text, "new")
-        listAccountLine(txtCodLine.Text, dtgAccountLine)
+        showAccount(dataLineOriginal(0), "new")
+        listAccountLine(dataLineOriginal(0), dtgAccountLine)
     End Sub
 End Class

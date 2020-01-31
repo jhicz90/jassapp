@@ -1,6 +1,6 @@
 ﻿Public Class frmAccount
-    Public vIdServiceLine As Integer = 0
-    Public vIdInternalLine As Integer = 0
+    Public vIdServiceLine As String = Nothing
+    Public vIdInternalLine As String = Nothing
     Dim dsRates As DataSet = Nothing
     Private Sub frmAccount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconEditpipe
@@ -27,6 +27,8 @@
                 If IsNothing(dataAccount) Then
                     Close()
                 Else
+                    vIdInternalLine = dataAccount(0)
+                    vIdServiceLine = dataAccount(1)
                     txtCodAccount.Text = dataAccount(2)
                     txtCodLine.Text = dataAccount(3)
                     cbxRates.SelectedValue = dataAccount(4)
@@ -51,6 +53,11 @@
         End If
     End Sub
 
+    Public Sub userFound(vActive As Boolean, Optional vDataUser() As String = Nothing, Optional vRates As Integer = 0, Optional vPriceRate As Double = 0)
+        addUserToLine(vIdInternalLine, vDataUser, vRates, vPriceRate)
+        listUserAccount(vIdServiceLine, vIdInternalLine, dtgUsersAccount)
+    End Sub
+
     Private Sub cbxRates_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxRates.SelectedIndexChanged
         If IsNumeric(cbxRates.SelectedValue.ToString) Then
             Dim dataPrice() As String = getPriceRate(cbxRates.SelectedValue.ToString)
@@ -66,7 +73,7 @@
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        If vIdServiceLine <> "new" Then
+        If vIdInternalLine <> "new" Then
             'Update account
         Else
             vIdInternalLine = saveAccountNew(vIdServiceLine, cbxRates.SelectedValue, Val(txtPriceRate.Text))
@@ -77,5 +84,9 @@
     Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewUser.Click
         showNewUser("new", vIdInternalLine, 3)
         listUserAccount(vIdServiceLine, vIdInternalLine, dtgUsersAccount)
+    End Sub
+
+    Private Sub btnFindUser_Click(sender As Object, e As EventArgs) Handles btnFindUser.Click
+        showFindUsers(Nothing, 3, Me)
     End Sub
 End Class

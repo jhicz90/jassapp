@@ -2,6 +2,7 @@
 
 Public Class frmFindUsers
     Public vFrmGet As Integer = 0
+    Public vFrmIn As Form = Nothing
     Dim dsRates As DataSet = Nothing
     Private Sub frmFindUsers_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconSearch
@@ -86,9 +87,15 @@ Public Class frmFindUsers
 
             Select Case vFrmGet
                 Case 1
-                    frmNewline.userFound(True, dataUser)
+                    Dim frm As New frmNewline
+                    frm = vFrmIn
+                    frm.userFound(True, dataUser)
                 Case 2
                     frmEditLine.userFound(True, dataUser, cbxRates.SelectedValue, Convert.ToDouble(txtPriceRate.Text))
+                Case 3
+                    Dim frm As New frmAccount
+                    frm = vFrmIn
+                    frm.userFound(True, dataUser)
                 Case Else
                     Close()
             End Select
