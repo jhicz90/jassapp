@@ -201,20 +201,18 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT users_line.internalline, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname " &
-            "FROM users_line INNER JOIN user_reg ON users_line.userreg = user_reg.iduserreg WHERE users_line.internalline = @idinternalline"
-            cmd.Parameters.AddWithValue("idinternalline", vIdInternalLine)
-
             Try
+                cnnx.Close()
+                cnnx.Open()
+
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT users_line.userreg AS iduser, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname " &
+                "FROM users_line INNER JOIN user_reg ON users_line.userreg = user_reg.iduserreg WHERE users_line.internalline = @idinternalline"
+                cmd.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+
                 Dim ada As New MySqlDataAdapter(cmd)
-
                 ada.Fill(ds)
-                cmd.Dispose()
-                ada.Dispose()
-
                 Return ds
             Catch ex As Exception
                 Return Nothing
@@ -462,7 +460,7 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub listAccountLine(vIdLine As String, dgAccountLine As DataGridView)
+    Public Sub listAccountLine(vIdServiceLine As String, dgAccountLine As DataGridView)
         Dim cmd As New MySqlCommand
         Dim dr As MySqlDataReader
 
@@ -481,7 +479,7 @@ Module dataFunctions
             INNER JOIN rates ON INTERLINE.rate = rates.idrate 
             INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
             WHERE service_line.idserviceline = @idserviceline"
-            cmd.Parameters.AddWithValue("idserviceline", vIdLine)
+            cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -1025,30 +1023,84 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub deleteUserToLine(vIdLine As String, vIdUser As String)
-        Dim cmdDeleteLineUser As New MySqlCommand
+    Public Sub deleteInterlalToService(vIdServiceLine As String, vIdInternalLine As String)
+        Dim cmdFindAccounts As New MySqlCommand
+        Dim cmdDeleteInternal As New MySqlCommand
+        Dim cmdDeleteUserInternal As New MySqlCommand
+        Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
-            cmdDeleteLineUser.Connection = cnnx
-            cmdDeleteLineUser.CommandType = CommandType.Text
+            cnnx.Close()
+            cnnx.Open()
 
-            If Not (vIdLine = Nothing And vIdUser = Nothing) Then
-                cmdDeleteLineUser.CommandText = "DELETE * FROM users_line " &
-                    "WHERE users_line.internalline = @idinternalline AND users_line.userreg = @iduserreg"
-                cmdDeleteLineUser.Parameters.AddWithValue("idinternalline", vIdLine)
-                cmdDeleteLineUser.Parameters.AddWithValue("iduserreg", vIdUser)
-
+            If Not (vIdInternalLine = Nothing) Then
                 Try
-                    cmdDeleteLineUser.ExecuteNonQuery()
-                    cmdDeleteLineUser.Dispose()
+                    cmdFindAccounts.Connection = cnnx
+                    cmdFindAccounts.CommandType = CommandType.Text
+                    cmdFindAccounts.CommandText = "SELECT * FROM account_line WHERE account_line.internalline = @idinternalline"
+                    cmdFindAccounts.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                    dr = cmdFindAccounts.ExecuteReader()
+                    Dim vFindAccounts As Boolean = dr.HasRows
+                    dr.Close()
 
-                    MsgBox("Se elemino el usuario de la linea", vbInformation, "Aviso")
+                    If vFindAccounts = False Then
+                        cmdDeleteUserInternal.Connection = cnnx
+                        cmdDeleteUserInternal.CommandType = CommandType.Text
+                        cmdDeleteUserInternal.CommandText = "DELETE FROM users_line WHERE users_line.internalline = @idinternalline"
+                        cmdDeleteUserInternal.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                        cmdDeleteUserInternal.ExecuteNonQuery()
+                        cmdDeleteUserInternal.Dispose()
+
+                        cmdDeleteInternal.Connection = cnnx
+                        cmdDeleteInternal.CommandType = CommandType.Text
+                        cmdDeleteInternal.CommandText = "DELETE FROM internal_line " &
+                            "WHERE internal_line.serviceline = @idserviceline AND internal_line.idinternalline = @idinternalline"
+                        cmdDeleteInternal.Parameters.AddWithValue("idserviceline", vIdServiceLine)
+                        cmdDeleteInternal.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                        cmdDeleteInternal.ExecuteNonQuery()
+                        cmdDeleteInternal.Dispose()
+
+                        MsgBox("Se elemino la linea-cuenta de la linea de servicio", vbInformation, "Aviso")
+                    Else
+                        MsgBox("Esta cuenta no puede ser eliminada porque hay cuentas enlazadas a ella.", vbInformation, "Aviso")
+                    End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error al actualizar el registro", vbCritical, "Aviso")
                     MsgBox(ex.Message)
                 End Try
             Else
                 MsgBox("No se envio el codigo de la linea", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub deleteUserToInternal(vIdInternalLine As String, vIdUserReg As String)
+        Dim cmdDeleteUser As New MySqlCommand
+
+        If Not (cnnx.DataSource.Equals("")) Then
+            cnnx.Close()
+            cnnx.Open()
+
+            If Not (vIdInternalLine = Nothing Or vIdUserReg = Nothing) Then
+                Try
+                    cmdDeleteUser.Connection = cnnx
+                    cmdDeleteUser.CommandType = CommandType.Text
+                    cmdDeleteUser.CommandText = "DELETE FROM users_line WHERE users_line.internalline = @idinternalline AND users_line.userreg = @iduserreg"
+                    cmdDeleteUser.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                    cmdDeleteUser.Parameters.AddWithValue("iduserreg", vIdUserReg)
+
+                    cmdDeleteUser.ExecuteNonQuery()
+                    cmdDeleteUser.Dispose()
+
+                    MsgBox("Se elemino el usuario o representante de la linea-cuenta", vbInformation, "Aviso")
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al eliminar el registro", vbCritical, "Aviso")
+                    MsgBox(ex.Message)
+                End Try
+            Else
+                MsgBox("No se envio el codigo de la linea o el codigo de usuario", vbCritical, "Aviso")
             End If
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
@@ -1081,10 +1133,10 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showAccountCollect(vCodLine As String, vCodAccount As String, vNameLine As String)
+    Public Sub showAccountCollect(vIdServiceLine As String, vIdInternalLine As String, vNameLine As String)
         Dim frm As New frmCollectDetail
-        frm.vCodLine = vCodLine
-        frm.vCodAccount = vCodAccount
+        frm.vIdServiceLine = vIdServiceLine
+        frm.vIdInternalLine = vIdInternalLine
         frm.vNameLine = vNameLine
         frm.ShowDialog()
     End Sub
@@ -1149,7 +1201,8 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub getAccountCollect(vIdLine As String, vIdInternalLine As String, dgAccountYear As DataGridView)
+    Public Sub getAccountCollect(vIdServiceLine As String, vIdInternalLine As String, dgAccountYear As DataGridView)
+        'Se agregara la tabla service_line a la consulta para obtener mas datos
         Dim cmdGetAccountCollect As New MySqlCommand
         Dim dr As MySqlDataReader
 
@@ -1157,7 +1210,7 @@ Module dataFunctions
             cmdGetAccountCollect.Connection = cnnx
             cmdGetAccountCollect.CommandType = CommandType.Text
 
-            If Not (vIdLine = Nothing And vIdInternalLine = Nothing) Then
+            If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
                 cmdGetAccountCollect.CommandText = "SELECT 
                 account_line.idaccountline, 
                 years_rate.year AS numyear, 
@@ -1181,7 +1234,7 @@ Module dataFunctions
                             Else
                                 vState = "Cancelado"
                             End If
-                            dgAccountYear.Rows.Add(dr(0).ToString, Format(CDec(dr(1).ToString), "###,##0.00"), Format(CDec(dr(2).ToString), "###,##0.00"), vState)
+                            dgAccountYear.Rows.Add(dr(0).ToString, CInt(dr(1).ToString), Format(CDec(dr(2).ToString), "###,##0.00"), Format(CDec(dr(3).ToString), "###,##0.00"), vState)
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1203,17 +1256,21 @@ Module dataFunctions
         Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
-            cmdGetAccountCollectCharge.Connection = cnnx
-            cmdGetAccountCollectCharge.CommandType = CommandType.Text
-
             If Not (vIdAccountLine = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                cmdGetAccountCollectCharge.Connection = cnnx
+                cmdGetAccountCollectCharge.CommandType = CommandType.Text
                 cmdGetAccountCollectCharge.CommandText = "SELECT 
                 account_detail.idaccountdetail, 
-                years_rate.year, 
                 account_detail.accountline, 
-                rate_types.name, 
+                years_rate.idyearrate, 
+                rate_types.idratetype, 
                 account_detail.month, 
+                rate_types.name AS cargo, 
+                rate_types.periodic, 
                 account_detail.debttotal, 
+                (account_detail.debttotal - account_detail.saldototal) AS saldo, 
                 account_detail.saldototal 
                 FROM account_detail 
                 INNER JOIN years_rate ON years_rate.idyearrate = account_detail.yearrate 
@@ -1228,13 +1285,24 @@ Module dataFunctions
                     If dr.HasRows Then
                         dgAccountCharge.Rows.Clear()
                         While dr.Read
-                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(4).ToString, dr(5).ToString, False, dr(4).ToString, Format(CDec(dr(6).ToString), "###,##0.00"), Format(CDec(dr(6).ToString) - CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(7).ToString), "###,##0.00"))
+                            Dim vNameMonth As String = UCase(MonthName(dr(4).ToString + 1))
+                            Dim vCharge As Boolean = dr(6).ToString
+                            Dim vNameCharge As String
+
+                            If vCharge Then
+                                vNameCharge = dr(5).ToString & " " & vNameMonth
+                            Else
+                                vNameCharge = dr(5).ToString
+                            End If
+
+                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, False, vNameCharge, Format(CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(8).ToString), "###,##0.00"), Format(CDec(dr(9).ToString), "###,##0.00"))
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
                     End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
+                    MsgBox(ex.Message)
                     dgAccountCharge.Rows.Clear()
                 End Try
             Else
@@ -1503,6 +1571,8 @@ Module dataFunctions
 
         If Not cnnx.DataSource.Equals("") Then
             If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
                 cmdGetAccount.Connection = cnnx
                 cmdGetAccount.CommandType = CommandType.Text
                 cmdGetAccount.CommandText = "SELECT 

@@ -89,4 +89,15 @@
     Private Sub btnFindUser_Click(sender As Object, e As EventArgs) Handles btnFindUser.Click
         showFindUsers(Nothing, 3, Me)
     End Sub
+
+    Private Sub dtgUsersAccount_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgUsersAccount.CellContentClick
+        If dtgUsersAccount.Columns(e.ColumnIndex).Name = "clmDelete" Then
+            If MsgBox("¿Desea eleminar a " & dtgUsersAccount.Item(1, e.RowIndex).Value & " de esta cuenta?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+                deleteUserToInternal(vIdInternalLine, dtgUsersAccount.Item(0, e.RowIndex).Value)
+                listUserAccount(vIdServiceLine, vIdInternalLine, dtgUsersAccount)
+            End If
+        ElseIf dtgUsersAccount.Columns(e.ColumnIndex).Name = "clmEdit" Then
+            'Editar usuario
+        End If
+    End Sub
 End Class

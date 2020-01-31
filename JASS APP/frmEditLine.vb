@@ -107,13 +107,9 @@ Public Class frmEditLine
 
     Private Sub dtgUserLine_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountLine.CellContentClick
         If dtgAccountLine.Columns(e.ColumnIndex).Name = "clmDelete" Then
-            If MsgBox("¿Desea eleminar a " & dtgAccountLine.Item(3, e.RowIndex).Value & " " & dtgAccountLine.Item(4, e.RowIndex).Value & vbCr & " de " & txtNameLine.Text & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
-                Try
-                    deleteUserToLine(txtCodLine.Text, dtgAccountLine.Item(0, e.RowIndex).Value)
-                    listAccountLine(txtCodLine.Text, dtgAccountLine)
-                Catch ex As Exception
-                    MsgBox("Ocurrio un error", vbExclamation, "Aviso")
-                End Try
+            If MsgBox("¿Desea eleminar a " & dtgAccountLine.Item(3, e.RowIndex).Value & " " & dtgAccountLine.Item(4, e.RowIndex).Value & vbCr & " de " & txtCodLine.Text & " (" & txtNameLine.Text & ") " & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+                deleteInterlalToService(dataLineOriginal(0), dtgAccountLine.Item(0, e.RowIndex).Value)
+                listAccountLine(dataLineOriginal(0), dtgAccountLine)
             End If
         ElseIf dtgAccountLine.Columns(e.ColumnIndex).Name = "clmEdit" Then
             showAccount(dataLineOriginal(0), dtgAccountLine.Item(0, e.RowIndex).Value)

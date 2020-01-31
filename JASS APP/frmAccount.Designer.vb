@@ -42,13 +42,8 @@ Partial Class frmAccount
         Me.DataGridViewButtonColumn1 = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.DataGridViewButtonColumn2 = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.tabpageUsers = New System.Windows.Forms.TabPage()
+        Me.btnFindUser = New System.Windows.Forms.Button()
         Me.dtgUsersAccount = New System.Windows.Forms.DataGridView()
-        Me.clmCodUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmDocNum = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmTypeUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.clmDelete = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.btnNewUser = New System.Windows.Forms.Button()
         Me.txtDateUpdated = New System.Windows.Forms.TextBox()
         Me.txtDateCreated = New System.Windows.Forms.TextBox()
@@ -56,7 +51,12 @@ Partial Class frmAccount
         Me.Label3 = New System.Windows.Forms.Label()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
-        Me.btnFindUser = New System.Windows.Forms.Button()
+        Me.clmIdUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmNames = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmDocNum = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmTypeUser = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.clmDelete = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.GroupBox1.SuspendLayout()
         Me.tabDataAccount.SuspendLayout()
         Me.tabpageAcounts.SuspendLayout()
@@ -274,6 +274,17 @@ Partial Class frmAccount
         Me.tabpageUsers.Text = "USUARIOS ASOCIADOS A LA CUENTA"
         Me.tabpageUsers.UseVisualStyleBackColor = True
         '
+        'btnFindUser
+        '
+        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
+        Me.btnFindUser.Location = New System.Drawing.Point(169, 23)
+        Me.btnFindUser.Name = "btnFindUser"
+        Me.btnFindUser.Size = New System.Drawing.Size(140, 48)
+        Me.btnFindUser.TabIndex = 7
+        Me.btnFindUser.Text = "Usuario existente"
+        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnFindUser.UseVisualStyleBackColor = True
+        '
         'dtgUsersAccount
         '
         Me.dtgUsersAccount.AllowUserToAddRows = False
@@ -285,63 +296,15 @@ Partial Class frmAccount
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgUsersAccount.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgUsersAccount.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgUsersAccount.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodUser, Me.clmNames, Me.clmDocNum, Me.clmTypeUser, Me.clmEdit, Me.clmDelete})
+        Me.dtgUsersAccount.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdUser, Me.clmNames, Me.clmDocNum, Me.clmTypeUser, Me.clmEdit, Me.clmDelete})
         Me.dtgUsersAccount.Location = New System.Drawing.Point(23, 77)
         Me.dtgUsersAccount.Name = "dtgUsersAccount"
         Me.dtgUsersAccount.ReadOnly = True
         Me.dtgUsersAccount.RowHeadersVisible = False
         Me.dtgUsersAccount.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgUsersAccount.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgUsersAccount.Size = New System.Drawing.Size(706, 317)
+        Me.dtgUsersAccount.Size = New System.Drawing.Size(706, 291)
         Me.dtgUsersAccount.TabIndex = 6
-        '
-        'clmCodUser
-        '
-        Me.clmCodUser.HeaderText = "Cod. User"
-        Me.clmCodUser.Name = "clmCodUser"
-        Me.clmCodUser.ReadOnly = True
-        Me.clmCodUser.Visible = False
-        '
-        'clmNames
-        '
-        Me.clmNames.FillWeight = 200.0!
-        Me.clmNames.HeaderText = "Nombre(s) o Razon social"
-        Me.clmNames.Name = "clmNames"
-        Me.clmNames.ReadOnly = True
-        '
-        'clmDocNum
-        '
-        Me.clmDocNum.HeaderText = "DNI o RUC"
-        Me.clmDocNum.Name = "clmDocNum"
-        Me.clmDocNum.ReadOnly = True
-        '
-        'clmTypeUser
-        '
-        Me.clmTypeUser.HeaderText = "Usuario"
-        Me.clmTypeUser.Name = "clmTypeUser"
-        Me.clmTypeUser.ReadOnly = True
-        '
-        'clmEdit
-        '
-        Me.clmEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmEdit.FillWeight = 75.0!
-        Me.clmEdit.HeaderText = ""
-        Me.clmEdit.Name = "clmEdit"
-        Me.clmEdit.ReadOnly = True
-        Me.clmEdit.Text = "Editar"
-        Me.clmEdit.UseColumnTextForButtonValue = True
-        Me.clmEdit.Width = 75
-        '
-        'clmDelete
-        '
-        Me.clmDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmDelete.FillWeight = 75.0!
-        Me.clmDelete.HeaderText = ""
-        Me.clmDelete.Name = "clmDelete"
-        Me.clmDelete.ReadOnly = True
-        Me.clmDelete.Text = "Quitar"
-        Me.clmDelete.UseColumnTextForButtonValue = True
-        Me.clmDelete.Width = 75
         '
         'btnNewUser
         '
@@ -419,16 +382,53 @@ Partial Class frmAccount
         Me.btnCancel.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnCancel.UseVisualStyleBackColor = True
         '
-        'btnFindUser
+        'clmIdUser
         '
-        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
-        Me.btnFindUser.Location = New System.Drawing.Point(169, 23)
-        Me.btnFindUser.Name = "btnFindUser"
-        Me.btnFindUser.Size = New System.Drawing.Size(140, 48)
-        Me.btnFindUser.TabIndex = 7
-        Me.btnFindUser.Text = "Usuario existente"
-        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnFindUser.UseVisualStyleBackColor = True
+        Me.clmIdUser.HeaderText = "Id de Usuario"
+        Me.clmIdUser.Name = "clmIdUser"
+        Me.clmIdUser.ReadOnly = True
+        Me.clmIdUser.Visible = False
+        '
+        'clmNames
+        '
+        Me.clmNames.FillWeight = 200.0!
+        Me.clmNames.HeaderText = "Nombre(s) o Razon social"
+        Me.clmNames.Name = "clmNames"
+        Me.clmNames.ReadOnly = True
+        '
+        'clmDocNum
+        '
+        Me.clmDocNum.HeaderText = "DNI o RUC"
+        Me.clmDocNum.Name = "clmDocNum"
+        Me.clmDocNum.ReadOnly = True
+        '
+        'clmTypeUser
+        '
+        Me.clmTypeUser.HeaderText = "Usuario"
+        Me.clmTypeUser.Name = "clmTypeUser"
+        Me.clmTypeUser.ReadOnly = True
+        '
+        'clmEdit
+        '
+        Me.clmEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmEdit.FillWeight = 75.0!
+        Me.clmEdit.HeaderText = ""
+        Me.clmEdit.Name = "clmEdit"
+        Me.clmEdit.ReadOnly = True
+        Me.clmEdit.Text = "Editar"
+        Me.clmEdit.UseColumnTextForButtonValue = True
+        Me.clmEdit.Width = 75
+        '
+        'clmDelete
+        '
+        Me.clmDelete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmDelete.FillWeight = 75.0!
+        Me.clmDelete.HeaderText = ""
+        Me.clmDelete.Name = "clmDelete"
+        Me.clmDelete.ReadOnly = True
+        Me.clmDelete.Text = "Quitar"
+        Me.clmDelete.UseColumnTextForButtonValue = True
+        Me.clmDelete.Width = 75
         '
         'frmAccount
         '
@@ -475,12 +475,6 @@ Partial Class frmAccount
     Friend WithEvents btnNewUser As Button
     Friend WithEvents dtgUsersAccount As DataGridView
     Friend WithEvents dtgAccountYear As DataGridView
-    Friend WithEvents clmCodUser As DataGridViewTextBoxColumn
-    Friend WithEvents clmNames As DataGridViewTextBoxColumn
-    Friend WithEvents clmDocNum As DataGridViewTextBoxColumn
-    Friend WithEvents clmTypeUser As DataGridViewTextBoxColumn
-    Friend WithEvents clmEdit As DataGridViewButtonColumn
-    Friend WithEvents clmDelete As DataGridViewButtonColumn
     Private WithEvents txtDateUpdated As TextBox
     Private WithEvents txtDateCreated As TextBox
     Friend WithEvents Label4 As Label
@@ -495,4 +489,10 @@ Partial Class frmAccount
     Friend WithEvents btnSave As Button
     Friend WithEvents btnCancel As Button
     Friend WithEvents btnFindUser As Button
+    Friend WithEvents clmIdUser As DataGridViewTextBoxColumn
+    Friend WithEvents clmNames As DataGridViewTextBoxColumn
+    Friend WithEvents clmDocNum As DataGridViewTextBoxColumn
+    Friend WithEvents clmTypeUser As DataGridViewTextBoxColumn
+    Friend WithEvents clmEdit As DataGridViewButtonColumn
+    Friend WithEvents clmDelete As DataGridViewButtonColumn
 End Class

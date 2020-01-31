@@ -28,8 +28,9 @@ Partial Class frmFindCollect
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.dtgLines = New System.Windows.Forms.DataGridView()
-        Me.clmCodAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmCodLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdInternalLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdServiceLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmCodeServiceLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNameLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSector = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmUserLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -94,7 +95,7 @@ Partial Class frmFindCollect
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgLines.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgLines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmCodAccount, Me.clmCodLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmOptions})
+        Me.dtgLines.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdInternalLine, Me.clmIdServiceLine, Me.clmCodeServiceLine, Me.clmNameLine, Me.clmSector, Me.clmUserLine, Me.clmDocId, Me.clmOptions})
         Me.dtgLines.Location = New System.Drawing.Point(12, 52)
         Me.dtgLines.MultiSelect = False
         Me.dtgLines.Name = "dtgLines"
@@ -105,21 +106,28 @@ Partial Class frmFindCollect
         Me.dtgLines.Size = New System.Drawing.Size(860, 397)
         Me.dtgLines.TabIndex = 9
         '
-        'clmCodAccount
+        'clmIdInternalLine
         '
-        Me.clmCodAccount.HeaderText = "Codigo Cuenta"
-        Me.clmCodAccount.Name = "clmCodAccount"
-        Me.clmCodAccount.ReadOnly = True
-        Me.clmCodAccount.Visible = False
+        Me.clmIdInternalLine.HeaderText = "Codigo Internal"
+        Me.clmIdInternalLine.Name = "clmIdInternalLine"
+        Me.clmIdInternalLine.ReadOnly = True
+        Me.clmIdInternalLine.Visible = False
         '
-        'clmCodLine
+        'clmIdServiceLine
         '
-        Me.clmCodLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmCodLine.FillWeight = 120.0!
-        Me.clmCodLine.HeaderText = "Codigo Linea"
-        Me.clmCodLine.Name = "clmCodLine"
-        Me.clmCodLine.ReadOnly = True
-        Me.clmCodLine.Width = 120
+        Me.clmIdServiceLine.HeaderText = "Codigo Servicio Linea"
+        Me.clmIdServiceLine.Name = "clmIdServiceLine"
+        Me.clmIdServiceLine.ReadOnly = True
+        Me.clmIdServiceLine.Visible = False
+        '
+        'clmCodeServiceLine
+        '
+        Me.clmCodeServiceLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmCodeServiceLine.FillWeight = 120.0!
+        Me.clmCodeServiceLine.HeaderText = "Codigo Linea"
+        Me.clmCodeServiceLine.Name = "clmCodeServiceLine"
+        Me.clmCodeServiceLine.ReadOnly = True
+        Me.clmCodeServiceLine.Width = 120
         '
         'clmNameLine
         '
@@ -191,8 +199,9 @@ Partial Class frmFindCollect
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents dtgLines As DataGridView
-    Friend WithEvents clmCodAccount As DataGridViewTextBoxColumn
-    Friend WithEvents clmCodLine As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdInternalLine As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdServiceLine As DataGridViewTextBoxColumn
+    Friend WithEvents clmCodeServiceLine As DataGridViewTextBoxColumn
     Friend WithEvents clmNameLine As DataGridViewTextBoxColumn
     Friend WithEvents clmSector As DataGridViewTextBoxColumn
     Friend WithEvents clmUserLine As DataGridViewTextBoxColumn

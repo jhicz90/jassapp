@@ -108,7 +108,7 @@ Partial Class frmFindLines
         '
         'clmIdInternalLine
         '
-        Me.clmIdInternalLine.HeaderText = "Codigo Cuenta"
+        Me.clmIdInternalLine.HeaderText = "Codigo Internal"
         Me.clmIdInternalLine.Name = "clmIdInternalLine"
         Me.clmIdInternalLine.ReadOnly = True
         Me.clmIdInternalLine.Visible = False
@@ -117,7 +117,7 @@ Partial Class frmFindLines
         '
         Me.clmIdServiceLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
         Me.clmIdServiceLine.FillWeight = 120.0!
-        Me.clmIdServiceLine.HeaderText = "Codigo Linea"
+        Me.clmIdServiceLine.HeaderText = "Codigo Servicio Linea"
         Me.clmIdServiceLine.Name = "clmIdServiceLine"
         Me.clmIdServiceLine.ReadOnly = True
         Me.clmIdServiceLine.Visible = False
