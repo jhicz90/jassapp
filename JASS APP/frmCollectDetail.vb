@@ -155,7 +155,7 @@
             Dim concepts(12) As String
             Dim data(7) As String
 
-            data(0) = vIdServiceLine
+            data(0) = getLine(vIdServiceLine)(1)
             data(1) = vDataReceipt(1)
             data(2) = cbxUsersInAccount.Text
             data(3) = getUser(cbxUsersInAccount.SelectedValue)(5)
@@ -164,9 +164,8 @@
             data(6) = Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt")
             data(7) = vDataReceipt(0)
 
-            concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vIdServiceLine, vIdInternalLine, data(7), data(1), data(2))
+            concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vIdInternalLine, data(7), data(1), data(2))
 
-            getAccountCollectCharge(vIdInternalLine, dtgAccountMounth)
             getAccountCollect(vIdServiceLine, vIdInternalLine, dtgAccountYear)
             showPrintReceipt(data, concepts)
             cleanAll()

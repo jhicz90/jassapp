@@ -2,7 +2,6 @@
 Imports MySql.Data.MySqlClient
 
 Module dataFunctions
-    Public cnn As New OleDbConnection(My.Settings.dbJASSConnectionString)
     Public cnnx As New MySqlConnection
     Public cnnstr As New MySqlConnectionStringBuilder
 
@@ -1189,6 +1188,7 @@ Module dataFunctions
                     dataStr(0) = "1"
                     dataStr(1) = dataStr(0).PadLeft(7, "0")
                 End If
+                dr.Close()
 
                 Return dataStr
             Catch ex As Exception
@@ -1207,10 +1207,12 @@ Module dataFunctions
         Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
-            cmdGetAccountCollect.Connection = cnnx
-            cmdGetAccountCollect.CommandType = CommandType.Text
 
             If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                cmdGetAccountCollect.Connection = cnnx
+                cmdGetAccountCollect.CommandType = CommandType.Text
                 cmdGetAccountCollect.CommandText = "SELECT 
                 account_line.idaccountline, 
                 years_rate.year AS numyear, 
@@ -1229,7 +1231,7 @@ Module dataFunctions
                         dgAccountYear.Rows.Clear()
                         While dr.Read()
                             Dim vState As String
-                            If CDec(dr(2).ToString) > 0 Then
+                            If CDec(dr(3).ToString) > 0 Then
                                 vState = "Saldo Pendiente"
                             Else
                                 vState = "Cancelado"
@@ -1239,6 +1241,7 @@ Module dataFunctions
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
                     End If
+                    dr.Close()
                 Catch ex As Exception
                     MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
                     dgAccountYear.Rows.Clear()
@@ -1316,13 +1319,13 @@ Module dataFunctions
 
         If cleanAll Then
             For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
-                dgAccountCharge.Item(4, index).Value = False
+                dgAccountCharge.Item(5, index).Value = False
             Next
             vSaldoTotal = 0
         Else
             For index As Integer = 0 To dgAccountCharge.Rows.Count - 1
-                If dgAccountCharge.Item(4, index).Value = True Then
-                    vSaldoTotal += CDec(dgAccountCharge.Item(8, index).Value)
+                If dgAccountCharge.Item(5, index).Value = True Then
+                    vSaldoTotal += CDec(dgAccountCharge.Item(9, index).Value)
                 End If
             Next
         End If
@@ -1330,24 +1333,37 @@ Module dataFunctions
         Return vSaldoTotal
     End Function
 
-    Public Sub receiptsHistory(dgHistory As DataGridView, vCodAccount As String, Optional vSeeAll As Integer = 0, Optional vAccountYear As Integer = 0)
-        Dim cmdGetAccountReceipts As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub receiptsHistory(dgHistory As DataGridView, vIdInternalLine As String, Optional vSeeAll As Integer = 0, Optional vYear As Integer = 0)
+        Dim cmdGetAccountReceipts As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not (cnn.DataSource.Equals("")) Then
-            cmdGetAccountReceipts.Connection = cnn
+        If Not (cnnx.DataSource.Equals("")) Then
+            cmdGetAccountReceipts.Connection = cnnx
             cmdGetAccountReceipts.CommandType = CommandType.Text
 
-            If Not (vCodAccount = Nothing) Then
-                Dim strCommand As String = "SELECT payments.ID_PAY, payments.COD_PAY, payments.COD_ACCOUNT, payments.ACCOUNT_YEAR, payments.PAY_CANCELED, payments.PAY_AMOUNT_TOTAL, payments.PAYER, payments.COLLECTOR, payments.PAY_CREATED, payments.PAY_UPDATED" &
-                    " FROM payments WHERE payments.COD_ACCOUNT = @codaccount"
+            If Not (vIdInternalLine = Nothing) Then
+                Dim strCommand As String = "SELECT 
+                payments.idpayment, 
+                payments.codepay, 
+                payments.internalline, 
+                years_rate.year, 
+                payments.canceled, 
+                payments.amounttotal, 
+                payments.payer, 
+                payments.collector, 
+                payments.created, 
+                payments.updated 
+                FROM payments 
+                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate 
+                WHERE payments.internalline = @idinternalline"
+
                 If vSeeAll <> 0 Then
                     '0: ver todos los recibos, 1: ver los no anulados, 2: ver los anulados
-                    strCommand = strCommand & " AND payments.PAY_CANCELED = @canceled"
+                    strCommand = strCommand & " AND payments.canceled = @canceled"
                 End If
-                strCommand = strCommand & " ORDER BY payments.PAY_CREATED DESC"
+                strCommand = strCommand & " ORDER BY payments.created DESC"
                 cmdGetAccountReceipts.CommandText = strCommand
-                cmdGetAccountReceipts.Parameters.AddWithValue("codaccount", vCodAccount)
+                cmdGetAccountReceipts.Parameters.AddWithValue("idinternalline", vIdInternalLine)
                 If vSeeAll <> 0 Then
                     If vSeeAll = 1 Then
                         cmdGetAccountReceipts.Parameters.AddWithValue("canceled", False)
@@ -1377,8 +1393,9 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vCodLine As String = Nothing, Optional vCodAccount As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing) As String()
+    Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vIdInternalLine As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing) As String()
         Dim rateYear As Integer = 0
+        Dim idAcccount As String = Nothing
         Dim dataConceptReceipt(12) As String
         Dim indexConcept As Integer = 0
         Dim amountPayTotal As Decimal
@@ -1386,28 +1403,29 @@ Module dataFunctions
 
         If dgAccount.Rows.Count > 0 Then
             For index As Integer = 0 To dgAccount.Rows.Count - 1
-                rateYear = dgAccount.Item(1, index).Value
+                rateYear = dgAccount.Item(2, index).Value
+                idAcccount = dgAccount.Item(1, index).Value
 
-                If dgAccount.Item(4, index).Value = True Then
-                    If dgAccount.Item(8, index).Value <= amountPay And amountPay > 0 Then
-                        If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value, dgAccount.Item(8, index).Value) Then
+                If dgAccount.Item(5, index).Value = True Then
+                    If dgAccount.Item(9, index).Value <= amountPay And amountPay > 0 Then
+                        If payAccountDetail(dgAccount.Item(0, index).Value, dgAccount.Item(9, index).Value, dgAccount.Item(9, index).Value) Then
 
-                            payReceiptDetail(vIdPay, vCodAccount, dgAccount.Item(0, index).Value, dgAccount.Item(8, index).Value)
+                            payReceiptDetail(vIdPay, idAcccount, dgAccount.Item(0, index).Value, dgAccount.Item(9, index).Value)
 
-                            dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
-                            dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
-                            amountPayTotal += dgAccount.Item(8, index).Value
+                            dataConceptReceipt(indexConcept) = dgAccount.Item(6, index).Value
+                            dataConceptReceipt(indexConcept + 6) = Format(CDec(dgAccount.Item(9, index).Value), "###,##0.00")
+                            amountPayTotal += dgAccount.Item(9, index).Value
                             indexConcept += 1
 
-                            amountPay -= dgAccount.Item(8, index).Value
+                            amountPay -= dgAccount.Item(9, index).Value
                         End If
-                    ElseIf dgAccount.Item(8, index).Value > amountPay And amountPay > 0 Then
-                        If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(8, index).Value) Then
+                    ElseIf dgAccount.Item(9, index).Value > amountPay And amountPay > 0 Then
+                        If payAccountDetail(dgAccount.Item(0, index).Value, amountPay, dgAccount.Item(9, index).Value) Then
 
-                            payReceiptDetail(vIdPay, vCodAccount, dgAccount.Item(0, index).Value, amountPay)
+                            payReceiptDetail(vIdPay, idAcccount, dgAccount.Item(0, index).Value, amountPay)
 
-                            dataConceptReceipt(indexConcept) = dgAccount.Item(5, index).Value
-                            dataConceptReceipt(indexConcept + 6) = dgAccount.Item(8, index).Value
+                            dataConceptReceipt(indexConcept) = dgAccount.Item(6, index).Value
+                            dataConceptReceipt(indexConcept + 6) = Format(CDec(amountPay), "###,##0.00")
                             amountPayTotal += amountPay
                             indexConcept += 1
 
@@ -1419,9 +1437,10 @@ Module dataFunctions
                 End If
             Next
 
-            payReceipt(vIdPay, vCodNumReceipt, vCodAccount, rateYear, amountPayTotal, vNamePayer)
+            payReceipt(vIdPay, vCodNumReceipt, idAcccount, rateYear, amountPayTotal, vNamePayer)
             dataConceptReceipt(12) = Format(amountPayTotal, "###,##0.00")
-            getAccountYearUpdated(rateYear, vCodLine, vCodAccount)
+            getAccountYearUpdated(rateYear, vIdInternalLine, idAcccount)
+            getAccountCollectCharge(idAcccount, dgAccount)
             Return dataConceptReceipt
             'Recordar implementar un limite de pagos por concepto en un maximo de 6
         Else
@@ -1430,18 +1449,19 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub payReceiptDetail(idPaymnent As Integer, vCodAccount As String, idDetailAccount As String, amountPay As Decimal)
-        Dim insertPaymentDetail As New OleDbCommand
+    Public Sub payReceiptDetail(vIdPaymnent As Integer, vIdAccountLine As String, idDetailAccount As String, amountPay As Decimal)
+        Dim insertPaymentDetail As New MySqlCommand
 
-        If Not cnn.DataSource.Equals("") Then
-            insertPaymentDetail.Connection = cnn
-            insertPaymentDetail.CommandType = CommandType.Text
-
-            If Not (idPaymnent = Nothing And vCodAccount = Nothing And idDetailAccount = Nothing And amountPay = Nothing) Then
-                insertPaymentDetail.CommandText = "INSERT INTO payments_detail(ID_PAY, COD_ACCOUNT, ID_DETAIL_ACCOUNT, PAY_AMOUNT) VALUES(@idpay, @codaccount, @iddetailaccount, @payamount)"
-                insertPaymentDetail.Parameters.AddWithValue("idpay", idPaymnent)
-                insertPaymentDetail.Parameters.AddWithValue("codaccount", vCodAccount)
-                insertPaymentDetail.Parameters.AddWithValue("iddetailaccount", idDetailAccount)
+        If Not cnnx.DataSource.Equals("") Then
+            If Not (vIdPaymnent = Nothing And vIdAccountLine = Nothing And idDetailAccount = Nothing And amountPay = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                insertPaymentDetail.Connection = cnnx
+                insertPaymentDetail.CommandType = CommandType.Text
+                insertPaymentDetail.CommandText = "INSERT INTO payment_detail(payment, accountline, accountdetail, payamount) VALUES(@idpay, @internalline, @accountdetail, @payamount)"
+                insertPaymentDetail.Parameters.AddWithValue("idpay", vIdPaymnent)
+                insertPaymentDetail.Parameters.AddWithValue("internalline", vIdAccountLine)
+                insertPaymentDetail.Parameters.AddWithValue("accountdetail", idDetailAccount)
                 insertPaymentDetail.Parameters.AddWithValue("payamount", amountPay)
 
                 insertPaymentDetail.ExecuteNonQuery()
@@ -1454,23 +1474,23 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub payReceipt(idPaymnent As Integer, vCodNumReceipt As String, vCodAccount As String, vAccountYear As Integer, amountPayTotal As Decimal, payerUser As String)
-        Dim insertPaymentDetail As New OleDbCommand
+    Public Sub payReceipt(idPaymnent As Integer, vCodNumReceipt As String, vIdAccount As String, vAccountYear As Integer, amountPayTotal As Decimal, payerUser As String)
+        Dim insertPaymentDetail As New MySqlCommand
 
-        If Not cnn.DataSource.Equals("") Then
-            insertPaymentDetail.Connection = cnn
-            insertPaymentDetail.CommandType = CommandType.Text
-
-            If Not (idPaymnent = Nothing And vCodNumReceipt = Nothing And vCodAccount = Nothing And amountPayTotal = Nothing And payerUser = Nothing) Then
-                insertPaymentDetail.CommandText = "INSERT INTO payments(ID_PAY, COD_PAY, COD_ACCOUNT, ACCOUNT_YEAR, PAY_AMOUNT_TOTAL, PAYER, COLLECTOR, PAY_CREATED) VALUES(@idpay, @codpay, @codaccount, @accountyear, @payamounttotal, @payer, @collector, @payed)"
+        If Not cnnx.DataSource.Equals("") Then
+            If Not (idPaymnent = Nothing And vCodNumReceipt = Nothing And vIdAccount = Nothing And amountPayTotal = Nothing And payerUser = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                insertPaymentDetail.Connection = cnnx
+                insertPaymentDetail.CommandType = CommandType.Text
+                insertPaymentDetail.CommandText = "INSERT INTO payments(idpayment, codepay, accountline, yearrate, amounttotal, payer, collector) VALUES(@idpay, @codepay, @accountline, @yearrate, @amounttotal, @payer, @collector)"
                 insertPaymentDetail.Parameters.AddWithValue("idpay", idPaymnent)
-                insertPaymentDetail.Parameters.AddWithValue("codpay", vCodNumReceipt)
-                insertPaymentDetail.Parameters.AddWithValue("codaccount", vCodAccount)
-                insertPaymentDetail.Parameters.AddWithValue("accountyear", vAccountYear)
-                insertPaymentDetail.Parameters.AddWithValue("payamounttotal", amountPayTotal)
+                insertPaymentDetail.Parameters.AddWithValue("codepay", vCodNumReceipt)
+                insertPaymentDetail.Parameters.AddWithValue("accountline", vIdAccount)
+                insertPaymentDetail.Parameters.AddWithValue("yearrate", vAccountYear)
+                insertPaymentDetail.Parameters.AddWithValue("amounttotal", amountPayTotal)
                 insertPaymentDetail.Parameters.AddWithValue("payer", payerUser)
                 insertPaymentDetail.Parameters.AddWithValue("collector", My.Settings.vUserNameLogin)
-                insertPaymentDetail.Parameters.AddWithValue("payed", Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt"))
 
                 insertPaymentDetail.ExecuteNonQuery()
                 insertPaymentDetail.Dispose()
@@ -1482,41 +1502,44 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub getAccountYearUpdated(rateYear As Integer, vCodLine As String, vCodAccount As String)
-        Dim cmdGetAccountYearDetail, cmdUpdateAccountYear As New OleDbCommand
-        Dim dr As OleDbDataReader
+    Public Sub getAccountYearUpdated(yearRate As Integer, vIdInternalLine As String, vIdAccount As String)
+        Dim cmdGetAccountYearDetail, cmdUpdateAccountYear As New MySqlCommand
+        Dim dr As MySqlDataReader
 
-        If Not cnn.DataSource.Equals("") Then
-            cmdGetAccountYearDetail.Connection = cnn
-            cmdGetAccountYearDetail.CommandType = CommandType.Text
-            cmdUpdateAccountYear.Connection = cnn
-            cmdUpdateAccountYear.CommandType = CommandType.Text
+        If Not cnnx.DataSource.Equals("") Then
 
-            If Not (vCodLine = Nothing And vCodAccount = Nothing) Then
-                cmdGetAccountYearDetail.CommandText = "SELECT DISTINCTROW Sum([account_detail].[AMOUNT_SALDO])" &
-                    " FROM account_detail WHERE account_detail.ACCOUNT_YEAR = @rateyear AND account_detail.COD_ACCOUNT = @codaccount"
-                cmdGetAccountYearDetail.Parameters.AddWithValue("rateyear", rateYear)
-                cmdGetAccountYearDetail.Parameters.AddWithValue("codaccount", vCodAccount)
+            If Not (vIdInternalLine = Nothing And vIdAccount = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                cmdGetAccountYearDetail.Connection = cnnx
+                cmdGetAccountYearDetail.CommandType = CommandType.Text
+                cmdGetAccountYearDetail.CommandText = "SELECT DISTINCTROW 
+                SUM(account_detail.saldototal) AS total 
+                FROM account_detail WHERE account_detail.yearrate = @yearrate AND account_detail.accountline = @idaccountline"
+                cmdGetAccountYearDetail.Parameters.AddWithValue("yearrate", yearRate)
+                cmdGetAccountYearDetail.Parameters.AddWithValue("idaccountline", vIdAccount)
 
                 Try
                     dr = cmdGetAccountYearDetail.ExecuteReader()
 
                     If dr.HasRows Then
                         dr.Read()
-                        cmdGetAccountYearDetail.Dispose()
 
                         Dim saldoTotalYear As Decimal = 0
                         saldoTotalYear = Val(dr(0).ToString)
+                        dr.Close()
 
-                        cmdUpdateAccountYear.CommandText = "UPDATE account_line SET ACCOUNT_SALDO = @accountsaldo, ACCOUNT_UPDATED = @dateUpdated" &
-                            " WHERE account_line.COD_ACCOUNT = @codaccount AND account_line.ACCOUNT_YEAR = @accountyear"
+                        cmdUpdateAccountYear.Connection = cnnx
+                        cmdUpdateAccountYear.CommandType = CommandType.Text
+                        cmdUpdateAccountYear.CommandText = "UPDATE account_line SET account_line.saldototal = @accountsaldo 
+                        WHERE account_line.idaccountline = @idaccountline AND account_line.yearrate = @yearrate"
                         cmdUpdateAccountYear.Parameters.AddWithValue("accountsaldo", saldoTotalYear)
-                        cmdUpdateAccountYear.Parameters.AddWithValue("dateUpdated", Date.Today)
-                        cmdUpdateAccountYear.Parameters.AddWithValue("codaccount", vCodAccount)
-                        cmdUpdateAccountYear.Parameters.AddWithValue("accountyear", rateYear)
+                        cmdUpdateAccountYear.Parameters.AddWithValue("idaccountline", vIdAccount)
+                        cmdUpdateAccountYear.Parameters.AddWithValue("yearrate", yearRate)
 
                         cmdUpdateAccountYear.ExecuteNonQuery()
                         cmdUpdateAccountYear.Dispose()
+                        cmdGetAccountYearDetail.Dispose()
                     Else
                         MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
                     End If
@@ -1533,15 +1556,17 @@ Module dataFunctions
     End Sub
 
     Public Function payAccountDetail(idAccountDetail As Integer, amountPay As Decimal, amountSaldo As Decimal) As Boolean
-        Dim cmdUpdateAccountDetail As New OleDbCommand
+        Dim cmdUpdateAccountDetail As New MySqlCommand
 
-        If Not cnn.DataSource.Equals("") Then
-            cmdUpdateAccountDetail.Connection = cnn
-            cmdUpdateAccountDetail.CommandType = CommandType.Text
+        If Not cnnx.DataSource.Equals("") Then
 
             If Not idAccountDetail = Nothing Then
-                cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET AMOUNT_SALDO = @amountsaldo" &
-                    " WHERE account_detail.ID_DETAIL_ACCOUNT = @idaccountdetail"
+                cnnx.Close()
+                cnnx.Open()
+                cmdUpdateAccountDetail.Connection = cnnx
+                cmdUpdateAccountDetail.CommandType = CommandType.Text
+                cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET account_detail.saldototal = @amountsaldo 
+                WHERE account_detail.idaccountdetail = @idaccountdetail"
                 cmdUpdateAccountDetail.Parameters.AddWithValue("amountsaldo", CDec(amountSaldo - amountPay))
                 cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", idAccountDetail)
 
@@ -1634,6 +1659,8 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
             cmd.CommandText = "SELECT 
@@ -1672,7 +1699,7 @@ Module dataFunctions
                     dataLine(9) = dr(9).ToString 'Fecha de registro
                     dataLine(10) = dr(10).ToString 'Fecha de actualizacion
 
-                    cmd.Dispose()
+                    dr.Close()
                     Return dataLine
                 Else
                     Return Nothing
@@ -1690,6 +1717,8 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Or IsNothing(vIdUserReg) Then
             Return Nothing
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
             cmd.CommandText = "SELECT

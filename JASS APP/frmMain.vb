@@ -70,4 +70,10 @@
         tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
         My.Settings.vPreviewPrint = Not My.Settings.vPreviewPrint
     End Sub
+
+    Private Sub frmMain_Closed(sender As Object, e As EventArgs) Handles Me.Closed
+        If cnnx.State = ConnectionState.Open Then
+            cnnx.Close()
+        End If
+    End Sub
 End Class
