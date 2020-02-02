@@ -61,27 +61,31 @@
     End Sub
 
     Private Sub dtgAccountYear_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountYear.CellClick
-        getAccountCollectCharge(dtgAccountYear.Item(0, e.RowIndex).Value, dtgAccountMounth)
-        dtgAccountMounth.Focus()
-        If dtgAccountMounth.Rows.Count > 0 Then
-            dtgAccountMounth.Item(5, dtgAccountMounth.Rows.GetFirstRow(0)).Selected = True
+        If e.RowIndex <> -1 Then
+            getAccountCollectCharge(dtgAccountYear.Item(0, e.RowIndex).Value, dtgAccountMounth)
+            dtgAccountMounth.Focus()
+            'If dtgAccountMounth.Rows.Count > 0 Then
+            '    dtgAccountMounth.Item(5, dtgAccountMounth.Rows.GetFirstRow(0)).Selected = True
+            'End If
         End If
     End Sub
 
     Private Sub dtgAccountMounth_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellContentClick
-        If dtgAccountMounth.Columns(e.ColumnIndex).Name = "clmOpcionMes" Then
-            If dtgAccountMounth.Item(5, e.RowIndex).Value = False And dtgAccountMounth.Item(9, e.RowIndex).Value > 0 Then
-                dtgAccountMounth.Item(5, e.RowIndex).Value = True
-            Else
-                dtgAccountMounth.Item(5, e.RowIndex).Value = False
+        If e.RowIndex <> -1 Then
+            If dtgAccountMounth.Columns(e.ColumnIndex).Name = "clmOpcionMes" Then
+                If dtgAccountMounth.Item(5, e.RowIndex).Value = False And dtgAccountMounth.Item(9, e.RowIndex).Value > 0 Then
+                    dtgAccountMounth.Item(5, e.RowIndex).Value = True
+                Else
+                    dtgAccountMounth.Item(5, e.RowIndex).Value = False
+                End If
+                vDebtAmount = selectCharge(dtgAccountMounth)
+                txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
             End If
-            vDebtAmount = selectCharge(dtgAccountMounth)
-            txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
         End If
     End Sub
 
     Private Sub dtgAccountMounth_KeyPress(sender As Object, e As KeyPressEventArgs) Handles dtgAccountMounth.KeyPress
-        If e.KeyChar = ChrW(Keys.Space) Then
+        If e.KeyChar = ChrW(Keys.Space) And dtgAccountMounth.SelectedRows(0).Index <> -1 Then
             If dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False And dtgAccountMounth.Item(9, dtgAccountMounth.SelectedRows(0).Index).Value > 0 Then
                 dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = True
             Else
