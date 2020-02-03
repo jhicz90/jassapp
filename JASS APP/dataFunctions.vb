@@ -32,15 +32,16 @@ Module dataFunctions
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
-            cmd.CommandText = "SELECT name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
+            cmd.CommandText = "SELECT idusersys ,name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
 
             Try
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
                     While dr.Read()
-                        My.Settings.vUserNameLogin = dr(0).ToString
-                        MsgBox("Bienvenid@ " + dr(0).ToString, vbInformation, "Aviso")
+                        My.Settings.vUserIdLogin = CInt(dr(0).ToString)
+                        My.Settings.vUserNameLogin = dr(1).ToString
+                        MsgBox("Bienvenid@ " + dr(1).ToString, vbInformation, "Aviso")
                     End While
                 Else
                     MsgBox("El usuario o contraseña ingresadas son incorrectas o no existen", vbExclamation, "Aviso")
@@ -206,7 +207,7 @@ Module dataFunctions
 
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
-                cmd.CommandText = "SELECT users_line.userreg AS iduser, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname " &
+                cmd.CommandText = "SELECT users_line.userreg AS iduser, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname " &
                 "FROM users_line INNER JOIN user_reg ON users_line.userreg = user_reg.iduserreg WHERE users_line.internalline = @idinternalline"
                 cmd.Parameters.AddWithValue("idinternalline", vIdInternalLine)
 
@@ -234,19 +235,19 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype"
             End Select
@@ -288,7 +289,7 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -297,7 +298,7 @@ Module dataFunctions
                     "WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -312,7 +313,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -325,7 +326,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -338,7 +339,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
@@ -387,7 +388,7 @@ Module dataFunctions
                     "service_line.code, " &
                     "service_line.name, " &
                     "streets.name, " &
-                    "CONCAT(user_reg.names, "" "",user_reg.surnames) AS fullname, " &
+                    "CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, " &
                     "user_reg.docid " &
                     "FROM internal_line " &
                     "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
@@ -402,7 +403,7 @@ Module dataFunctions
                     "service_line.code, " &
                     "service_line.name, " &
                     "streets.name, " &
-                    "CONCAT(user_reg.names, "" "",user_reg.surnames) AS fullname, " &
+                    "CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, " &
                     "user_reg.docid " &
                     "FROM internal_line " &
                     "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
@@ -417,7 +418,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -429,7 +430,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
@@ -472,7 +473,7 @@ Module dataFunctions
             INTERLINE.idinternalline, 
             rates.idrate, 
             INTERLINE.code, 
-            (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.names, "" "", user_reg.surnames) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
+            (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
             rates.name 
             FROM internal_line INTERLINE 
             INNER JOIN rates ON INTERLINE.rate = rates.idrate 
@@ -516,7 +517,7 @@ Module dataFunctions
             internal_line.idinternalline,
             internal_line.serviceline,
             user_reg.iduserreg,
-            CONCAT(user_reg.names, "" "", user_reg.surnames) AS fullname,
+            CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname,
             user_reg.docid,
             user_type.name 
             FROM internal_line
@@ -1148,9 +1149,9 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showAccountReceipts(vCodAccount As String)
+    Public Sub showAccountReceipts(vIdInternalLine As String)
         Dim frm As New frmSeePays
-        frm.vCodAccount = vCodAccount
+        frm.vIdInternalLine = vIdInternalLine
         frm.ShowDialog()
     End Sub
 
@@ -1159,6 +1160,15 @@ Module dataFunctions
         frm.vIdUserReg = vIdUserReg
         frm.vFrmGet = vFrmGet
         frm.vIdInternalLine = vIdInternalLine
+        frm.ShowDialog()
+    End Sub
+
+    Public Sub showPayDetail(vIdPayment As String, vNumReceipt As String, vCollector As String, vPayer As String)
+        Dim frm As New frmPayDetail
+        frm.vIdPayment = vIdPayment
+        frm.vNumReceipt = vNumReceipt
+        frm.vCollector = vCollector
+        frm.vPayer = vPayer
         frm.ShowDialog()
     End Sub
 
@@ -1274,7 +1284,8 @@ Module dataFunctions
                 rate_types.periodic, 
                 account_detail.debttotal, 
                 (account_detail.debttotal - account_detail.saldototal) AS saldo, 
-                account_detail.saldototal 
+                account_detail.saldototal, 
+                years_rate.year 
                 FROM account_detail 
                 INNER JOIN years_rate ON years_rate.idyearrate = account_detail.yearrate 
                 INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
@@ -1288,12 +1299,17 @@ Module dataFunctions
                     If dr.HasRows Then
                         dgAccountCharge.Rows.Clear()
                         While dr.Read
-                            Dim vNameMonth As String = UCase(MonthName(dr(4).ToString + 1))
+                            Dim vNameMonth As String
+                            If CInt(dr(4).ToString) = 0 Then
+                                vNameMonth = ""
+                            Else
+                                vNameMonth = UCase(MonthName(dr(4).ToString))
+                            End If
                             Dim vCharge As Boolean = dr(6).ToString
                             Dim vNameCharge As String
 
                             If vCharge Then
-                                vNameCharge = dr(5).ToString & " " & vNameMonth
+                                vNameCharge = dr(5).ToString & " " & vNameMonth & " " & dr(10).ToString
                             Else
                                 vNameCharge = dr(5).ToString
                             End If
@@ -1338,24 +1354,28 @@ Module dataFunctions
         Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
-            cmdGetAccountReceipts.Connection = cnnx
-            cmdGetAccountReceipts.CommandType = CommandType.Text
-
             If Not (vIdInternalLine = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                cmdGetAccountReceipts.Connection = cnnx
+                cmdGetAccountReceipts.CommandType = CommandType.Text
                 Dim strCommand As String = "SELECT 
                 payments.idpayment, 
                 payments.codepay, 
-                payments.internalline, 
+                payments.accountline, 
                 years_rate.year, 
                 payments.canceled, 
                 payments.amounttotal, 
                 payments.payer, 
-                payments.collector, 
+                UCASE(user_sys.name) as usercollect, 
                 payments.created, 
                 payments.updated 
                 FROM payments 
                 INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate 
-                WHERE payments.internalline = @idinternalline"
+                INNER JOIN account_line ON account_line.idaccountline = payments.accountline 
+                INNER JOIN internal_line ON internal_line.idinternalline = account_line.internalline 
+                INNER JOIN user_sys ON user_sys.idusersys = payments.collector
+                WHERE internal_line.idinternalline = @idinternalline"
 
                 If vSeeAll <> 0 Then
                     '0: ver todos los recibos, 1: ver los no anulados, 2: ver los anulados
@@ -1366,32 +1386,160 @@ Module dataFunctions
                 cmdGetAccountReceipts.Parameters.AddWithValue("idinternalline", vIdInternalLine)
                 If vSeeAll <> 0 Then
                     If vSeeAll = 1 Then
-                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", False)
+                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 0)
                     ElseIf vSeeAll = 2 Then
-                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", True)
+                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 1)
                     End If
                 End If
 
                 Try
                     dr = cmdGetAccountReceipts.ExecuteReader()
-
+                    dgHistory.Rows.Clear()
                     If dr.HasRows Then
-                        dgHistory.Rows.Clear()
                         While dr.Read
-                            dgHistory.Rows.Add(dr(0).ToString, dr(3).ToString, dr(1).ToString, Format(CDec(dr(5).ToString), "###,##0.00"), dr(6).ToString, dr(7).ToString, dr(8).ToString)
+                            dgHistory.Rows.Add(dr(0).ToString, dr(2).ToString, dr(3).ToString, dr(1).ToString, Format(CDec(dr(5).ToString), "###,##0.00"), dr(6).ToString, dr(7).ToString, dr(8).ToString)
                         End While
                     Else
                         MsgBox("No hay pagos que mostrar", vbCritical, "Aviso")
                     End If
+                    dr.Close()
                 Catch ex As Exception
-                    MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
                     dgHistory.Rows.Clear()
+                    MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
                 End Try
             Else
                 MsgBox("No se envio el codigo de la cuenta", vbCritical, "Aviso")
             End If
         End If
     End Sub
+
+    Public Sub receiptDetail(dgDetail As DataGridView, vIdPayment As String)
+        Dim cmdGetReceiptDetail As New MySqlCommand
+        Dim dr As MySqlDataReader
+
+        If Not (cnnx.DataSource.Equals("")) Then
+            If Not (vIdPayment = Nothing) Then
+                cnnx.Close()
+                cnnx.Open()
+                cmdGetReceiptDetail.Connection = cnnx
+                cmdGetReceiptDetail.CommandType = CommandType.Text
+                cmdGetReceiptDetail.CommandText = "SELECT 
+                payments.idpayment, 
+                payments.accountline, 
+                account_detail.idaccountdetail, 
+                years_rate.year, 
+                account_detail.month, 
+                rate_types.name, 
+                rate_types.periodic, 
+                payment_detail.payamount 
+                FROM payment_detail 
+                INNER JOIN payments ON payments.idpayment = payment_detail.payment 
+                INNER JOIN account_detail ON account_detail.idaccountdetail = payment_detail.accountdetail 
+                INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype 
+                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate
+                WHERE payment_detail.payment = @idpayment"
+                cmdGetReceiptDetail.Parameters.AddWithValue("idpayment", vIdPayment)
+
+                Try
+                    dr = cmdGetReceiptDetail.ExecuteReader()
+
+                    dgDetail.Rows.Clear()
+                    If dr.HasRows Then
+                        While dr.Read
+                            Dim vNameMonth As String
+                            If CInt(dr(4).ToString) = 0 Then
+                                vNameMonth = ""
+                            Else
+                                vNameMonth = UCase(MonthName(dr(4).ToString))
+                            End If
+                            Dim vCharge As Boolean = dr(6).ToString
+                            Dim vNameCharge As String
+
+                            If vCharge Then
+                                vNameCharge = dr(5).ToString & " " & vNameMonth & " " & dr(3).ToString
+                            Else
+                                vNameCharge = dr(5).ToString
+                            End If
+
+                            dgDetail.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, vNameCharge, Format(CDec(dr(7).ToString), "###,##0.00"))
+                        End While
+                    Else
+                        MsgBox("No hay pagos que mostrar", vbCritical, "Aviso")
+                    End If
+                    dr.Close()
+                Catch ex As Exception
+                    dgDetail.Rows.Clear()
+                    MsgBox("Ocurrio un error en la consulta", vbCritical, "Aviso")
+                End Try
+            Else
+                MsgBox("No se envio el identificador del recibo", vbCritical, "Aviso")
+            End If
+        End If
+    End Sub
+
+    Public Function cancelReceipt(dgDetail As DataGridView, vIdPayment As String, vNumReceipt As String) As Boolean
+        Dim cmdUpdateReceipt As New MySqlCommand
+        Dim cmdUpdateAccountLine As New MySqlCommand
+
+        If Not (cnnx.DataSource.Equals("")) Then
+            If MsgBox("¿Desea anular el recibo N°" & vNumReceipt & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+                If Not (vIdPayment = Nothing And dgDetail.Rows.Count > 0) Then
+                    Dim vIdAccountLine As String = dgDetail.Item(1, 0).Value
+                    Try
+                        cnnx.Close()
+                        cnnx.Open()
+                        cmdUpdateReceipt.Connection = cnnx
+                        cmdUpdateReceipt.CommandType = CommandType.Text
+                        cmdUpdateReceipt.CommandText = "UPDATE payments SET payments.canceled = 1 WHERE payments.idpayment = @idpayment"
+                        cmdUpdateReceipt.Parameters.AddWithValue("idpayment", vIdPayment)
+                        cmdUpdateReceipt.ExecuteNonQuery()
+                        cmdUpdateReceipt.Dispose()
+
+
+                        For index As Integer = 0 To dgDetail.Rows.Count - 1
+                            Dim cmdUpdateAccountDetail As New MySqlCommand
+                            cmdUpdateAccountDetail.Connection = cnnx
+                            cmdUpdateAccountDetail.CommandType = CommandType.Text
+                            cmdUpdateAccountDetail.CommandText = "UPDATE 
+                            account_detail 
+                            SET account_detail.saldototal = (
+                            SELECT 
+                            (account_detail.saldototal + payment_detail.payamount) AS afterpay 
+                            FROM account_detail INNER JOIN payment_detail ON payment_detail.accountdetail = account_detail.idaccountdetail 
+                            WHERE payment_detail.accountdetail = @idaccountdetail AND payment_detail.payment = @idpayment) 
+                            WHERE account_detail.idaccountdetail = @idaccountdetail"
+                            cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", dgDetail.Item(2, index).Value)
+                            cmdUpdateAccountDetail.Parameters.AddWithValue("idpayment", vIdPayment)
+                            cmdUpdateAccountDetail.ExecuteNonQuery()
+                            cmdUpdateAccountDetail.Dispose()
+                        Next
+
+                        cmdUpdateAccountLine.Connection = cnnx
+                        cmdUpdateAccountLine.CommandType = CommandType.Text
+                        cmdUpdateAccountLine.CommandText = "UPDATE 
+                        account_line 
+                        SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                        WHERE account_line.idaccountline = @idaccountline"
+                        cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                        cmdUpdateAccountLine.ExecuteNonQuery()
+                        cmdUpdateAccountLine.Dispose()
+
+                        Return True
+                    Catch ex As Exception
+                        MsgBox("Ocurrio un error en la consulta", vbCritical, "Aviso")
+                        Return False
+                    End Try
+                Else
+                    MsgBox("No se envio el identificador del recibo o faltan datos", vbCritical, "Aviso")
+                    Return False
+                End If
+            Else
+                Return False
+            End If
+        Else
+            Return False
+        End If
+    End Function
 
     Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vIdInternalLine As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing) As String()
         Dim rateYear As Integer = 0
@@ -1490,7 +1638,7 @@ Module dataFunctions
                 insertPaymentDetail.Parameters.AddWithValue("yearrate", vAccountYear)
                 insertPaymentDetail.Parameters.AddWithValue("amounttotal", amountPayTotal)
                 insertPaymentDetail.Parameters.AddWithValue("payer", payerUser)
-                insertPaymentDetail.Parameters.AddWithValue("collector", My.Settings.vUserNameLogin)
+                insertPaymentDetail.Parameters.AddWithValue("collector", My.Settings.vUserIdLogin)
 
                 insertPaymentDetail.ExecuteNonQuery()
                 insertPaymentDetail.Dispose()

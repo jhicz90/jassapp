@@ -36,6 +36,7 @@ Partial Class frmCollectDetail
         Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.grpYearDetail = New System.Windows.Forms.GroupBox()
+        Me.btnClose = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtCodNumReceipt = New System.Windows.Forms.TextBox()
         Me.btnClean = New System.Windows.Forms.Button()
@@ -55,8 +56,6 @@ Partial Class frmCollectDetail
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtDebitAccount = New System.Windows.Forms.TextBox()
         Me.dtgAccountMounth = New System.Windows.Forms.DataGridView()
-        Me.cbxUsersInAccount = New System.Windows.Forms.ComboBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.clmIdDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmIdAccountDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmYearDetail = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -67,6 +66,8 @@ Partial Class frmCollectDetail
         Me.clmMontoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPagadoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cbxUsersInAccount = New System.Windows.Forms.ComboBox()
+        Me.Label10 = New System.Windows.Forms.Label()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -196,6 +197,7 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grpYearDetail.Controls.Add(Me.btnClose)
         Me.grpYearDetail.Controls.Add(Me.Label9)
         Me.grpYearDetail.Controls.Add(Me.txtCodNumReceipt)
         Me.grpYearDetail.Controls.Add(Me.btnClean)
@@ -221,6 +223,16 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.TabIndex = 5
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
+        '
+        'btnClose
+        '
+        Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.Image = Global.JASS_APP.My.Resources.Resources.close_window_32
+        Me.btnClose.Location = New System.Drawing.Point(613, 425)
+        Me.btnClose.Name = "btnClose"
+        Me.btnClose.Size = New System.Drawing.Size(64, 48)
+        Me.btnClose.TabIndex = 28
+        Me.btnClose.UseVisualStyleBackColor = True
         '
         'Label9
         '
@@ -454,26 +466,6 @@ Partial Class frmCollectDetail
         Me.dtgAccountMounth.Size = New System.Drawing.Size(620, 366)
         Me.dtgAccountMounth.TabIndex = 1
         '
-        'cbxUsersInAccount
-        '
-        Me.cbxUsersInAccount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cbxUsersInAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbxUsersInAccount.FormattingEnabled = True
-        Me.cbxUsersInAccount.Location = New System.Drawing.Point(657, 38)
-        Me.cbxUsersInAccount.Name = "cbxUsersInAccount"
-        Me.cbxUsersInAccount.Size = New System.Drawing.Size(260, 21)
-        Me.cbxUsersInAccount.TabIndex = 11
-        '
-        'Label10
-        '
-        Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(507, 42)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(144, 13)
-        Me.Label10.TabIndex = 12
-        Me.Label10.Text = "Usuarios asociados a cuenta"
-        '
         'clmIdDetail
         '
         Me.clmIdDetail.HeaderText = "Id Detalle"
@@ -551,10 +543,31 @@ Partial Class frmCollectDetail
         Me.clmSaldoMes.ReadOnly = True
         Me.clmSaldoMes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
+        'cbxUsersInAccount
+        '
+        Me.cbxUsersInAccount.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbxUsersInAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbxUsersInAccount.FormattingEnabled = True
+        Me.cbxUsersInAccount.Location = New System.Drawing.Point(657, 38)
+        Me.cbxUsersInAccount.Name = "cbxUsersInAccount"
+        Me.cbxUsersInAccount.Size = New System.Drawing.Size(260, 21)
+        Me.cbxUsersInAccount.TabIndex = 11
+        '
+        'Label10
+        '
+        Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(507, 42)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(144, 13)
+        Me.Label10.TabIndex = 12
+        Me.Label10.Text = "Usuarios asociados a cuenta"
+        '
         'frmCollectDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(929, 711)
         Me.Controls.Add(Me.Label10)
         Me.Controls.Add(Me.cbxUsersInAccount)
@@ -623,4 +636,5 @@ Partial Class frmCollectDetail
     Friend WithEvents clmMontoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
+    Friend WithEvents btnClose As Button
 End Class

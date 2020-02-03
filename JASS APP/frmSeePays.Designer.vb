@@ -23,16 +23,16 @@ Partial Class frmSeePays
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.dtgAccountReceipts = New System.Windows.Forms.DataGridView()
-        Me.dtgReceiptDetail = New System.Windows.Forms.DataGridView()
-        Me.clmIdPay = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdPayment = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmAccountYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCodPay = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmAmountTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPayer = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmCollector = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPayCreated = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmDetail = New System.Windows.Forms.DataGridViewButtonColumn()
         CType(Me.dtgAccountReceipts, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.dtgReceiptDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'dtgAccountReceipts
@@ -45,7 +45,7 @@ Partial Class frmSeePays
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountReceipts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountReceipts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdPay, Me.clmAccountYear, Me.clmCodPay, Me.clmAmountTotal, Me.clmPayer, Me.clmCollector, Me.clmPayCreated})
+        Me.dtgAccountReceipts.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdPayment, Me.clmIdAccount, Me.clmAccountYear, Me.clmCodPay, Me.clmAmountTotal, Me.clmPayer, Me.clmCollector, Me.clmPayCreated, Me.clmDetail})
         Me.dtgAccountReceipts.Location = New System.Drawing.Point(12, 12)
         Me.dtgAccountReceipts.MultiSelect = False
         Me.dtgAccountReceipts.Name = "dtgAccountReceipts"
@@ -53,25 +53,22 @@ Partial Class frmSeePays
         Me.dtgAccountReceipts.RowHeadersVisible = False
         Me.dtgAccountReceipts.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccountReceipts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccountReceipts.Size = New System.Drawing.Size(589, 387)
+        Me.dtgAccountReceipts.Size = New System.Drawing.Size(860, 387)
         Me.dtgAccountReceipts.TabIndex = 0
         '
-        'dtgReceiptDetail
+        'clmIdPayment
         '
-        Me.dtgReceiptDetail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dtgReceiptDetail.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgReceiptDetail.Location = New System.Drawing.Point(607, 149)
-        Me.dtgReceiptDetail.Name = "dtgReceiptDetail"
-        Me.dtgReceiptDetail.Size = New System.Drawing.Size(265, 250)
-        Me.dtgReceiptDetail.TabIndex = 1
+        Me.clmIdPayment.HeaderText = "Id Pago"
+        Me.clmIdPayment.Name = "clmIdPayment"
+        Me.clmIdPayment.ReadOnly = True
+        Me.clmIdPayment.Visible = False
         '
-        'clmIdPay
+        'clmIdAccount
         '
-        Me.clmIdPay.HeaderText = "Id Pago"
-        Me.clmIdPay.Name = "clmIdPay"
-        Me.clmIdPay.ReadOnly = True
-        Me.clmIdPay.Visible = False
+        Me.clmIdAccount.HeaderText = "Id de Cuenta"
+        Me.clmIdAccount.Name = "clmIdAccount"
+        Me.clmIdAccount.ReadOnly = True
+        Me.clmIdAccount.Visible = False
         '
         'clmAccountYear
         '
@@ -99,19 +96,19 @@ Partial Class frmSeePays
         '
         'clmPayer
         '
-        Me.clmPayer.FillWeight = 75.0!
+        Me.clmPayer.FillWeight = 120.0!
         Me.clmPayer.HeaderText = "Pagador"
         Me.clmPayer.Name = "clmPayer"
         Me.clmPayer.ReadOnly = True
-        Me.clmPayer.Width = 75
+        Me.clmPayer.Width = 120
         '
         'clmCollector
         '
-        Me.clmCollector.FillWeight = 75.0!
+        Me.clmCollector.FillWeight = 120.0!
         Me.clmCollector.HeaderText = "Cobrador"
         Me.clmCollector.Name = "clmCollector"
         Me.clmCollector.ReadOnly = True
-        Me.clmCollector.Width = 75
+        Me.clmCollector.Width = 120
         '
         'clmPayCreated
         '
@@ -121,28 +118,36 @@ Partial Class frmSeePays
         Me.clmPayCreated.Name = "clmPayCreated"
         Me.clmPayCreated.ReadOnly = True
         '
+        'clmDetail
+        '
+        Me.clmDetail.HeaderText = ""
+        Me.clmDetail.Name = "clmDetail"
+        Me.clmDetail.ReadOnly = True
+        Me.clmDetail.Text = "Detalle"
+        Me.clmDetail.UseColumnTextForButtonValue = True
+        '
         'frmSeePays
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(884, 411)
-        Me.Controls.Add(Me.dtgReceiptDetail)
         Me.Controls.Add(Me.dtgAccountReceipts)
         Me.Name = "frmSeePays"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Historial de Pagos"
         CType(Me.dtgAccountReceipts, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.dtgReceiptDetail, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents dtgAccountReceipts As DataGridView
-    Friend WithEvents dtgReceiptDetail As DataGridView
-    Friend WithEvents clmIdPay As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdPayment As DataGridViewTextBoxColumn
+    Friend WithEvents clmIdAccount As DataGridViewTextBoxColumn
     Friend WithEvents clmAccountYear As DataGridViewTextBoxColumn
     Friend WithEvents clmCodPay As DataGridViewTextBoxColumn
     Friend WithEvents clmAmountTotal As DataGridViewTextBoxColumn
     Friend WithEvents clmPayer As DataGridViewTextBoxColumn
     Friend WithEvents clmCollector As DataGridViewTextBoxColumn
     Friend WithEvents clmPayCreated As DataGridViewTextBoxColumn
+    Friend WithEvents clmDetail As DataGridViewButtonColumn
 End Class

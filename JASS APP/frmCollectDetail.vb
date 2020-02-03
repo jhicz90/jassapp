@@ -152,6 +152,15 @@
 
     Private Sub btnSeePayments_Click(sender As Object, e As EventArgs) Handles btnSeePayments.Click
         showAccountReceipts(vIdInternalLine)
+        CollectInit()
+        dtgAccountYear.Rows.Clear()
+        dtgAccountMounth.Rows.Clear()
+        cleanAll()
+        getAccountCollect(vIdServiceLine, vIdInternalLine, dtgAccountYear)
+    End Sub
+
+    Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
+        Close()
     End Sub
 
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click

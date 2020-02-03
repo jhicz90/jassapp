@@ -222,6 +222,12 @@
     <Compile Include="frmNewUser.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmPayDetail.Designer.vb">
+      <DependentUpon>frmPayDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmPayDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmReceipt.Designer.vb">
       <DependentUpon>frmReceipt.vb</DependentUpon>
     </Compile>
@@ -287,6 +293,9 @@
     <EmbeddedResource Include="frmNewUser.resx">
       <DependentUpon>frmNewUser.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmPayDetail.resx">
+      <DependentUpon>frmPayDetail.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmReceipt.resx">
       <DependentUpon>frmReceipt.vb</DependentUpon>
     </EmbeddedResource>
@@ -316,6 +325,8 @@
     <Content Include="dbJASS.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\close-window.png" />
+    <None Include="Resources\close-window-32.png" />
     <None Include="packages.config" />
     <None Include="Resources\iconCashbook.ico" />
     <None Include="Resources\cashbook.png" />
