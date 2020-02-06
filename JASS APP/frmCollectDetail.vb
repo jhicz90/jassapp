@@ -71,28 +71,46 @@
     End Sub
 
     Private Sub dtgAccountMounth_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellContentClick
+        Dim limite As Integer = 0
         If e.RowIndex <> -1 Then
             If dtgAccountMounth.Columns(e.ColumnIndex).Name = "clmOpcionMes" Then
-                If dtgAccountMounth.Item(5, e.RowIndex).Value = False And dtgAccountMounth.Item(9, e.RowIndex).Value > 0 Then
-                    dtgAccountMounth.Item(5, e.RowIndex).Value = True
-                Else
-                    dtgAccountMounth.Item(5, e.RowIndex).Value = False
+                For index As Integer = 0 To dtgAccountMounth.Rows.Count - 1
+                    If dtgAccountMounth.Item(5, index).Value = True Then
+                        limite += 1
+                    End If
+                Next
+
+                If limite < 6 Then
+                    If dtgAccountMounth.Item(5, e.RowIndex).Value = False And dtgAccountMounth.Item(9, e.RowIndex).Value > 0 Then
+                        dtgAccountMounth.Item(5, e.RowIndex).Value = True
+                    Else
+                        dtgAccountMounth.Item(5, e.RowIndex).Value = False
+                    End If
+                    vDebtAmount = selectCharge(dtgAccountMounth)
+                    txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
                 End If
-                vDebtAmount = selectCharge(dtgAccountMounth)
-                txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
             End If
         End If
     End Sub
 
     Private Sub dtgAccountMounth_KeyPress(sender As Object, e As KeyPressEventArgs) Handles dtgAccountMounth.KeyPress
+        Dim limite As Integer = 0
         If e.KeyChar = ChrW(Keys.Space) And dtgAccountMounth.SelectedRows(0).Index <> -1 Then
-            If dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False And dtgAccountMounth.Item(9, dtgAccountMounth.SelectedRows(0).Index).Value > 0 Then
-                dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = True
-            Else
-                dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False
+            For index As Integer = 0 To dtgAccountMounth.Rows.Count - 1
+                If dtgAccountMounth.Item(5, index).Value = True Then
+                    limite += 1
+                End If
+            Next
+
+            If limite < 6 Then
+                If dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False And dtgAccountMounth.Item(9, dtgAccountMounth.SelectedRows(0).Index).Value > 0 Then
+                    dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = True
+                Else
+                    dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False
+                End If
+                vDebtAmount = selectCharge(dtgAccountMounth)
+                txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
             End If
-            vDebtAmount = selectCharge(dtgAccountMounth)
-            txtSaldo.Text = Format(vDebtAmount, "###,##0.00")
         ElseIf e.KeyChar = ChrW(Keys.Enter) Then
             txtMountPay.Focus()
         End If
@@ -161,6 +179,10 @@
 
     Private Sub btnClose_Click(sender As Object, e As EventArgs) Handles btnClose.Click
         Close()
+    End Sub
+
+    Private Sub btnDebtRecord_Click(sender As Object, e As EventArgs) Handles btnDebtRecord.Click
+        showDebtRecord(vIdServiceLine, vIdInternalLine, vNameLine)
     End Sub
 
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click

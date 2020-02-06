@@ -3,7 +3,7 @@
     Public vIdInternalLine As String = Nothing
     Dim dsRates As DataSet = Nothing
     Private Sub frmAccount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Icon = My.Resources.iconEditpipe
+        Icon = My.Resources.iconNewline
 
         loadAccount(vIdServiceLine, vIdInternalLine)
     End Sub

@@ -166,6 +166,18 @@
     <Compile Include="frmCollectDetail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmDebtRecord.Designer.vb">
+      <DependentUpon>frmDebtRecord.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDebtRecord.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDeclarationServices.Designer.vb">
+      <DependentUpon>frmDeclarationServices.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDeclarationServices.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmFindAccounts.Designer.vb">
       <DependentUpon>frmFindAccounts.vb</DependentUpon>
     </Compile>
@@ -266,6 +278,12 @@
     <EmbeddedResource Include="frmCollectDetail.resx">
       <DependentUpon>frmCollectDetail.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDebtRecord.resx">
+      <DependentUpon>frmDebtRecord.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDeclarationServices.resx">
+      <DependentUpon>frmDeclarationServices.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmFindAccounts.resx">
       <DependentUpon>frmFindAccounts.vb</DependentUpon>
     </EmbeddedResource>
@@ -322,9 +340,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="dbJASS.accdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <None Include="Resources\calendar-plus.png" />
+    <None Include="Resources\calendar-plus-32.png" />
+    <None Include="Resources\search-16.png" />
+    <None Include="Resources\iconDebtrecord.ico" />
+    <None Include="Resources\ledger-edit.png" />
+    <None Include="Resources\ledger-edit-32.png" />
     <None Include="Resources\close-window.png" />
     <None Include="Resources\close-window-32.png" />
     <None Include="packages.config" />
@@ -405,6 +426,69 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plus-1-year-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\plus-1-year.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\month-view-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\month-view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calendar-1-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\calendar-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exchange-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\exchange.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\schedule-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\schedule.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timetable-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\timetable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\event-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\event.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel-import-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel-import.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel-export-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\excel-export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\data-sheet-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\data-sheet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconDeclareservice.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

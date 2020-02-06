@@ -1174,6 +1174,14 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
+    Public Sub showDebtRecord(vIdServiceLine As String, vIdInternalLine As String, vNameLine As String)
+        Dim frm As New frmDebtRecord
+        frm.vIdServiceLine = vIdServiceLine
+        frm.vIdInternalLine = vIdInternalLine
+        frm.vNameLine = vNameLine
+        frm.ShowDialog()
+    End Sub
+
     Public Function lastCodReceipt() As String()
         Dim cmdGetLastReceipt As New MySqlCommand
         Dim dr As MySqlDataReader
@@ -1248,7 +1256,7 @@ Module dataFunctions
                             Else
                                 vState = "Cancelado"
                             End If
-                            dgAccountYear.Rows.Add(dr(0).ToString, CInt(dr(1).ToString), Format(CDec(dr(2).ToString), "###,##0.00"), Format(CDec(dr(3).ToString), "###,##0.00"), vState)
+                            dgAccountYear.Rows.Add(dr(0).ToString, CInt(dr(1).ToString), Format(CDec(dr(2).ToString), "###,##0.00"), Format(CDec(dr(2).ToString) - CDec(dr(3).ToString), "###,##0.00"), Format(CDec(dr(3).ToString), "###,##0.00"), vState)
                         End While
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1498,19 +1506,18 @@ Module dataFunctions
                             cmdUpdateReceipt.ExecuteNonQuery()
                             cmdUpdateReceipt.Dispose()
 
-
                             For index As Integer = 0 To dgDetail.Rows.Count - 1
                                 Dim cmdUpdateAccountDetail As New MySqlCommand
                                 cmdUpdateAccountDetail.Connection = cnnx
                                 cmdUpdateAccountDetail.CommandType = CommandType.Text
                                 cmdUpdateAccountDetail.CommandText = "UPDATE 
-                            account_detail 
-                            SET account_detail.saldototal = (
-                            SELECT 
-                            (account_detail.saldototal + payment_detail.payamount) AS afterpay 
-                            FROM account_detail INNER JOIN payment_detail ON payment_detail.accountdetail = account_detail.idaccountdetail 
-                            WHERE payment_detail.accountdetail = @idaccountdetail AND payment_detail.payment = @idpayment) 
-                            WHERE account_detail.idaccountdetail = @idaccountdetail"
+                                account_detail 
+                                SET account_detail.saldototal = (
+                                SELECT 
+                                (account_detail.saldototal + payment_detail.payamount) AS afterpay 
+                                FROM account_detail INNER JOIN payment_detail ON payment_detail.accountdetail = account_detail.idaccountdetail 
+                                WHERE payment_detail.accountdetail = @idaccountdetail AND payment_detail.payment = @idpayment) 
+                                WHERE account_detail.idaccountdetail = @idaccountdetail"
                                 cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", dgDetail.Item(2, index).Value)
                                 cmdUpdateAccountDetail.Parameters.AddWithValue("idpayment", vIdPayment)
                                 cmdUpdateAccountDetail.ExecuteNonQuery()
@@ -1520,9 +1527,9 @@ Module dataFunctions
                             cmdUpdateAccountLine.Connection = cnnx
                             cmdUpdateAccountLine.CommandType = CommandType.Text
                             cmdUpdateAccountLine.CommandText = "UPDATE 
-                        account_line 
-                        SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
-                        WHERE account_line.idaccountline = @idaccountline"
+                            account_line 
+                            SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                            WHERE account_line.idaccountline = @idaccountline"
                             cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                             cmdUpdateAccountLine.ExecuteNonQuery()
                             cmdUpdateAccountLine.Dispose()

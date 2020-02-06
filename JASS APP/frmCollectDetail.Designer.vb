@@ -29,13 +29,8 @@ Partial Class frmCollectDetail
         Me.txtCodAccount = New System.Windows.Forms.TextBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.dtgAccountYear = New System.Windows.Forms.DataGridView()
-        Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmMontoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmSaldoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         Me.grpYearDetail = New System.Windows.Forms.GroupBox()
+        Me.btnDebtRecord = New System.Windows.Forms.Button()
         Me.btnClose = New System.Windows.Forms.Button()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtCodNumReceipt = New System.Windows.Forms.TextBox()
@@ -68,6 +63,13 @@ Partial Class frmCollectDetail
         Me.clmSaldoMes = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cbxUsersInAccount = New System.Windows.Forms.ComboBox()
         Me.Label10 = New System.Windows.Forms.Label()
+        Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmMontoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmPayedTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmSaldoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmOpciones = New System.Windows.Forms.DataGridViewButtonColumn()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpYearDetail.SuspendLayout()
         CType(Me.dtgAccountMounth, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -106,9 +108,9 @@ Partial Class frmCollectDetail
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(12, 15)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(91, 13)
+        Me.Label1.Size = New System.Drawing.Size(87, 13)
         Me.Label1.TabIndex = 6
-        Me.Label1.Text = "Código de la linea"
+        Me.Label1.Text = "Linea de servicio"
         '
         'txtCodAccount
         '
@@ -123,9 +125,9 @@ Partial Class frmCollectDetail
         Me.Label3.AutoSize = True
         Me.Label3.Location = New System.Drawing.Point(12, 38)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(102, 13)
+        Me.Label3.Size = New System.Drawing.Size(91, 13)
         Me.Label3.TabIndex = 10
-        Me.Label3.Text = "Código de la cuenta"
+        Me.Label3.Text = "Código de cuenta"
         '
         'dtgAccountYear
         '
@@ -137,7 +139,7 @@ Partial Class frmCollectDetail
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgAccountYear.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dtgAccountYear.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgAccountYear.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdAccount, Me.clmYear, Me.clmMontoTotal, Me.clmSaldoTotal, Me.clmEstado, Me.clmOpciones})
+        Me.dtgAccountYear.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdAccount, Me.clmYear, Me.clmMontoTotal, Me.clmPayedTotal, Me.clmSaldoTotal, Me.clmEstado, Me.clmOpciones})
         Me.dtgAccountYear.Location = New System.Drawing.Point(12, 64)
         Me.dtgAccountYear.MultiSelect = False
         Me.dtgAccountYear.Name = "dtgAccountYear"
@@ -149,54 +151,12 @@ Partial Class frmCollectDetail
         Me.dtgAccountYear.Size = New System.Drawing.Size(905, 150)
         Me.dtgAccountYear.TabIndex = 4
         '
-        'clmIdAccount
-        '
-        Me.clmIdAccount.HeaderText = "Id de Cuenta"
-        Me.clmIdAccount.Name = "clmIdAccount"
-        Me.clmIdAccount.ReadOnly = True
-        Me.clmIdAccount.Visible = False
-        '
-        'clmYear
-        '
-        Me.clmYear.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmYear.HeaderText = "Año"
-        Me.clmYear.Name = "clmYear"
-        Me.clmYear.ReadOnly = True
-        Me.clmYear.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmMontoTotal
-        '
-        Me.clmMontoTotal.HeaderText = "Monto Total"
-        Me.clmMontoTotal.Name = "clmMontoTotal"
-        Me.clmMontoTotal.ReadOnly = True
-        Me.clmMontoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmSaldoTotal
-        '
-        Me.clmSaldoTotal.HeaderText = "Saldo Total"
-        Me.clmSaldoTotal.Name = "clmSaldoTotal"
-        Me.clmSaldoTotal.ReadOnly = True
-        Me.clmSaldoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmEstado
-        '
-        Me.clmEstado.HeaderText = "Estado"
-        Me.clmEstado.Name = "clmEstado"
-        Me.clmEstado.ReadOnly = True
-        Me.clmEstado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmOpciones
-        '
-        Me.clmOpciones.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmOpciones.HeaderText = ""
-        Me.clmOpciones.Name = "clmOpciones"
-        Me.clmOpciones.ReadOnly = True
-        '
         'grpYearDetail
         '
         Me.grpYearDetail.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.grpYearDetail.Controls.Add(Me.btnDebtRecord)
         Me.grpYearDetail.Controls.Add(Me.btnClose)
         Me.grpYearDetail.Controls.Add(Me.Label9)
         Me.grpYearDetail.Controls.Add(Me.txtCodNumReceipt)
@@ -224,9 +184,22 @@ Partial Class frmCollectDetail
         Me.grpYearDetail.TabStop = False
         Me.grpYearDetail.Text = "Datos de Año-Tarifa"
         '
+        'btnDebtRecord
+        '
+        Me.btnDebtRecord.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnDebtRecord.Image = Global.JASS_APP.My.Resources.Resources.ledger_edit_32
+        Me.btnDebtRecord.Location = New System.Drawing.Point(339, 391)
+        Me.btnDebtRecord.Name = "btnDebtRecord"
+        Me.btnDebtRecord.Size = New System.Drawing.Size(105, 82)
+        Me.btnDebtRecord.TabIndex = 29
+        Me.btnDebtRecord.Text = "REGISTRAR DEUDAS"
+        Me.btnDebtRecord.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+        Me.btnDebtRecord.UseVisualStyleBackColor = True
+        '
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Image = Global.JASS_APP.My.Resources.Resources.close_window_32
         Me.btnClose.Location = New System.Drawing.Point(613, 425)
         Me.btnClose.Name = "btnClose"
@@ -563,6 +536,58 @@ Partial Class frmCollectDetail
         Me.Label10.TabIndex = 12
         Me.Label10.Text = "Usuarios asociados a cuenta"
         '
+        'clmIdAccount
+        '
+        Me.clmIdAccount.HeaderText = "Id de Cuenta"
+        Me.clmIdAccount.Name = "clmIdAccount"
+        Me.clmIdAccount.ReadOnly = True
+        Me.clmIdAccount.Visible = False
+        '
+        'clmYear
+        '
+        Me.clmYear.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmYear.HeaderText = "Año"
+        Me.clmYear.Name = "clmYear"
+        Me.clmYear.ReadOnly = True
+        Me.clmYear.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmMontoTotal
+        '
+        Me.clmMontoTotal.HeaderText = "Monto Total"
+        Me.clmMontoTotal.Name = "clmMontoTotal"
+        Me.clmMontoTotal.ReadOnly = True
+        Me.clmMontoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmPayedTotal
+        '
+        Me.clmPayedTotal.HeaderText = "Pagado"
+        Me.clmPayedTotal.Name = "clmPayedTotal"
+        Me.clmPayedTotal.ReadOnly = True
+        Me.clmPayedTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmSaldoTotal
+        '
+        Me.clmSaldoTotal.HeaderText = "Saldo Total"
+        Me.clmSaldoTotal.Name = "clmSaldoTotal"
+        Me.clmSaldoTotal.ReadOnly = True
+        Me.clmSaldoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmEstado
+        '
+        Me.clmEstado.HeaderText = "Estado"
+        Me.clmEstado.Name = "clmEstado"
+        Me.clmEstado.ReadOnly = True
+        Me.clmEstado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmOpciones
+        '
+        Me.clmOpciones.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmOpciones.HeaderText = ""
+        Me.clmOpciones.Name = "clmOpciones"
+        Me.clmOpciones.ReadOnly = True
+        Me.clmOpciones.Text = "Ver"
+        Me.clmOpciones.UseColumnTextForButtonValue = True
+        '
         'frmCollectDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -620,12 +645,6 @@ Partial Class frmCollectDetail
     Friend WithEvents Label9 As Label
     Friend WithEvents cbxUsersInAccount As ComboBox
     Friend WithEvents Label10 As Label
-    Friend WithEvents clmIdAccount As DataGridViewTextBoxColumn
-    Friend WithEvents clmYear As DataGridViewTextBoxColumn
-    Friend WithEvents clmMontoTotal As DataGridViewTextBoxColumn
-    Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
-    Friend WithEvents clmEstado As DataGridViewTextBoxColumn
-    Friend WithEvents clmOpciones As DataGridViewButtonColumn
     Friend WithEvents clmIdDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmIdAccountDetail As DataGridViewTextBoxColumn
     Friend WithEvents clmYearDetail As DataGridViewTextBoxColumn
@@ -637,4 +656,12 @@ Partial Class frmCollectDetail
     Friend WithEvents clmPagadoMes As DataGridViewTextBoxColumn
     Friend WithEvents clmSaldoMes As DataGridViewTextBoxColumn
     Friend WithEvents btnClose As Button
+    Friend WithEvents btnDebtRecord As Button
+    Friend WithEvents clmIdAccount As DataGridViewTextBoxColumn
+    Friend WithEvents clmYear As DataGridViewTextBoxColumn
+    Friend WithEvents clmMontoTotal As DataGridViewTextBoxColumn
+    Friend WithEvents clmPayedTotal As DataGridViewTextBoxColumn
+    Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
+    Friend WithEvents clmEstado As DataGridViewTextBoxColumn
+    Friend WithEvents clmOpciones As DataGridViewButtonColumn
 End Class

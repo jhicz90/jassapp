@@ -40,6 +40,7 @@ Partial Class frmMain
         Me.tsdpdCollect = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiCollectBox = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMonthRates = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiDeclarationServices = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdWindows = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiMinWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMaxWindows = New System.Windows.Forms.ToolStripMenuItem()
@@ -75,7 +76,7 @@ Partial Class frmMain
         '
         Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiSharedLine, Me.tsmiNewUser})
         Me.tsmiNew.Name = "tsmiNew"
-        Me.tsmiNew.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiNew.Size = New System.Drawing.Size(150, 22)
         Me.tsmiNew.Text = "Nuevo"
         '
         'tsmiNewLine
@@ -111,7 +112,7 @@ Partial Class frmMain
         '
         Me.tsmiPrint.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiConfigPrints, Me.tsmiPreviewReceipt})
         Me.tsmiPrint.Name = "tsmiPrint"
-        Me.tsmiPrint.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiPrint.Size = New System.Drawing.Size(150, 22)
         Me.tsmiPrint.Text = "Impresora"
         '
         'tsmiConfigPrints
@@ -131,7 +132,7 @@ Partial Class frmMain
         'tsmiConfig
         '
         Me.tsmiConfig.Name = "tsmiConfig"
-        Me.tsmiConfig.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiConfig.Size = New System.Drawing.Size(150, 22)
         Me.tsmiConfig.Text = "Configuración"
         '
         'tsmiExit
@@ -139,7 +140,7 @@ Partial Class frmMain
         Me.tsmiExit.Name = "tsmiExit"
         Me.tsmiExit.ShortcutKeyDisplayString = "Alt + F4"
         Me.tsmiExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.tsmiExit.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiExit.Size = New System.Drawing.Size(150, 22)
         Me.tsmiExit.Text = "&Salir"
         '
         'tsdpdRegister
@@ -170,7 +171,7 @@ Partial Class frmMain
         '
         'tsdpdCollect
         '
-        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiMonthRates})
+        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiMonthRates, Me.tsmiDeclarationServices})
         Me.tsdpdCollect.Image = Global.JASS_APP.My.Resources.Resources.coins_32
         Me.tsdpdCollect.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdCollect.Name = "tsdpdCollect"
@@ -185,14 +186,20 @@ Partial Class frmMain
         Me.tsmiCollectBox.Name = "tsmiCollectBox"
         Me.tsmiCollectBox.ShortcutKeyDisplayString = "F5"
         Me.tsmiCollectBox.ShortcutKeys = System.Windows.Forms.Keys.F5
-        Me.tsmiCollectBox.Size = New System.Drawing.Size(183, 22)
+        Me.tsmiCollectBox.Size = New System.Drawing.Size(200, 22)
         Me.tsmiCollectBox.Text = "Caja de cobranza"
         '
         'tsmiMonthRates
         '
         Me.tsmiMonthRates.Name = "tsmiMonthRates"
-        Me.tsmiMonthRates.Size = New System.Drawing.Size(183, 22)
+        Me.tsmiMonthRates.Size = New System.Drawing.Size(200, 22)
         Me.tsmiMonthRates.Text = "Tarifas mensuales"
+        '
+        'tsmiDeclarationServices
+        '
+        Me.tsmiDeclarationServices.Name = "tsmiDeclarationServices"
+        Me.tsmiDeclarationServices.Size = New System.Drawing.Size(200, 22)
+        Me.tsmiDeclarationServices.Text = "Declaración de servicios"
         '
         'tsdpdWindows
         '
@@ -312,4 +319,5 @@ Partial Class frmMain
     Friend WithEvents tsmiNewUser As ToolStripMenuItem
     Friend WithEvents tsmiConfigPrints As ToolStripMenuItem
     Friend WithEvents tsmiPreviewReceipt As ToolStripMenuItem
+    Friend WithEvents tsmiDeclarationServices As ToolStripMenuItem
 End Class
