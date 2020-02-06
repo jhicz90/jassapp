@@ -3,6 +3,7 @@
     Public vNumReceipt As String = Nothing
     Public vCollector As String = Nothing
     Public vPayer As String = Nothing
+    Public vDatePay As Date = Nothing
 
     Private Sub frmPayDetail_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconCashbook
@@ -14,7 +15,7 @@
     End Sub
 
     Private Sub btnCanceled_Click(sender As Object, e As EventArgs) Handles btnCanceled.Click
-        If cancelReceipt(dtgDetail, vIdPayment, vNumReceipt) Then
+        If cancelReceipt(dtgDetail, vIdPayment, vNumReceipt, vDatePay) Then
             Close()
         End If
     End Sub

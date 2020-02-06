@@ -16,6 +16,7 @@ Public Class frmLogin
                 Me.DialogResult = DialogResult.OK
             End If
         Else
+            Close()
             Application.Exit()
         End If
     End Sub

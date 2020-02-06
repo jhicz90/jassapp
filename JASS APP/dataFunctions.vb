@@ -18,6 +18,7 @@ Module dataFunctions
             Return True
         Catch ex As Exception
             MsgBox("No pudo completarse la conección a la base de datos.", vbCritical, "Aviso")
+            cnnx.Close()
             Return False
         End Try
     End Function
@@ -1163,12 +1164,13 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showPayDetail(vIdPayment As String, vNumReceipt As String, vCollector As String, vPayer As String)
+    Public Sub showPayDetail(vIdPayment As String, vNumReceipt As String, vCollector As String, vPayer As String, vDatePay As Date)
         Dim frm As New frmPayDetail
         frm.vIdPayment = vIdPayment
         frm.vNumReceipt = vNumReceipt
         frm.vCollector = vCollector
         frm.vPayer = vPayer
+        frm.vDatePay = vDatePay
         frm.ShowDialog()
     End Sub
 
@@ -1477,30 +1479,31 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Function cancelReceipt(dgDetail As DataGridView, vIdPayment As String, vNumReceipt As String) As Boolean
+    Public Function cancelReceipt(dgDetail As DataGridView, vIdPayment As String, vNumReceipt As String, vDatePay As Date) As Boolean
         Dim cmdUpdateReceipt As New MySqlCommand
         Dim cmdUpdateAccountLine As New MySqlCommand
 
         If Not (cnnx.DataSource.Equals("")) Then
-            If MsgBox("¿Desea anular el recibo N°" & vNumReceipt & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
-                If Not (vIdPayment = Nothing And dgDetail.Rows.Count > 0) Then
-                    Dim vIdAccountLine As String = dgDetail.Item(1, 0).Value
-                    Try
-                        cnnx.Close()
-                        cnnx.Open()
-                        cmdUpdateReceipt.Connection = cnnx
-                        cmdUpdateReceipt.CommandType = CommandType.Text
-                        cmdUpdateReceipt.CommandText = "UPDATE payments SET payments.canceled = 1 WHERE payments.idpayment = @idpayment"
-                        cmdUpdateReceipt.Parameters.AddWithValue("idpayment", vIdPayment)
-                        cmdUpdateReceipt.ExecuteNonQuery()
-                        cmdUpdateReceipt.Dispose()
+            If DateDiff(DateInterval.Day, CDate(Format(vDatePay, "dd/MM/yyyy")), Today) <= 7 Then
+                If MsgBox("¿Desea anular el recibo N°" & vNumReceipt & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+                    If Not (vIdPayment = Nothing And dgDetail.Rows.Count > 0) Then
+                        Dim vIdAccountLine As String = dgDetail.Item(1, 0).Value
+                        Try
+                            cnnx.Close()
+                            cnnx.Open()
+                            cmdUpdateReceipt.Connection = cnnx
+                            cmdUpdateReceipt.CommandType = CommandType.Text
+                            cmdUpdateReceipt.CommandText = "UPDATE payments SET payments.canceled = 1 WHERE payments.idpayment = @idpayment"
+                            cmdUpdateReceipt.Parameters.AddWithValue("idpayment", vIdPayment)
+                            cmdUpdateReceipt.ExecuteNonQuery()
+                            cmdUpdateReceipt.Dispose()
 
 
-                        For index As Integer = 0 To dgDetail.Rows.Count - 1
-                            Dim cmdUpdateAccountDetail As New MySqlCommand
-                            cmdUpdateAccountDetail.Connection = cnnx
-                            cmdUpdateAccountDetail.CommandType = CommandType.Text
-                            cmdUpdateAccountDetail.CommandText = "UPDATE 
+                            For index As Integer = 0 To dgDetail.Rows.Count - 1
+                                Dim cmdUpdateAccountDetail As New MySqlCommand
+                                cmdUpdateAccountDetail.Connection = cnnx
+                                cmdUpdateAccountDetail.CommandType = CommandType.Text
+                                cmdUpdateAccountDetail.CommandText = "UPDATE 
                             account_detail 
                             SET account_detail.saldototal = (
                             SELECT 
@@ -1508,32 +1511,36 @@ Module dataFunctions
                             FROM account_detail INNER JOIN payment_detail ON payment_detail.accountdetail = account_detail.idaccountdetail 
                             WHERE payment_detail.accountdetail = @idaccountdetail AND payment_detail.payment = @idpayment) 
                             WHERE account_detail.idaccountdetail = @idaccountdetail"
-                            cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", dgDetail.Item(2, index).Value)
-                            cmdUpdateAccountDetail.Parameters.AddWithValue("idpayment", vIdPayment)
-                            cmdUpdateAccountDetail.ExecuteNonQuery()
-                            cmdUpdateAccountDetail.Dispose()
-                        Next
+                                cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", dgDetail.Item(2, index).Value)
+                                cmdUpdateAccountDetail.Parameters.AddWithValue("idpayment", vIdPayment)
+                                cmdUpdateAccountDetail.ExecuteNonQuery()
+                                cmdUpdateAccountDetail.Dispose()
+                            Next
 
-                        cmdUpdateAccountLine.Connection = cnnx
-                        cmdUpdateAccountLine.CommandType = CommandType.Text
-                        cmdUpdateAccountLine.CommandText = "UPDATE 
+                            cmdUpdateAccountLine.Connection = cnnx
+                            cmdUpdateAccountLine.CommandType = CommandType.Text
+                            cmdUpdateAccountLine.CommandText = "UPDATE 
                         account_line 
                         SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
                         WHERE account_line.idaccountline = @idaccountline"
-                        cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
-                        cmdUpdateAccountLine.ExecuteNonQuery()
-                        cmdUpdateAccountLine.Dispose()
+                            cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                            cmdUpdateAccountLine.ExecuteNonQuery()
+                            cmdUpdateAccountLine.Dispose()
 
-                        Return True
-                    Catch ex As Exception
-                        MsgBox("Ocurrio un error en la consulta", vbCritical, "Aviso")
+                            Return True
+                        Catch ex As Exception
+                            MsgBox("Ocurrio un error en la consulta", vbCritical, "Aviso")
+                            Return False
+                        End Try
+                    Else
+                        MsgBox("No se envio el identificador del recibo o faltan datos", vbCritical, "Aviso")
                         Return False
-                    End Try
+                    End If
                 Else
-                    MsgBox("No se envio el identificador del recibo o faltan datos", vbCritical, "Aviso")
                     Return False
                 End If
             Else
+                MsgBox("Excedio el dia para reclamo por anulación de recibo", vbCritical, "Aviso")
                 Return False
             End If
         Else
