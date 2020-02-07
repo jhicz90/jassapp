@@ -61,13 +61,13 @@
         txtCellphone.Text = ""
         txtNameLine.Focus()
 
-        Dim codeLine As String
-        codeLine = getCodeLine(cbxStreets.SelectedValue)
-        If (codeLine <> Nothing) Then
-            txtCodLine.Text = codeLine
-        Else
-            Close()
-        End If
+        'Dim codeLine As String
+        'codeLine = getCodeLine(cbxStreets.SelectedValue)
+        'If (codeLine <> Nothing) Then
+        '    txtCodLine.Text = codeLine
+        'Else
+        '    Close()
+        'End If
     End Sub
 
     Public Sub userFound(vActive As Boolean, Optional vDataUser() As String = Nothing)
@@ -153,8 +153,7 @@
 
     Private Sub cbxStreets_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxStreets.SelectedIndexChanged
         If IsNumeric(cbxStreets.SelectedValue.ToString) Then
-            Dim codeLine As String
-            codeLine = getCodeLine(cbxStreets.SelectedValue)
+            Dim codeLine As String = getCodeLine(cbxStreets.SelectedValue)
             If (codeLine <> Nothing) Then
                 txtCodLine.Text = codeLine
             Else

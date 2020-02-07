@@ -1,7 +1,10 @@
 ﻿Imports System.Data.OleDb
+Imports ClosedXML.Excel
 Imports MySql.Data.MySqlClient
 
 Module dataFunctions
+    Public Libro As XLWorkbook
+    Public Hoja As IXLWorksheet
     Public cnnx As New MySqlConnection
     Public cnnstr As New MySqlConnectionStringBuilder
 
@@ -95,35 +98,68 @@ Module dataFunctions
     End Function
 
     Public Function generateCodeLine(vIdSector As String) As String
-        Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim cmdStreet As New MySqlCommand
+        Dim cmdLastServiceLine As New MySqlCommand
+        Dim cmdCheck As New MySqlCommand
+        Dim drStreet, drLast, drCheck As MySqlDataReader
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
+            Dim index As Integer = 1
+            Do
+                Try
+                    cnnx.Close()
+                    cnnx.Open()
+                    cmdStreet.Connection = cnnx
+                    cmdStreet.CommandType = CommandType.Text
+                    cmdStreet.CommandText = "SELECT code FROM streets WHERE idstreet LIKE @idsector"
+                    cmdStreet.Parameters.AddWithValue("idsector", vIdSector)
+                    drStreet = cmdStreet.ExecuteReader()
 
-            cmd.CommandText = "SELECT code FROM streets WHERE idstreet LIKE '" & vIdSector & "'"
+                    If drStreet.HasRows Then
+                        drStreet.Read()
+                        Dim streetLine As String = drStreet(0).ToString
+                        Dim codeLine As String = ""
+                        Dim codeNum As String = ""
 
-            Try
-                dr = cmd.ExecuteReader()
+                        cnnx.Close()
+                        cnnx.Open()
+                        cmdLastServiceLine.Connection = cnnx
+                        cmdLastServiceLine.CommandType = CommandType.Text
+                        cmdLastServiceLine.CommandText = "SELECT MAX(service_line.idserviceline) AS id FROM service_line"
+                        drLast = cmdLastServiceLine.ExecuteReader
 
-                If dr.HasRows Then
-                    dr.Read()
+                        If drLast.HasRows Then
+                            drLast.Read()
+                            codeNum = CInt(drLast(0).ToString) + index
+                        Else
+                            codeNum = "1"
+                        End If
 
-                    Dim codeLine As String = ""
-                    Dim codeNum As String = CInt((10000 * Rnd()) + 1)
-                    codeLine = Year(Today).ToString & "-" & Trim(dr(0).ToString) & "-" & codeNum.PadLeft(5, "0")
+                        codeLine = Year(Today).ToString & "-" & Trim(streetLine) & "-" & codeNum.PadLeft(5, "0")
 
-                    cmd.Dispose()
-                    Return codeLine
-                Else
+                        cnnx.Close()
+                        cnnx.Open()
+                        cmdCheck.Connection = cnnx
+                        cmdCheck.CommandType = CommandType.Text
+                        cmdCheck.CommandText = "SELECT code FROM service_line WHERE code LIKE @codserviceline"
+                        cmdCheck.Parameters.AddWithValue("codserviceline", codeLine)
+                        drCheck = cmdCheck.ExecuteReader
+
+                        If drCheck.HasRows Then
+                            index += 1
+                        Else
+                            Return codeLine
+                        End If
+                    Else
+                        Return Nothing
+                    End If
+                Catch ex As Exception
+                    MsgBox(ex.Message)
                     Return Nothing
-                End If
-            Catch ex As Exception
-                Return Nothing
-            End Try
+                End Try
+            Loop
         End If
     End Function
 
@@ -138,6 +174,26 @@ Module dataFunctions
         Next
         Return vResult
     End Function
+
+    Public Function listYearRate() As DataSet
+        Dim ds As New DataSet
+        Dim ada As New MySqlDataAdapter
+
+        If cnnx.DataSource.Equals("") Then
+            Return Nothing
+        Else
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                ada.SelectCommand = New MySqlCommand("SELECT idyearrate, year FROM years_rate", cnnx)
+                ada.Fill(ds)
+                Return ds
+            Catch ex As Exception
+                Return Nothing
+            End Try
+        End If
+    End Function
+
     Public Function listRates() As DataSet
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
@@ -622,21 +678,7 @@ Module dataFunctions
             Return Nothing
         Else
             Try
-                Dim vResult As Boolean
-                Do
-                    codeLine = generateCodeLine(vIdSector)
-                    If codeLine = Nothing Then
-                        Return Nothing
-                    End If
-                    Dim dr As MySqlDataReader
-                    cmd.Connection = cnnx
-                    cmd.CommandType = CommandType.Text
-                    cmd.CommandText = "SELECT code FROM service_line WHERE code LIKE '" & codeLine & "'"
-                    dr = cmd.ExecuteReader()
-                    vResult = dr.HasRows
-
-                    cmd.Dispose()
-                Loop While vResult
+                codeLine = generateCodeLine(vIdSector)
 
                 Return codeLine
             Catch ex As Exception
@@ -1934,4 +1976,112 @@ Module dataFunctions
             End Try
         End If
     End Function
+
+    Public Sub exportingExcel(vYearRate As String, vCrit As Integer, Optional vOption1 As Boolean = False)
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                service_line.idserviceline, 
+                INTERLINE.idinternalline, 
+                years_rate.idyearrate, 
+                rates.idrate, 
+                service_line.code, 
+                INTERLINE.code, 
+                streets.name, 
+                (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS users, 
+                rates.name, 
+                years_rate.year,
+                INTERLINE.pricerate 
+                FROM internal_line INTERLINE
+                INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
+                INNER JOIN rates ON rates.idrate = INTERLINE.rate 
+                INNER JOIN streets ON streets.idstreet = service_line.street 
+                INNER JOIN years_rate ON years_rate.idyearrate = rates.yearrate
+                ORDER BY users ASC"
+
+                dr = cmd.ExecuteReader
+
+                With Hoja
+                    .Name = "Servicios"
+                    .SheetView.ZoomScale = 100
+                    .PageSetup.PageOrientation = XLPageOrientation.Landscape
+                    .PageSetup.PaperSize = XLPaperSize.A4Paper
+                    .PageSetup.PrintAreas.Add("E:M")
+                    .PageSetup.SetRowsToRepeatAtTop("1:1")
+                    .PageSetup.FitToPages(1, 0)
+                    .PageSetup.Margins.Left = 0.4
+                    .PageSetup.Margins.Right = 0.4
+                    .PageSetup.Margins.Top = 0.8
+                    .PageSetup.Margins.Bottom = 0.8
+                    .PageSetup.Margins.Header = 0.4
+                    .PageSetup.Margins.Footer = 0.4
+                    .PageSetup.Header.Left.AddText("JASS HUANGALA " & Year(Today))
+                    .PageSetup.Footer.Left.AddText(UCase(Today))
+                    .PageSetup.Footer.Center.AddText("LINEAS DE SERVICIO")
+                    .PageSetup.Footer.Right.AddText("Página &P de &N")
+                    .SheetView.FreezeRows(1)
+
+                    .Range("A1").Value = "ID LINEA"
+                    .Range("B1").Value = "ID CUENTA"
+                    .Range("C1").Value = "ID AÑO"
+                    .Range("D1").Value = "ID TARIFA"
+                    .Range("E1").Value = "COD. SERVICIO DE LINEA"
+                    .Range("F1").Value = "COD. CUENTA"
+                    .Range("G1").Value = "CALLE O SECTOR"
+                    .Range("H1").Value = "USUARIOS"
+                    .Range("I1").Value = "TARIFA"
+                    .Range("J1").Value = "AÑO"
+                    .Range("K1").Value = "PRECIO"
+                    .Range("L1").Value = "MES"
+                    .Range("M1").Value = "TARIFA MES"
+
+                    .Columns("A:D").Hide()
+                    .Columns("E").Width = 25
+                    .Columns("F").Width = 15
+                    .Columns("G").Width = 20
+                    .Columns("H").Width = 45
+                    .Columns("I").Width = 30
+                    .Columns("J").Width = 10
+                    .Columns("K").Width = 12
+                    .Columns("L").Width = 12
+                    .Columns("M").Width = 15
+
+                    Dim index As Integer = 2
+                    While dr.Read
+                        '.Range("A" & index & ":K" & index).Value = {dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString, dr(7).ToString, dr(8).ToString, dr(9).ToString, dr(10).ToString}
+                        .Range("A" & index).Value = dr(0).ToString
+                        .Range("B" & index).Value = dr(1).ToString
+                        .Range("C" & index).Value = dr(2).ToString
+                        .Range("D" & index).Value = dr(3).ToString
+                        .Range("E" & index).Value = dr(4).ToString
+                        .Range("F" & index).Value = dr(5).ToString
+                        .Range("G" & index).Value = dr(6).ToString
+                        .Range("H" & index).Value = dr(7).ToString
+                        .Range("I" & index).Value = dr(8).ToString
+                        .Range("J" & index).Value = dr(9).ToString
+                        .Range("K" & index).Value = dr(10).ToString
+                        .Range("L" & index).Value = 1
+
+                        If vOption1 Then
+                            .Range("M" & index).Value = dr(10).ToString
+                        Else
+                            .Range("M" & index).Value = 0
+                        End If
+
+                        index += 1
+                    End While
+                End With
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
 End Module
