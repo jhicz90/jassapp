@@ -27,13 +27,6 @@ Partial Class frmDeclarationServices
         Me.cbxCrit = New System.Windows.Forms.ComboBox()
         Me.chkOrder = New System.Windows.Forms.CheckBox()
         Me.dtgAccounts = New System.Windows.Forms.DataGridView()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.btnLoadAccounts = New System.Windows.Forms.Button()
-        Me.btnExportAccounts = New System.Windows.Forms.Button()
-        Me.btnImportAccounts = New System.Windows.Forms.Button()
-        Me.chkFillAccountsRate = New System.Windows.Forms.CheckBox()
-        Me.bgwServices = New System.ComponentModel.BackgroundWorker()
-        Me.dialogSaveExcel = New System.Windows.Forms.SaveFileDialog()
         Me.clmIdLine = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmYearRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
@@ -45,8 +38,16 @@ Partial Class frmDeclarationServices
         Me.clmRateName = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkMonths = New System.Windows.Forms.CheckBox()
         Me.cbxMonths = New System.Windows.Forms.ComboBox()
+        Me.chkFillAccountsRate = New System.Windows.Forms.CheckBox()
+        Me.btnLoadAccounts = New System.Windows.Forms.Button()
+        Me.btnExportAccounts = New System.Windows.Forms.Button()
+        Me.btnImportAccounts = New System.Windows.Forms.Button()
+        Me.bgwServices = New System.ComponentModel.BackgroundWorker()
+        Me.dialogSaveExcel = New System.Windows.Forms.SaveFileDialog()
+        Me.dialogOpenExcel = New System.Windows.Forms.OpenFileDialog()
         CType(Me.dtgAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -110,75 +111,8 @@ Partial Class frmDeclarationServices
         Me.dtgAccounts.RowHeadersVisible = False
         Me.dtgAccounts.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccounts.Size = New System.Drawing.Size(810, 404)
+        Me.dtgAccounts.Size = New System.Drawing.Size(810, 304)
         Me.dtgAccounts.TabIndex = 6
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.CheckBox1)
-        Me.GroupBox1.Controls.Add(Me.cbxMonths)
-        Me.GroupBox1.Controls.Add(Me.chkFillAccountsRate)
-        Me.GroupBox1.Controls.Add(Me.cbxYearRate)
-        Me.GroupBox1.Controls.Add(Me.Label1)
-        Me.GroupBox1.Controls.Add(Me.chkOrder)
-        Me.GroupBox1.Controls.Add(Me.cbxCrit)
-        Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(504, 127)
-        Me.GroupBox1.TabIndex = 7
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Tarifas y orden"
-        '
-        'btnLoadAccounts
-        '
-        Me.btnLoadAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnLoadAccounts.Image = Global.JASS_APP.My.Resources.Resources.data_sheet_32
-        Me.btnLoadAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnLoadAccounts.Location = New System.Drawing.Point(522, 12)
-        Me.btnLoadAccounts.Name = "btnLoadAccounts"
-        Me.btnLoadAccounts.Size = New System.Drawing.Size(96, 64)
-        Me.btnLoadAccounts.TabIndex = 8
-        Me.btnLoadAccounts.Text = "CARGAR"
-        Me.btnLoadAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnLoadAccounts.UseVisualStyleBackColor = True
-        '
-        'btnExportAccounts
-        '
-        Me.btnExportAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnExportAccounts.Image = Global.JASS_APP.My.Resources.Resources.excel_export_32
-        Me.btnExportAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnExportAccounts.Location = New System.Drawing.Point(624, 12)
-        Me.btnExportAccounts.Name = "btnExportAccounts"
-        Me.btnExportAccounts.Size = New System.Drawing.Size(96, 64)
-        Me.btnExportAccounts.TabIndex = 9
-        Me.btnExportAccounts.Text = "EXPORTAR"
-        Me.btnExportAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnExportAccounts.UseVisualStyleBackColor = True
-        '
-        'btnImportAccounts
-        '
-        Me.btnImportAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnImportAccounts.Image = Global.JASS_APP.My.Resources.Resources.excel_import_32
-        Me.btnImportAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnImportAccounts.Location = New System.Drawing.Point(726, 12)
-        Me.btnImportAccounts.Name = "btnImportAccounts"
-        Me.btnImportAccounts.Size = New System.Drawing.Size(96, 64)
-        Me.btnImportAccounts.TabIndex = 10
-        Me.btnImportAccounts.Text = "IMPORTAR"
-        Me.btnImportAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnImportAccounts.UseVisualStyleBackColor = True
-        '
-        'chkFillAccountsRate
-        '
-        Me.chkFillAccountsRate.Location = New System.Drawing.Point(6, 73)
-        Me.chkFillAccountsRate.Name = "chkFillAccountsRate"
-        Me.chkFillAccountsRate.Size = New System.Drawing.Size(338, 40)
-        Me.chkFillAccountsRate.TabIndex = 5
-        Me.chkFillAccountsRate.Text = "Llenar automaticamente los servicios conforme a la tarifa impuesta en la cuenta"
-        Me.chkFillAccountsRate.UseVisualStyleBackColor = True
-        '
-        'bgwServices
-        '
         '
         'clmIdLine
         '
@@ -266,38 +200,105 @@ Partial Class frmDeclarationServices
         Me.clmEdit.ReadOnly = True
         Me.clmEdit.UseColumnTextForButtonValue = True
         '
-        'CheckBox1
+        'GroupBox1
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(6, 48)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(86, 17)
-        Me.CheckBox1.TabIndex = 7
-        Me.CheckBox1.Text = "Asignar mes:"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.GroupBox1.Controls.Add(Me.chkMonths)
+        Me.GroupBox1.Controls.Add(Me.cbxMonths)
+        Me.GroupBox1.Controls.Add(Me.chkFillAccountsRate)
+        Me.GroupBox1.Controls.Add(Me.cbxYearRate)
+        Me.GroupBox1.Controls.Add(Me.Label1)
+        Me.GroupBox1.Controls.Add(Me.chkOrder)
+        Me.GroupBox1.Controls.Add(Me.cbxCrit)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 12)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(504, 127)
+        Me.GroupBox1.TabIndex = 7
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "Tarifas y orden"
+        '
+        'chkMonths
+        '
+        Me.chkMonths.AutoSize = True
+        Me.chkMonths.Location = New System.Drawing.Point(6, 48)
+        Me.chkMonths.Name = "chkMonths"
+        Me.chkMonths.Size = New System.Drawing.Size(86, 17)
+        Me.chkMonths.TabIndex = 7
+        Me.chkMonths.Text = "Asignar mes:"
+        Me.chkMonths.UseVisualStyleBackColor = True
         '
         'cbxMonths
         '
         Me.cbxMonths.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbxMonths.Enabled = False
         Me.cbxMonths.FormattingEnabled = True
-        Me.cbxMonths.Items.AddRange(New Object() {"Calle o sector", "Nombre de usuario", "Año de registro"})
+        Me.cbxMonths.Items.AddRange(New Object() {"ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SETIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"})
         Me.cbxMonths.Location = New System.Drawing.Point(118, 46)
         Me.cbxMonths.Name = "cbxMonths"
         Me.cbxMonths.Size = New System.Drawing.Size(120, 21)
         Me.cbxMonths.TabIndex = 6
         '
+        'chkFillAccountsRate
+        '
+        Me.chkFillAccountsRate.Location = New System.Drawing.Point(6, 73)
+        Me.chkFillAccountsRate.Name = "chkFillAccountsRate"
+        Me.chkFillAccountsRate.Size = New System.Drawing.Size(338, 40)
+        Me.chkFillAccountsRate.TabIndex = 5
+        Me.chkFillAccountsRate.Text = "Llenar automaticamente los servicios conforme a la tarifa impuesta en la cuenta"
+        Me.chkFillAccountsRate.UseVisualStyleBackColor = True
+        '
+        'btnLoadAccounts
+        '
+        Me.btnLoadAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnLoadAccounts.Image = Global.JASS_APP.My.Resources.Resources.data_sheet_32
+        Me.btnLoadAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnLoadAccounts.Location = New System.Drawing.Point(522, 12)
+        Me.btnLoadAccounts.Name = "btnLoadAccounts"
+        Me.btnLoadAccounts.Size = New System.Drawing.Size(96, 64)
+        Me.btnLoadAccounts.TabIndex = 8
+        Me.btnLoadAccounts.Text = "CARGAR"
+        Me.btnLoadAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnLoadAccounts.UseVisualStyleBackColor = True
+        '
+        'btnExportAccounts
+        '
+        Me.btnExportAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnExportAccounts.Image = Global.JASS_APP.My.Resources.Resources.excel_export_32
+        Me.btnExportAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnExportAccounts.Location = New System.Drawing.Point(624, 12)
+        Me.btnExportAccounts.Name = "btnExportAccounts"
+        Me.btnExportAccounts.Size = New System.Drawing.Size(96, 64)
+        Me.btnExportAccounts.TabIndex = 9
+        Me.btnExportAccounts.Text = "EXPORTAR"
+        Me.btnExportAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnExportAccounts.UseVisualStyleBackColor = True
+        '
+        'btnImportAccounts
+        '
+        Me.btnImportAccounts.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnImportAccounts.Image = Global.JASS_APP.My.Resources.Resources.excel_import_32
+        Me.btnImportAccounts.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnImportAccounts.Location = New System.Drawing.Point(726, 12)
+        Me.btnImportAccounts.Name = "btnImportAccounts"
+        Me.btnImportAccounts.Size = New System.Drawing.Size(96, 64)
+        Me.btnImportAccounts.TabIndex = 10
+        Me.btnImportAccounts.Text = "IMPORTAR"
+        Me.btnImportAccounts.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnImportAccounts.UseVisualStyleBackColor = True
+        '
+        'bgwServices
+        '
+        '
         'frmDeclarationServices
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(834, 561)
+        Me.ClientSize = New System.Drawing.Size(834, 461)
         Me.Controls.Add(Me.btnImportAccounts)
         Me.Controls.Add(Me.btnExportAccounts)
         Me.Controls.Add(Me.btnLoadAccounts)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.dtgAccounts)
-        Me.MinimumSize = New System.Drawing.Size(850, 600)
+        Me.MinimumSize = New System.Drawing.Size(850, 500)
         Me.Name = "frmDeclarationServices"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Declaración de servicios"
@@ -331,6 +332,7 @@ Partial Class frmDeclarationServices
     Friend WithEvents clmRateName As DataGridViewTextBoxColumn
     Friend WithEvents clmYear As DataGridViewTextBoxColumn
     Friend WithEvents clmEdit As DataGridViewButtonColumn
-    Friend WithEvents CheckBox1 As CheckBox
+    Friend WithEvents chkMonths As CheckBox
     Friend WithEvents cbxMonths As ComboBox
+    Friend WithEvents dialogOpenExcel As OpenFileDialog
 End Class

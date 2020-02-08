@@ -204,7 +204,7 @@ Module dataFunctions
             Try
                 cnnx.Close()
                 cnnx.Open()
-                ada.SelectCommand = New MySqlCommand("SELECT idrate, name FROM rates", cnnx)
+                ada.SelectCommand = New MySqlCommand("SELECT code, name FROM rates", cnnx)
                 ada.Fill(ds)
                 Return ds
             Catch ex As Exception
@@ -528,12 +528,12 @@ Module dataFunctions
             cmd.CommandType = CommandType.Text
             cmd.CommandText = "SELECT 
             INTERLINE.idinternalline, 
-            rates.idrate, 
+            rates.code, 
             INTERLINE.code, 
             (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
             rates.name 
             FROM internal_line INTERLINE 
-            INNER JOIN rates ON INTERLINE.rate = rates.idrate 
+            INNER JOIN rates ON INTERLINE.rate = rates.code 
             INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
             WHERE service_line.idserviceline = @idserviceline"
             cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
@@ -1977,9 +1977,11 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub exportingExcel(vYearRate As String, vCrit As Integer, Optional vOption1 As Boolean = False)
+    Public Sub exportingExcel(vYearRate As String, vCrit As Integer, Optional vOptionFill As Boolean = False, Optional vOptionMes As Boolean = False, Optional vMes As Integer = 0)
         Dim cmd As New MySqlCommand
         Dim dr As MySqlDataReader
+
+        vMes += 1
 
         If Not cnnx.DataSource.Equals("") Then
             Try
@@ -1991,7 +1993,7 @@ Module dataFunctions
                 service_line.idserviceline, 
                 INTERLINE.idinternalline, 
                 years_rate.idyearrate, 
-                rates.idrate, 
+                rates.code, 
                 service_line.code, 
                 INTERLINE.code, 
                 streets.name, 
@@ -2001,7 +2003,7 @@ Module dataFunctions
                 INTERLINE.pricerate 
                 FROM internal_line INTERLINE
                 INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
-                INNER JOIN rates ON rates.idrate = INTERLINE.rate 
+                INNER JOIN rates ON rates.code = INTERLINE.rate 
                 INNER JOIN streets ON streets.idstreet = service_line.street 
                 INNER JOIN years_rate ON years_rate.idyearrate = rates.yearrate
                 ORDER BY users ASC"
@@ -2010,7 +2012,7 @@ Module dataFunctions
 
                 With Hoja
                     .Name = "Servicios"
-                    .SheetView.ZoomScale = 100
+                    .SheetView.ZoomScale = 90
                     .PageSetup.PageOrientation = XLPageOrientation.Landscape
                     .PageSetup.PaperSize = XLPaperSize.A4Paper
                     .PageSetup.PrintAreas.Add("E:M")
@@ -2067,9 +2069,14 @@ Module dataFunctions
                         .Range("I" & index).Value = dr(8).ToString
                         .Range("J" & index).Value = dr(9).ToString
                         .Range("K" & index).Value = dr(10).ToString
-                        .Range("L" & index).Value = 1
 
-                        If vOption1 Then
+                        If vOptionMes Then
+                            .Range("L" & index).Value = vMes
+                        Else
+                            .Range("L" & index).Value = 0
+                        End If
+
+                        If vOptionFill Then
                             .Range("M" & index).Value = dr(10).ToString
                         Else
                             .Range("M" & index).Value = 0
@@ -2080,6 +2087,60 @@ Module dataFunctions
                 End With
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
+
+    Public Sub importingExcel()
+        With Hoja
+            Dim rowsLast As Integer = .Range("E:E").LastRowUsed.RowNumber
+            If rowsLast > 1 Then
+                For index = 2 To rowsLast
+                    If (Trim(.Cell("A" & index).Value) <> "" And Trim(.Cell("B" & index).Value) <> "" And Trim(.Cell("C" & index).Value) <> "" And Trim(.Cell("D" & index).Value) <> "") Then
+                        addAccountLine(.Cell("B" & index).Value, .Cell("C" & index).Value)
+                        .Cell("N" & index).Value = "AÑO INSERTADO"
+                    Else
+                        .Cell("N" & index).Value = "FALTAN DATOS"
+                    End If
+                Next
+            Else
+                MsgBox("No hay datos que cargar", vbExclamation, "Aviso")
+            End If
+        End With
+        Libro.Save()
+    End Sub
+
+    Public Sub addAccountLine(vIdInternalLine As String, vIdYearRate As String)
+        Dim cmdCheked, cmdInsertAccountYear As New MySqlCommand
+        Dim drChecked As MySqlDataReader
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                cmdCheked.Connection = cnnx
+                cmdCheked.CommandType = CommandType.Text
+                cmdCheked.CommandText = "SELECT 
+                * 
+                FROM account_line 
+                WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @yearrate"
+                cmdCheked.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                cmdCheked.Parameters.AddWithValue("yearrate", vIdYearRate)
+                drChecked = cmdCheked.ExecuteReader()
+                Dim check As Boolean = drChecked.HasRows
+
+                If Not check Then
+                    cnnx.Close()
+                    cnnx.Open()
+                    cmdInsertAccountYear.CommandTimeout = 0
+                    cmdInsertAccountYear.Connection = cnnx
+                    cmdInsertAccountYear.CommandType = CommandType.Text
+                    cmdInsertAccountYear.CommandText = "INSERT INTO account_line(internalline, yearrate, debttotal, saldototal) VALUES(" & vIdInternalLine & ", " & vIdYearRate & ", 0, 0)"
+                    cmdInsertAccountYear.ExecuteNonQuery()
+                End If
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
             End Try
         End If

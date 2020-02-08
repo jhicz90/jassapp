@@ -13,7 +13,7 @@
 
         If Not dsRates.HasErrors Then
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "idrate"
+            cbxRates.ValueMember = "code"
             cbxRates.DisplayMember = "name"
         End If
 
