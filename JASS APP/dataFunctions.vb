@@ -1022,9 +1022,6 @@ Module dataFunctions
 
     Public Function updateAccount(vIdInternalLine As String, vIdLine As String, vIdRate As Integer, vPriceRate As Decimal) As Boolean
         Dim cmdUpdateAccount As New MySqlCommand
-        Dim cmdLastInsertLineUser As New MySqlCommand
-        Dim cmdIdInternalLine As New MySqlCommand
-        Dim dr As MySqlDataReader
 
         If Not (cnnx.DataSource.Equals("")) Then
             Try
@@ -1637,7 +1634,8 @@ Module dataFunctions
                             cmdUpdateAccountLine.CommandType = CommandType.Text
                             cmdUpdateAccountLine.CommandText = "UPDATE 
                             account_line 
-                            SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                            SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline), 
+                            account_line.debttotal = (SELECT SUM(account_detail.debttotal) AS debttotal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
                             WHERE account_line.idaccountline = @idaccountline"
                             cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                             cmdUpdateAccountLine.ExecuteNonQuery()
@@ -2244,7 +2242,7 @@ Module dataFunctions
     End Function
 
     Public Function addAccountDetail(vIdInternalLine As String, vIdYearRate As String, vMonth As String, vDebtAmount As Decimal) As Integer
-        Dim cmdChekedDetail, cmdChekedYear, cmdInsertAccountDetail As New MySqlCommand
+        Dim cmdChekedDetail, cmdChekedYear, cmdInsertAccountDetail, cmdUpdateAccountYear As New MySqlCommand
         Dim drCheckedDetail, drChekedYear As MySqlDataReader
 
         If Not cnnx.DataSource.Equals("") Then
@@ -2294,6 +2292,16 @@ Module dataFunctions
                         cmdInsertAccountDetail.CommandType = CommandType.Text
                         cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", 1, " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
                         cmdInsertAccountDetail.ExecuteNonQuery()
+
+                        cmdUpdateAccountYear.Connection = cnnx
+                        cmdUpdateAccountYear.CommandType = CommandType.Text
+                        cmdUpdateAccountYear.CommandText = "UPDATE 
+                        account_line 
+                        SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline), 
+                        account_line.debttotal = (SELECT SUM(account_detail.debttotal) AS debttotal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                        WHERE account_line.idaccountline = @idaccountline"
+                        cmdUpdateAccountYear.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                        cmdUpdateAccountYear.ExecuteNonQuery()
                         Return 1
                     Else
                         Return 2
