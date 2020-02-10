@@ -26,19 +26,19 @@ Module dataFunctions
         End Try
     End Function
 
-    Public Function userLogin(ByVal nameusr As String, ByVal passwd As String)
+    Public Function userLogin(ByVal nameusr As String, ByVal passwd As String) As Boolean
         Dim cmd As New MySqlCommand
         Dim dr As MySqlDataReader
 
         If cnnx.DataSource.Equals("") Then
             Return False
         Else
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT idusersys ,name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
-
             Try
+                cnnx.Close()
+                cnnx.Open()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT idusersys ,name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
                 dr = cmd.ExecuteReader()
 
                 If dr.HasRows Then
@@ -47,6 +47,7 @@ Module dataFunctions
                         My.Settings.vUserNameLogin = dr(1).ToString
                         MsgBox("Bienvenid@ " + dr(1).ToString, vbInformation, "Aviso")
                     End While
+                    Return True
                 Else
                     MsgBox("El usuario o contraseña ingresadas son incorrectas o no existen", vbExclamation, "Aviso")
                     cmd.Dispose()
@@ -55,13 +56,33 @@ Module dataFunctions
                 End If
 
                 cmd.Dispose()
-
-                Return True
             Catch ex As Exception
                 Return False
             End Try
         End If
     End Function
+
+    Public Sub getYearActive()
+        Dim cmd As New MySqlCommand
+        Dim dr As MySqlDataReader
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT years_rate.idyearrate, years_rate.year, years_rate.nameyear FROM years_rate WHERE years_rate.active = 1 LIMIT 1"
+                dr = cmd.ExecuteReader
+                dr.Read()
+                My.Settings.vIdYear = dr(0).ToString
+                My.Settings.vYear = CInt(dr(1).ToString)
+                My.Settings.vYearName = dr(2).ToString
+            Catch ex As Exception
+                MsgBox(ex.Message)
+            End Try
+        End If
+    End Sub
     Public Function generateCode(vLen As Integer, vLower As Boolean, vUpper As Boolean, vNumber As Boolean) As String
         Dim intRnd As Integer
         Dim intStep As Integer = Nothing
@@ -204,7 +225,7 @@ Module dataFunctions
             Try
                 cnnx.Close()
                 cnnx.Open()
-                ada.SelectCommand = New MySqlCommand("SELECT code, name FROM rates", cnnx)
+                ada.SelectCommand = New MySqlCommand("SELECT idrate, name FROM rates", cnnx)
                 ada.Fill(ds)
                 Return ds
             Catch ex As Exception
@@ -261,7 +282,6 @@ Module dataFunctions
             Try
                 cnnx.Close()
                 cnnx.Open()
-
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT users_line.userreg AS iduser, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname " &
@@ -284,6 +304,8 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
 
@@ -338,9 +360,10 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
             Dim comand As String
 
             Select Case typeBusq
@@ -432,9 +455,10 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
             Dim comand As String
 
             Select Case typeBusq
@@ -524,16 +548,18 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             MsgBox("Error de conexion", vbExclamation, "Aviso")
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
             cmd.CommandText = "SELECT 
             INTERLINE.idinternalline, 
-            rates.code, 
+            rates.idrate, 
             INTERLINE.code, 
             (SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
             rates.name 
             FROM internal_line INTERLINE 
-            INNER JOIN rates ON INTERLINE.rate = rates.code 
+            INNER JOIN rates ON INTERLINE.rate = rates.idrate 
             INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
             WHERE service_line.idserviceline = @idserviceline"
             cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
@@ -612,10 +638,19 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
-            cmd.CommandText = "SELECT price, description, variable FROM rates WHERE idrate LIKE '" & idRate & "'"
+            cmd.CommandText = "SELECT 
+            price, 
+            description, 
+            variable 
+            FROM rates 
+            INNER JOIN rate_price ON rate_price.rate = rates.idrate 
+            WHERE rate_price.yearrate=@idyearrate AND idrate=@idrate"
+            cmd.Parameters.AddWithValue("idyearrate", My.Settings.vIdYear)
+            cmd.Parameters.AddWithValue("idrate", idRate)
 
             Try
                 dr = cmd.ExecuteReader()
@@ -645,9 +680,10 @@ Module dataFunctions
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
+            cnnx.Close()
+            cnnx.Open()
             cmd.Connection = cnnx
             cmd.CommandType = CommandType.Text
-
             cmd.CommandText = "SELECT code, name FROM streets WHERE idstreet LIKE '" & idAvenue & "'"
 
             Try
@@ -981,6 +1017,37 @@ Module dataFunctions
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
             Return Nothing
+        End If
+    End Function
+
+    Public Function updateAccount(vIdInternalLine As String, vIdLine As String, vIdRate As Integer, vPriceRate As Decimal) As Boolean
+        Dim cmdUpdateAccount As New MySqlCommand
+        Dim cmdLastInsertLineUser As New MySqlCommand
+        Dim cmdIdInternalLine As New MySqlCommand
+        Dim dr As MySqlDataReader
+
+        If Not (cnnx.DataSource.Equals("")) Then
+            Try
+                'Registrando una linea-cuenta
+                cmdUpdateAccount.Connection = cnnx
+                cmdUpdateAccount.CommandType = CommandType.Text
+                cmdUpdateAccount.CommandText = "UPDATE internal_line SET serviceline=@serviceline, rate=@rate, pricerate=@pricerate WHERE internal_line.idinternalline = @idinternalline"
+                cmdUpdateAccount.Parameters.AddWithValue("serviceline", vIdLine)
+                cmdUpdateAccount.Parameters.AddWithValue("rate", vIdRate)
+                cmdUpdateAccount.Parameters.AddWithValue("pricerate", vPriceRate)
+                cmdUpdateAccount.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                cmdUpdateAccount.ExecuteNonQuery()
+
+                MsgBox("El registro se actualizo corrrectamente", MsgBoxStyle.Exclamation, "Aviso")
+                Return True
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al guardar el registro", vbCritical, "Aviso")
+                MsgBox(ex.Message)
+                Return False
+            End Try
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            Return False
         End If
     End Function
 
@@ -1993,7 +2060,7 @@ Module dataFunctions
                 service_line.idserviceline, 
                 INTERLINE.idinternalline, 
                 years_rate.idyearrate, 
-                rates.code, 
+                rates.idrate, 
                 service_line.code, 
                 INTERLINE.code, 
                 streets.name, 
@@ -2003,10 +2070,13 @@ Module dataFunctions
                 INTERLINE.pricerate 
                 FROM internal_line INTERLINE
                 INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
-                INNER JOIN rates ON rates.code = INTERLINE.rate 
+                INNER JOIN rates ON rates.idrate = INTERLINE.rate 
                 INNER JOIN streets ON streets.idstreet = service_line.street 
-                INNER JOIN years_rate ON years_rate.idyearrate = rates.yearrate
+                INNER JOIN rate_price ON rate_price.rate = rates.idrate
+                INNER JOIN years_rate ON years_rate.idyearrate = rate_price.yearrate 
+                WHERE rate_price.yearrate = @idyearrate
                 ORDER BY users ASC"
+                cmd.Parameters.AddWithValue("idyearrate", vYearRate)
 
                 dr = cmd.ExecuteReader
 

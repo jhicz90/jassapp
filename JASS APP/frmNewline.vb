@@ -12,7 +12,7 @@
         If Not dsRates.HasErrors Then
             cbxRates.Enabled = True
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "code"
+            cbxRates.ValueMember = "idrate"
             cbxRates.DisplayMember = "name"
         Else
             cbxRates.Enabled = False

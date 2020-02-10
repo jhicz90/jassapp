@@ -13,7 +13,7 @@
 
         If Not dsRates.HasErrors Then
             cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "code"
+            cbxRates.ValueMember = "idrate"
             cbxRates.DisplayMember = "name"
         End If
 
@@ -74,11 +74,14 @@
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
         If vIdInternalLine <> "new" Then
-            'Update account
+            Dim saved As Boolean = updateAccount(vIdInternalLine, vIdServiceLine, cbxRates.SelectedValue, Val(txtPriceRate.Text))
+            If saved = False Then
+                Close()
+            End If
         Else
             vIdInternalLine = saveAccountNew(vIdServiceLine, cbxRates.SelectedValue, Val(txtPriceRate.Text))
-            loadAccount(vIdServiceLine, vIdInternalLine)
         End If
+        loadAccount(vIdServiceLine, vIdInternalLine)
     End Sub
 
     Private Sub btnNewUser_Click(sender As Object, e As EventArgs) Handles btnNewUser.Click

@@ -19,5 +19,14 @@
     <Setting Name="vUserIdLogin" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="vIdYear" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="vYear" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="vYearName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">AÑO</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

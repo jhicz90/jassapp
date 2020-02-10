@@ -12,8 +12,9 @@ Public Class frmLogin
 
     Private Sub OK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OK.Click
         If DatabaseConnect() Then
+            getYearActive()
             If userLogin(UsernameTextBox.Text, PasswordTextBox.Text) = True Then
-                Me.DialogResult = DialogResult.OK
+                DialogResult = DialogResult.OK
             End If
         Else
             Close()

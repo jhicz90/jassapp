@@ -15,7 +15,7 @@
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles Me.Load
         If frmLogin.ShowDialog() = DialogResult.Cancel Then
-            Me.Dispose()
+            Dispose()
         End If
     End Sub
 

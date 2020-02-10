@@ -99,6 +99,42 @@ Namespace My
                 Me("vUserIdLogin") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property vIdYear() As Integer
+            Get
+                Return CType(Me("vIdYear"),Integer)
+            End Get
+            Set
+                Me("vIdYear") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property vYear() As Integer
+            Get
+                Return CType(Me("vYear"),Integer)
+            End Get
+            Set
+                Me("vYear") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("AÑO")>  _
+        Public Property vYearName() As String
+            Get
+                Return CType(Me("vYearName"),String)
+            End Get
+            Set
+                Me("vYearName") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
