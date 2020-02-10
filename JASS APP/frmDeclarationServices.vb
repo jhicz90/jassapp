@@ -108,7 +108,6 @@ Public Class frmDeclarationServices
             blockWindow(False)
             bgwServices.RunWorkerAsync()
         Else
-            Libro.Dispose()
             vExporOrImport = False
         End If
     End Sub
