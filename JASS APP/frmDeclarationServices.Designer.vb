@@ -48,6 +48,7 @@ Partial Class frmDeclarationServices
         Me.bgwServices = New System.ComponentModel.BackgroundWorker()
         Me.dialogSaveExcel = New System.Windows.Forms.SaveFileDialog()
         Me.dialogOpenExcel = New System.Windows.Forms.OpenFileDialog()
+        Me.prgWorking = New System.Windows.Forms.ProgressBar()
         CType(Me.dtgAccounts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -111,7 +112,7 @@ Partial Class frmDeclarationServices
         Me.dtgAccounts.RowHeadersVisible = False
         Me.dtgAccounts.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgAccounts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgAccounts.Size = New System.Drawing.Size(810, 304)
+        Me.dtgAccounts.Size = New System.Drawing.Size(810, 281)
         Me.dtgAccounts.TabIndex = 6
         '
         'clmIdLine
@@ -288,11 +289,21 @@ Partial Class frmDeclarationServices
         'bgwServices
         '
         '
+        'prgWorking
+        '
+        Me.prgWorking.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.prgWorking.Location = New System.Drawing.Point(12, 432)
+        Me.prgWorking.Name = "prgWorking"
+        Me.prgWorking.Size = New System.Drawing.Size(810, 23)
+        Me.prgWorking.TabIndex = 11
+        '
         'frmDeclarationServices
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(834, 461)
+        Me.Controls.Add(Me.prgWorking)
         Me.Controls.Add(Me.btnImportAccounts)
         Me.Controls.Add(Me.btnExportAccounts)
         Me.Controls.Add(Me.btnLoadAccounts)
@@ -335,4 +346,5 @@ Partial Class frmDeclarationServices
     Friend WithEvents chkMonths As CheckBox
     Friend WithEvents cbxMonths As ComboBox
     Friend WithEvents dialogOpenExcel As OpenFileDialog
+    Friend WithEvents prgWorking As ProgressBar
 End Class

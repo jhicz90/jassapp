@@ -264,7 +264,7 @@ Module dataFunctions
 
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
-                cmd.CommandText = "SELECT users_line.userreg AS iduser, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname " &
+                cmd.CommandText = "SELECT users_line.userreg AS iduser, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname " &
                 "FROM users_line INNER JOIN user_reg ON users_line.userreg = user_reg.iduserreg WHERE users_line.internalline = @idinternalline"
                 cmd.Parameters.AddWithValue("idinternalline", vIdInternalLine)
 
@@ -292,19 +292,19 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype 
                     WHERE user_reg.docid LIKE '%" & txtBusq & "%'"
                 Case Else
                     'Buscar a todos
-                    comand = "SELECT user_reg.iduserreg, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid,
+                    comand = "SELECT user_reg.iduserreg, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, user_reg.docid,
                     user_reg.names, user_reg.surnames, user_type.idusertype, user_reg.address, user_reg.cellphone, user_reg.telephone
                     FROM user_reg INNER JOIN user_type ON user_type.idusertype = user_reg.usertype"
             End Select
@@ -346,7 +346,7 @@ Module dataFunctions
             Select Case typeBusq
                 Case 0
                     'Buscar por nombres
-                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -355,7 +355,7 @@ Module dataFunctions
                     "WHERE user_reg.names LIKE '%" & txtBusq & "%' OR user_reg.surnames LIKE '%" & txtBusq & "%'"
                 Case 1
                     'Buscar por documento
-                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, user_reg.docid " &
+                    comand = "SELECT internal_line.idinternalline, service_line.idserviceline, service_line.code, service_line.name, streets.name, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, user_reg.docid " &
                     "FROM service_line " &
                     "INNER JOIN streets On streets.idstreet = service_line.street " &
                     "INNER JOIN internal_line ON internal_line.serviceline = service_line.idserviceline " &
@@ -370,7 +370,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -383,7 +383,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -396,7 +396,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
@@ -445,7 +445,7 @@ Module dataFunctions
                     "service_line.code, " &
                     "service_line.name, " &
                     "streets.name, " &
-                    "CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, " &
+                    "TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, " &
                     "user_reg.docid " &
                     "FROM internal_line " &
                     "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
@@ -460,7 +460,7 @@ Module dataFunctions
                     "service_line.code, " &
                     "service_line.name, " &
                     "streets.name, " &
-                    "CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, " &
+                    "TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname, " &
                     "user_reg.docid " &
                     "FROM internal_line " &
                     "INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline" &
@@ -475,7 +475,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street " &
@@ -487,7 +487,7 @@ Module dataFunctions
                     "SERVLINE.code, " &
                     "SERVLINE.name, " &
                     "SECTOR.name, " &
-                    "(SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
+                    "(SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS fullnames, " &
                     "(SELECT GROUP_CONCAT(DISTINCT user_reg.docid SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE internal_line.serviceline = SERVLINE.idserviceline) AS docids " &
                     "FROM service_line SERVLINE " &
                     "INNER JOIN streets SECTOR ON SECTOR.idstreet = SERVLINE.street"
@@ -530,7 +530,7 @@ Module dataFunctions
             INTERLINE.idinternalline, 
             rates.code, 
             INTERLINE.code, 
-            (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
+            (SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS fullname, 
             rates.name 
             FROM internal_line INTERLINE 
             INNER JOIN rates ON INTERLINE.rate = rates.code 
@@ -574,7 +574,7 @@ Module dataFunctions
             internal_line.idinternalline,
             internal_line.serviceline,
             user_reg.iduserreg,
-            CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname,
+            TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname,
             user_reg.docid,
             user_type.name 
             FROM internal_line
@@ -1997,7 +1997,7 @@ Module dataFunctions
                 service_line.code, 
                 INTERLINE.code, 
                 streets.name, 
-                (SELECT GROUP_CONCAT(DISTINCT CONCAT(user_reg.surnames, "" "", user_reg.names) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS users, 
+                (SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS users, 
                 rates.name, 
                 years_rate.year,
                 INTERLINE.pricerate 
@@ -2092,17 +2092,39 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub importingExcel()
+    Public Sub importingExcel(vPrgWorking As ProgressBar)
         With Hoja
             Dim rowsLast As Integer = .Range("E:E").LastRowUsed.RowNumber
+            vPrgWorking.Minimum = 1
+            vPrgWorking.Maximum = rowsLast - 1
             If rowsLast > 1 Then
                 For index = 2 To rowsLast
                     If (Trim(.Cell("A" & index).Value) <> "" And Trim(.Cell("B" & index).Value) <> "" And Trim(.Cell("C" & index).Value) <> "" And Trim(.Cell("D" & index).Value) <> "") Then
-                        addAccountLine(.Cell("B" & index).Value, .Cell("C" & index).Value)
-                        .Cell("N" & index).Value = "AÑO INSERTADO"
+                        Dim accountYear As Integer = addAccountYear(.Cell("B" & index).Value, .Cell("C" & index).Value)
+                        If accountYear = 1 Then
+                            .Cell("N" & index).Value = "AÑO INSERTADO"
+                        ElseIf accountYear = 2 Then
+                            .Cell("N" & index).Value = "AÑO ENCONTRADO"
+                        Else
+                            .Cell("N" & index).Value = "NO INGRESADO"
+                        End If
+
+                        If CDec(.Cell("M" & index).Value) > 0 And accountYear > 0 Then
+                            Dim accountDetail As Integer = addAccountDetail(.Cell("B" & index).Value, .Cell("C" & index).Value, .Cell("L" & index).Value, .Cell("M" & index).Value)
+                            If accountDetail = 1 Then
+                                .Cell("O" & index).Value = "MES INSERTADO"
+                            ElseIf accountDetail = 2 Then
+                                .Cell("O" & index).Value = "MES ENCONTRADO"
+                            Else
+                                .Cell("O" & index).Value = "NO INGRESADO"
+                            End If
+                        Else
+                            .Cell("O" & index).Value = "SE NECESITA AÑO O DATO"
+                        End If
                     Else
                         .Cell("N" & index).Value = "FALTAN DATOS"
                     End If
+                    vPrgWorking.Value = index - 1
                 Next
             Else
                 MsgBox("No hay datos que cargar", vbExclamation, "Aviso")
@@ -2111,7 +2133,7 @@ Module dataFunctions
         Libro.Save()
     End Sub
 
-    Public Sub addAccountLine(vIdInternalLine As String, vIdYearRate As String)
+    Public Function addAccountYear(vIdInternalLine As String, vIdYearRate As String) As Integer
         Dim cmdCheked, cmdInsertAccountYear As New MySqlCommand
         Dim drChecked As MySqlDataReader
 
@@ -2124,25 +2146,98 @@ Module dataFunctions
                 cmdCheked.CommandText = "SELECT 
                 * 
                 FROM account_line 
-                WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @yearrate"
+                WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @idyearrate"
                 cmdCheked.Parameters.AddWithValue("idinternalline", vIdInternalLine)
-                cmdCheked.Parameters.AddWithValue("yearrate", vIdYearRate)
+                cmdCheked.Parameters.AddWithValue("idyearrate", vIdYearRate)
                 drChecked = cmdCheked.ExecuteReader()
                 Dim check As Boolean = drChecked.HasRows
 
                 If Not check Then
                     cnnx.Close()
                     cnnx.Open()
-                    cmdInsertAccountYear.CommandTimeout = 0
                     cmdInsertAccountYear.Connection = cnnx
                     cmdInsertAccountYear.CommandType = CommandType.Text
                     cmdInsertAccountYear.CommandText = "INSERT INTO account_line(internalline, yearrate, debttotal, saldototal) VALUES(" & vIdInternalLine & ", " & vIdYearRate & ", 0, 0)"
                     cmdInsertAccountYear.ExecuteNonQuery()
+                    Return 1
+                Else
+                    Return 2
                 End If
             Catch ex As Exception
                 MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
+                Return 0
             End Try
+        Else
+            Return 0
         End If
-    End Sub
+    End Function
+
+    Public Function addAccountDetail(vIdInternalLine As String, vIdYearRate As String, vMonth As String, vDebtAmount As Decimal) As Integer
+        Dim cmdChekedDetail, cmdChekedYear, cmdInsertAccountDetail As New MySqlCommand
+        Dim drCheckedDetail, drChekedYear As MySqlDataReader
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                cmdChekedYear.Connection = cnnx
+                cmdChekedYear.CommandType = CommandType.Text
+                cmdChekedYear.CommandText = "SELECT 
+                account_line.idaccountline 
+                FROM account_line 
+                WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @idyearrate"
+                cmdChekedYear.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                cmdChekedYear.Parameters.AddWithValue("idyearrate", vIdYearRate)
+                drChekedYear = cmdChekedYear.ExecuteReader()
+
+                Dim vIdAccountLine As String
+                Dim chekedYear As Boolean = drChekedYear.HasRows
+
+                If chekedYear Then
+                    drChekedYear.Read()
+                    vIdAccountLine = drChekedYear(0).ToString
+                Else
+                    vIdAccountLine = 0
+                    chekedYear = False
+                End If
+
+                If chekedYear Then
+                    cnnx.Close()
+                    cnnx.Open()
+                    cmdChekedDetail.Connection = cnnx
+                    cmdChekedDetail.CommandType = CommandType.Text
+                    cmdChekedDetail.CommandText = "SELECT 
+                    * 
+                    FROM account_detail 
+                    WHERE account_detail.accountline = @idaccountline AND account_detail.yearrate = @idyearrate AND account_detail.ratetype = 1 AND account_detail.month = @month"
+                    cmdChekedDetail.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                    cmdChekedDetail.Parameters.AddWithValue("idyearrate", vIdYearRate)
+                    cmdChekedDetail.Parameters.AddWithValue("month", vMonth)
+                    drCheckedDetail = cmdChekedDetail.ExecuteReader()
+                    Dim checkDetail As Boolean = drCheckedDetail.HasRows
+
+                    If Not checkDetail Then
+                        cnnx.Close()
+                        cnnx.Open()
+                        cmdInsertAccountDetail.Connection = cnnx
+                        cmdInsertAccountDetail.CommandType = CommandType.Text
+                        cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", 1, " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
+                        cmdInsertAccountDetail.ExecuteNonQuery()
+                        Return 1
+                    Else
+                        Return 2
+                    End If
+                Else
+                    Return 0
+                End If
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return 0
+            End Try
+        Else
+            Return 0
+        End If
+    End Function
 End Module

@@ -1,4 +1,5 @@
-﻿Imports ClosedXML.Excel
+﻿Imports System.ComponentModel
+Imports ClosedXML.Excel
 Public Class frmDeclarationServices
     Dim dsYearsRate As DataSet = Nothing
     Dim vAction As Integer = 0
@@ -35,16 +36,28 @@ Public Class frmDeclarationServices
     End Sub
 
     Public Sub exportExcel()
-        Libro.SaveAs(dialogSaveExcel.FileName)
-        exportingExcel(cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
-        Libro.Save()
-        MsgBox("Exportación terminada con exito.", MsgBoxStyle.Information, "Excel")
+        Try
+            Libro.SaveAs(dialogSaveExcel.FileName)
+            exportingExcel(cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
+            Libro.Save()
+            MsgBox("Exportación terminada con exito.", MsgBoxStyle.Information, "Excel")
+            vExporOrImport = False
+        Catch ex As Exception
+            MsgBox("Error a la hora de exportar", MsgBoxStyle.Exclamation, "Excel")
+            MsgBox(ex.Message)
+        End Try
         blockWindow(True)
     End Sub
 
     Public Sub importExcel()
-        importingExcel()
-        MsgBox("Importación terminada con exito.", MsgBoxStyle.Information, "Excel")
+        Try
+            importingExcel(prgWorking)
+            MsgBox("Importación terminada con exito.", MsgBoxStyle.Information, "Excel")
+            vExporOrImport = False
+        Catch ex As Exception
+            MsgBox("Error a la hora de importar", MsgBoxStyle.Exclamation, "Excel")
+            MsgBox(ex.Message)
+        End Try
         blockWindow(True)
     End Sub
 
@@ -78,6 +91,7 @@ Public Class frmDeclarationServices
             bgwServices.RunWorkerAsync()
         Else
             Libro.Dispose()
+            vExporOrImport = False
         End If
     End Sub
 
@@ -95,6 +109,7 @@ Public Class frmDeclarationServices
             bgwServices.RunWorkerAsync()
         Else
             Libro.Dispose()
+            vExporOrImport = False
         End If
     End Sub
 
@@ -105,5 +120,13 @@ Public Class frmDeclarationServices
             Case 2
                 importExcel()
         End Select
+    End Sub
+
+    Private Sub frmDeclarationServices_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        If vExporOrImport Then
+            e.Cancel = True
+        Else
+            e.Cancel = False
+        End If
     End Sub
 End Class
