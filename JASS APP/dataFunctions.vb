@@ -2172,8 +2172,9 @@ Module dataFunctions
                     .Range("I1").Value = "TARIFA"
                     .Range("J1").Value = "AÑO"
                     .Range("K1").Value = "PRECIO"
-                    .Range("L1").Value = "MES"
-                    .Range("M1").Value = "TARIFA MES"
+                    .Range("L1").Value = "SERVICIO"
+                    .Range("M1").Value = "MES"
+                    .Range("N1").Value = "TARIFA MES"
 
                     .Columns("A:D").Hide()
                     .Columns("E").Width = 25
@@ -2185,6 +2186,7 @@ Module dataFunctions
                     .Columns("K").Width = 12
                     .Columns("L").Width = 12
                     .Columns("M").Width = 15
+                    .Columns("N").Width = 12
 
                     Dim index As Integer = 2
                     While dr.Read
@@ -2202,17 +2204,49 @@ Module dataFunctions
                         .Range("K" & index).Value = dr(10).ToString
 
                         If vOptionMes Then
-                            .Range("L" & index).Value = vMes
-                        Else
-                            .Range("L" & index).Value = 0
-                        End If
-
-                        If vOptionFill Then
-                            .Range("M" & index).Value = dr(10).ToString
+                            .Range("M" & index).Value = vMes
                         Else
                             .Range("M" & index).Value = 0
                         End If
 
+                        If vOptionFill Then
+                            .Range("N" & index).Value = dr(10).ToString
+                        Else
+                            .Range("N" & index).Value = 0
+                        End If
+
+                        index += 1
+                    End While
+                    dr.Close()
+                End With
+
+                'Consulta para la siguiente hoja
+                cmd.CommandText = "SELECT 
+                idratetype, 
+                name,
+                description, 
+                periodic 
+                FROM rate_types"
+                dr = cmd.ExecuteReader
+
+                Hoja = Libro.Worksheets.Add("Leyenda")
+
+                With Hoja
+                    .Cell("A1").Value = "ID DE ORDEN"
+                    .Cell("B1").Value = "NOMBRE"
+                    .Cell("C1").Value = "DESCRIPCION"
+                    .Cell("D1").Value = "PERIODICO"
+                    .Columns("A").Width = 12
+                    .Columns("B").Width = 15
+                    .Columns("C").Width = 45
+                    .Columns("D").Width = 12
+
+                    Dim index As Integer = 2
+                    While dr.Read
+                        .Cell("A" & index).Value = dr(0).ToString
+                        .Cell("B" & index).Value = dr(1).ToString
+                        .Cell("C" & index).Value = dr(2).ToString
+                        .Cell("D" & index).Value = CBool(dr(3).ToString)
                         index += 1
                     End While
                 End With
@@ -2233,27 +2267,27 @@ Module dataFunctions
                     If (Trim(.Cell("A" & index).Value) <> "" And Trim(.Cell("B" & index).Value) <> "" And Trim(.Cell("C" & index).Value) <> "" And Trim(.Cell("D" & index).Value) <> "") Then
                         Dim accountYear As Integer = addAccountYear(.Cell("B" & index).Value, .Cell("C" & index).Value)
                         If accountYear = 1 Then
-                            .Cell("N" & index).Value = "AÑO INSERTADO"
+                            .Cell("O" & index).Value = "AÑO INSERTADO"
                         ElseIf accountYear = 2 Then
-                            .Cell("N" & index).Value = "AÑO ENCONTRADO"
+                            .Cell("O" & index).Value = "AÑO ENCONTRADO"
                         Else
-                            .Cell("N" & index).Value = "NO INGRESADO"
+                            .Cell("O" & index).Value = "NO INGRESADO"
                         End If
 
-                        If CDec(.Cell("M" & index).Value) > 0 And accountYear > 0 Then
-                            Dim accountDetail As Integer = addAccountDetail(.Cell("B" & index).Value, .Cell("C" & index).Value, .Cell("L" & index).Value, .Cell("M" & index).Value)
+                        If CDec(.Cell("N" & index).Value) > 0 And accountYear > 0 Then
+                            Dim accountDetail As Integer = addAccountDetail(.Cell("B" & index).Value, .Cell("C" & index).Value, .Cell("L" & index).Value, .Cell("M" & index).Value, .Cell("N" & index).Value)
                             If accountDetail = 1 Then
-                                .Cell("O" & index).Value = "MES INSERTADO"
+                                .Cell("P" & index).Value = "MES O CUENTA INSERTADA"
                             ElseIf accountDetail = 2 Then
-                                .Cell("O" & index).Value = "MES ENCONTRADO"
+                                .Cell("P" & index).Value = "MES O CUENTA ENCONTRADA"
                             Else
-                                .Cell("O" & index).Value = "NO INGRESADO"
+                                .Cell("P" & index).Value = "NO INGRESADO"
                             End If
                         Else
-                            .Cell("O" & index).Value = "SE NECESITA AÑO O DATO"
+                            .Cell("P" & index).Value = "SE NECESITA AÑO O DATO"
                         End If
                     Else
-                        .Cell("N" & index).Value = "FALTAN DATOS"
+                        .Cell("O" & index).Value = "FALTAN DATOS"
                     End If
                     vPrgWorking.Value = index - 1
                 Next
@@ -2304,7 +2338,7 @@ Module dataFunctions
         End If
     End Function
 
-    Public Function addAccountDetail(vIdInternalLine As String, vIdYearRate As String, vMonth As String, vDebtAmount As Decimal) As Integer
+    Public Function addAccountDetail(vIdInternalLine As String, vIdYearRate As String, vIdDetail As String, vMonth As String, vDebtAmount As Decimal) As Integer
         Dim cmdChekedDetail, cmdChekedYear, cmdInsertAccountDetail, cmdUpdateAccountYear As New MySqlCommand
         Dim drCheckedDetail, drChekedYear As MySqlDataReader
 
@@ -2341,9 +2375,10 @@ Module dataFunctions
                     cmdChekedDetail.CommandText = "SELECT 
                     * 
                     FROM account_detail 
-                    WHERE account_detail.accountline = @idaccountline AND account_detail.yearrate = @idyearrate AND account_detail.ratetype = 1 AND account_detail.month = @month"
+                    WHERE account_detail.accountline = @idaccountline AND account_detail.yearrate = @idyearrate AND account_detail.ratetype = @idratetype AND account_detail.month = @month"
                     cmdChekedDetail.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                     cmdChekedDetail.Parameters.AddWithValue("idyearrate", vIdYearRate)
+                    cmdChekedDetail.Parameters.AddWithValue("idratetype", vIdDetail)
                     cmdChekedDetail.Parameters.AddWithValue("month", vMonth)
                     drCheckedDetail = cmdChekedDetail.ExecuteReader()
                     Dim checkDetail As Boolean = drCheckedDetail.HasRows
@@ -2353,7 +2388,7 @@ Module dataFunctions
                         cnnx.Open()
                         cmdInsertAccountDetail.Connection = cnnx
                         cmdInsertAccountDetail.CommandType = CommandType.Text
-                        cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", 1, " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
+                        cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", " & vIdDetail & ", " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
                         cmdInsertAccountDetail.ExecuteNonQuery()
 
                         cmdUpdateAccountYear.Connection = cnnx
