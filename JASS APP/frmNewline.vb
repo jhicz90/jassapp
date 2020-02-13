@@ -5,7 +5,6 @@
     Public codUser As String = ""
     Private Sub FrmNewline_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconNewline
-        MdiParent = frmMain
 
         dsRates = listRates()
 

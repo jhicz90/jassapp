@@ -723,6 +723,38 @@ Module dataFunctions
         End If
     End Function
 
+    Public Function checkDocId(vDocId As String) As Boolean
+        Dim cmdFindUser As New MySqlCommand
+        Dim dr As MySqlDataReader
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                Dim vDuplicateDoc As Boolean = False
+
+                If vDocId.Trim <> "" Then
+                    cmdFindUser.Connection = cnnx
+                    cmdFindUser.CommandType = CommandType.Text
+                    cmdFindUser.CommandText = "SELECT user_reg.docid FROM user_reg WHERE user_reg.docid LIKE @docid"
+                    cmdFindUser.Parameters.AddWithValue("docid", vDocId)
+                    dr = cmdFindUser.ExecuteReader
+                    vDuplicateDoc = dr.HasRows
+                    dr.Close()
+                End If
+
+                If vDuplicateDoc Then
+                    MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
+                End If
+
+                Return vDuplicateDoc
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                Return False
+            End Try
+        Else
+            Return False
+        End If
+    End Function
+
     Public Sub addUserToLine(vIdInternalLine As String, dataUser() As String, vIdRate As Integer, Optional vPriceRate As Double = 0)
         Dim cmdInsertLineUser As New MySqlCommand
         Dim cmdFindLineUser As New MySqlCommand
@@ -776,16 +808,7 @@ Module dataFunctions
 
         If Not (cnnx.DataSource.Equals("")) Then
             Try
-                cmdFindUser.Connection = cnnx
-                cmdFindUser.CommandType = CommandType.Text
-                cmdFindUser.CommandText = "SELECT user_reg.docid FROM user_reg WHERE user_reg.docid LIKE @docid"
-                cmdFindUser.Parameters.AddWithValue("docid", dataUser(4))
-                dr = cmdFindUser.ExecuteReader
-                Dim vDuplicateDoc As Boolean = dr.HasRows
-                dr.Close()
-
-                If vDuplicateDoc Then
-                    MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
+                If checkDocId(dataUser(4)) Then
                     Exit Sub
                 End If
 
@@ -838,21 +861,12 @@ Module dataFunctions
         Dim cmdInsertAccountUser As New MySqlCommand
         Dim dr As MySqlDataReader
 
-        If Not (cnnx.DataSource.Equals("")) Then
+        If Not cnnx.DataSource.Equals("") Then
             Try
                 If dataUser(3).Trim <> "" And (dataUser(7).Trim = "" Or dataUser(7) = Nothing) Then
-                    cmdFindUser.Connection = cnnx
-                    cmdFindUser.CommandType = CommandType.Text
-                    cmdFindUser.CommandText = "SELECT * FROM user_reg WHERE user_reg.docid LIKE @docid"
-                    cmdFindUser.Parameters.AddWithValue("docid", dataUser(3))
-                    dr = cmdFindUser.ExecuteReader
-                    vFindUser = dr.HasRows
-
-                    If vFindUser Then
-                        MsgBox("El numero de documento ya esta en uso.", vbExclamation, "Aviso")
+                    If checkDocId(dataUser(3)) Then
                         Return False
                     End If
-                    dr.Close()
                 End If
 
                 cmdFindLine.Connection = cnnx
@@ -1214,15 +1228,59 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Sub showFindUsers(frmMdiParent As Form, vFrmGet As Integer, vFrmIn As Form)
+    Public Sub showNewLine(vfrmMdiParent As Form)
+        Dim frm As New frmNewline
+
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
+    Public Sub showFindLines(vfrmMdiParent As Form)
+        Dim frm As New frmFindLines
+
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
+    Public Sub showFindCollect(vfrmMdiParent As Form)
+        Dim frm As New frmFindCollect
+
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
+    Public Sub showDeclarationServices(vfrmMdiParent As Form)
+        Dim frm As New frmDeclarationServices
+
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
+    Public Sub showFindUsers(vfrmMdiParent As Form, vFrmGet As Integer, vFrmIn As Form)
         Dim frm As New frmFindUsers
-        frm.MdiParent = frmMdiParent
         frm.vFrmGet = vFrmGet
         frm.vFrmIn = vFrmIn
 
-        If IsNothing(frmMdiParent) Then
+        If IsNothing(vfrmMdiParent) Then
             frm.ShowDialog()
         Else
+            frm.MdiParent = vfrmMdiParent
             frm.Show()
         End If
     End Sub
@@ -1262,12 +1320,17 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showNewUser(vIdUserReg As String, vIdInternalLine As String, vFrmGet As Integer)
+    Public Sub showNewUser(vIdUserReg As String, vIdInternalLine As String, vFrmGet As Integer, Optional vfrmMdiParent As Form = Nothing)
         Dim frm As New frmNewuser
         frm.vIdUserReg = vIdUserReg
         frm.vFrmGet = vFrmGet
         frm.vIdInternalLine = vIdInternalLine
-        frm.ShowDialog()
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
     End Sub
 
     Public Sub showPayDetail(vIdPayment As String, vNumReceipt As String, vCollector As String, vPayer As String, vDatePay As Date)

@@ -1,7 +1,6 @@
 ﻿Public Class frmFindCollect
     Private Sub frmFindCollect_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconSearch
-        MdiParent = frmMain
 
         cbxCrit.SelectedIndex = 0
 

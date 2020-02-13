@@ -1,7 +1,6 @@
 ﻿Public Class frmFindLines
     Private Sub frmSeeLines_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconSearch
-        MdiParent = frmMain
 
         cbxCrit.SelectedIndex = 0
 

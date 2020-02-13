@@ -29,7 +29,7 @@ Public Class frmNewuser
             If vIdInternalLine.Length = 0 Then
                 Close()
             ElseIf Not IsNothing(dataUser) And vIdInternalLine.Length > 0 Then
-                txtCodUser.Text = dataUser(0)
+                txtCodUser.Text = vIdUserReg = dataUser(0)
                 txtNames.Text = dataUser(1)
                 txtSurnames.Text = dataUser(2)
                 cbxTypeUser.SelectedValue = dataUser(3)
@@ -48,6 +48,7 @@ Public Class frmNewuser
     End Sub
 
     Public Sub newUser()
+        vIdUserReg = Nothing
         txtCodUser.Text = ""
         txtNames.Text = ""
         txtSurnames.Text = ""
@@ -88,7 +89,7 @@ Public Class frmNewuser
     End Sub
 
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
-        dataUserEdited(0) = txtCodUser.Text
+        dataUserEdited(0) = vIdUserReg
         dataUserEdited(1) = txtNames.Text
         dataUserEdited(2) = txtSurnames.Text
         dataUserEdited(3) = cbxTypeUser.SelectedValue

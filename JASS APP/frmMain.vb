@@ -20,54 +20,46 @@
     End Sub
 
     Private Sub tsmiNewLine_Click(sender As Object, e As EventArgs) Handles tsmiNewLine.Click
-        frmNewline.Show()
-        frmNewline.Focus()
+        showNewLine(Me)
     End Sub
 
     Private Sub tsmiNewUser_Click(sender As Object, e As EventArgs) Handles tsmiNewUser.Click
-        'Nuevo usuario
+        showNewUser("new", Nothing, 1, Me)
     End Sub
 
     Private Sub tsmiFindLines_Click(sender As Object, e As EventArgs) Handles tsmiFindLines.Click
-        frmFindLines.Show()
-        frmFindLines.Focus()
+        showFindLines(Me)
     End Sub
 
     Private Sub tsmiCollectBox_Click(sender As Object, e As EventArgs) Handles tsmiCollectBox.Click
-        frmFindCollect.Show()
-        frmFindCollect.Focus()
+        showFindCollect(Me)
     End Sub
 
     Private Sub tsmiDeclarationServices_Click(sender As Object, e As EventArgs) Handles tsmiDeclarationServices.Click
-        frmDeclarationServices.Show()
-        frmDeclarationServices.Focus()
+        showDeclarationServices(Me)
     End Sub
 
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
-        frmNewline.Close()
-        frmFindLines.Close()
-        frmFindCollect.Close()
-        frmEditLine.Close()
-        frmNewuser.Close()
-        frmDeclarationServices.Close()
+        Do
+            If MdiChildren.Count > 0 Then
+                Dim frm As Form = MdiChildren(0)
+                frm.Close()
+            End If
+        Loop While MdiChildren.Count > 0
     End Sub
 
     Private Sub tsmiMinWindows_Click(sender As Object, e As EventArgs) Handles tsmiMinWindows.Click
-        frmNewline.WindowState = FormWindowState.Minimized
-        frmFindLines.WindowState = FormWindowState.Minimized
-        frmFindCollect.WindowState = FormWindowState.Minimized
-        frmEditLine.WindowState = FormWindowState.Minimized
-        frmNewuser.WindowState = FormWindowState.Minimized
-        frmDeclarationServices.WindowState = FormWindowState.Minimized
+        For index As Integer = 0 To MdiChildren.Count - 1
+            Dim frm As Form = MdiChildren(index)
+            frm.WindowState = FormWindowState.Minimized
+        Next
     End Sub
 
     Private Sub tsmiMaxWindows_Click(sender As Object, e As EventArgs) Handles tsmiMaxWindows.Click
-        frmNewline.WindowState = FormWindowState.Normal
-        frmFindLines.WindowState = FormWindowState.Normal
-        frmFindCollect.WindowState = FormWindowState.Normal
-        frmEditLine.WindowState = FormWindowState.Normal
-        frmNewuser.WindowState = FormWindowState.Normal
-        frmDeclarationServices.WindowState = FormWindowState.Normal
+        For index As Integer = 0 To MdiChildren.Count - 1
+            Dim frm As Form = MdiChildren(index)
+            frm.WindowState = FormWindowState.Normal
+        Next
     End Sub
 
     Private Sub tsmiAbout_Click(sender As Object, e As EventArgs) Handles tsmiAbout.Click
@@ -75,8 +67,7 @@
     End Sub
 
     Private Sub tsmiPreviewReceipt_Click(sender As Object, e As EventArgs) Handles tsmiPreviewReceipt.Click
-        tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
-        My.Settings.vPreviewPrint = Not My.Settings.vPreviewPrint
+        My.Settings.vPreviewPrint = tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
     End Sub
 
     Private Sub frmMain_Closed(sender As Object, e As EventArgs) Handles Me.Closed

@@ -6,7 +6,6 @@ Public Class frmDeclarationServices
     Dim vExporOrImport As Boolean = False
     Private Sub frmDeclarationServices_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconDeclareservice
-        MdiParent = frmMain
         CheckForIllegalCrossThreadCalls = False
 
         dsYearsRate = listYearRate()
