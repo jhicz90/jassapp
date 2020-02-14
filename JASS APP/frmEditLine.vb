@@ -2,19 +2,12 @@
 
 Public Class frmEditLine
     Public vIdServiceLine As String = Nothing
-    Dim dsAvenues As DataSet = Nothing
     Dim dataLineOriginal(8) As String
     Dim dataLineEdited(8) As String
     Private Sub frmEditLine_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconEditpipe
 
-        dsAvenues = listAvenues()
-
-        If Not (dsAvenues.Equals(Nothing)) Then
-            cbxStreets.DataSource = dsAvenues.Tables(0)
-            cbxStreets.ValueMember = "idstreet"
-            cbxStreets.DisplayMember = "name"
-        End If
+        listAvenues(cbxStreets)
 
         If vIdServiceLine.Equals(Nothing) Then
             Close()

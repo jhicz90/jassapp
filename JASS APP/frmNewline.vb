@@ -1,44 +1,11 @@
 ﻿Public Class frmNewline
-    Dim dsRates As DataSet = Nothing
-    Dim dsAvenues As DataSet = Nothing
-    Dim dsUserTypes As DataSet = Nothing
     Public codUser As String = ""
     Private Sub FrmNewline_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconNewline
 
-        dsRates = listRates()
-
-        If Not dsRates.HasErrors Then
-            cbxRates.Enabled = True
-            cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "idrate"
-            cbxRates.DisplayMember = "name"
-        Else
-            cbxRates.Enabled = False
-        End If
-
-        dsAvenues = listAvenues()
-
-        If Not dsAvenues.HasErrors Then
-            cbxStreets.Enabled = True
-            cbxStreets.DataSource = dsAvenues.Tables(0)
-            cbxStreets.ValueMember = "idstreet"
-            cbxStreets.DisplayMember = "name"
-        Else
-            cbxStreets.Enabled = False
-        End If
-
-        dsUserTypes = listUserTypes()
-
-        If Not dsUserTypes.HasErrors Then
-            cbxTypeUser.Enabled = True
-            cbxTypeUser.DataSource = dsUserTypes.Tables(0)
-            cbxTypeUser.ValueMember = "idusertype"
-            cbxTypeUser.DisplayMember = "name"
-        Else
-            cbxTypeUser.Enabled = False
-        End If
-
+        listRates(cbxRates)
+        listAvenues(cbxStreets)
+        listUserTypes(cbxTypeUser)
         newLine()
     End Sub
 

@@ -1,5 +1,4 @@
 ﻿Public Class frmCollectDetail
-    Dim dsUsersInAccount As DataSet = Nothing
     Public vIdServiceLine As String = Nothing
     Public vIdInternalLine As String = Nothing
     Public vNameLine As String = Nothing
@@ -8,15 +7,7 @@
     Private Sub frmCollectDetail_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconCollect
 
-        dsUsersInAccount = listUsersInAccount(vIdInternalLine)
-
-        If Not dsUsersInAccount.HasErrors Then
-            cbxUsersInAccount.DataSource = dsUsersInAccount.Tables(0)
-            cbxUsersInAccount.ValueMember = "iduser"
-            cbxUsersInAccount.DisplayMember = "fullname"
-        Else
-            cbxUsersInAccount.Enabled = False
-        End If
+        listUsersInAccount(vIdInternalLine, cbxUsersInAccount, Nothing)
 
         If cbxUsersInAccount.Items.Count > 0 Then
             cbxUsersInAccount.Enabled = True

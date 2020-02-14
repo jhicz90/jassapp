@@ -28,34 +28,32 @@ Module dataFunctions
 
     Public Function userLogin(ByVal nameusr As String, ByVal passwd As String) As Boolean
         Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableUserSystem As New DataTable
 
         If cnnx.DataSource.Equals("") Then
             Return False
         Else
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
-                cmd.CommandText = "SELECT idusersys ,name, loguser, passuser FROM user_sys WHERE loguser = '" & nameusr & "' AND passuser = '" & passwd & "'"
-                dr = cmd.ExecuteReader()
+                cmd.CommandText = "SELECT idusersys ,name, loguser, passuser FROM user_sys WHERE loguser = @name AND passuser = @pass"
+                cmd.Parameters.AddWithValue("name", nameusr)
+                cmd.Parameters.AddWithValue("pass", passwd)
+                ada.SelectCommand = cmd
+                ada.Fill(tableUserSystem)
 
-                If dr.HasRows Then
-                    While dr.Read()
-                        My.Settings.vUserIdLogin = CInt(dr(0).ToString)
-                        My.Settings.vUserNameLogin = dr(1).ToString
-                        MsgBox("Bienvenid@ " + dr(1).ToString, vbInformation, "Aviso")
-                    End While
+                If tableUserSystem.Rows.Count > 0 Then
+                    For index As Integer = 0 To tableUserSystem.Rows.Count - 1
+                        My.Settings.vUserIdLogin = CInt(tableUserSystem.Rows(index).Item(0).ToString)
+                        My.Settings.vUserNameLogin = tableUserSystem.Rows(index).Item(1).ToString
+                    Next
+                    MsgBox("Bienvenid@ " + tableUserSystem.Rows(0).Item(1).ToString, vbInformation, "Aviso")
                     Return True
                 Else
                     MsgBox("El usuario o contraseña ingresadas son incorrectas o no existen", vbExclamation, "Aviso")
-                    cmd.Dispose()
-                    dr.Close()
                     Return False
                 End If
-
-                cmd.Dispose()
             Catch ex As Exception
                 Return False
             End Try
@@ -64,25 +62,26 @@ Module dataFunctions
 
     Public Sub getYearActive()
         Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableYear As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT years_rate.idyearrate, years_rate.year, years_rate.nameyear FROM years_rate WHERE years_rate.active = 1 LIMIT 1"
-                dr = cmd.ExecuteReader
-                dr.Read()
-                My.Settings.vIdYear = dr(0).ToString
-                My.Settings.vYear = CInt(dr(1).ToString)
-                My.Settings.vYearName = dr(2).ToString
+                ada.SelectCommand = cmd
+                ada.Fill(tableYear)
+
+                My.Settings.vIdYear = tableYear.Rows(0).Item(0).ToString
+                My.Settings.vYear = CInt(tableYear.Rows(0).Item(1).ToString)
+                My.Settings.vYearName = tableYear.Rows(0).Item(2).ToString
             Catch ex As Exception
                 MsgBox(ex.Message)
             End Try
         End If
     End Sub
+
     Public Function generateCode(vLen As Integer, vLower As Boolean, vUpper As Boolean, vNumber As Boolean) As String
         Dim intRnd As Integer
         Dim intStep As Integer = Nothing
@@ -119,10 +118,9 @@ Module dataFunctions
     End Function
 
     Public Function generateCodeLine(vIdSector As String) As String
-        Dim cmdStreet As New MySqlCommand
-        Dim cmdLastServiceLine As New MySqlCommand
-        Dim cmdCheck As New MySqlCommand
-        Dim drStreet, drLast, drCheck As MySqlDataReader
+        Dim cmdStreet, cmdLastServiceLine, cmdCheck As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableStreet, tableLast, tableCheck As New DataTable
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
@@ -130,45 +128,40 @@ Module dataFunctions
             Dim index As Integer = 1
             Do
                 Try
-                    cnnx.Close()
-                    cnnx.Open()
                     cmdStreet.Connection = cnnx
                     cmdStreet.CommandType = CommandType.Text
                     cmdStreet.CommandText = "SELECT code FROM streets WHERE idstreet LIKE @idsector"
                     cmdStreet.Parameters.AddWithValue("idsector", vIdSector)
-                    drStreet = cmdStreet.ExecuteReader()
+                    ada.SelectCommand = cmdStreet
+                    ada.Fill(tableStreet)
 
-                    If drStreet.HasRows Then
-                        drStreet.Read()
-                        Dim streetLine As String = drStreet(0).ToString
+                    If tableStreet.Rows.Count > 0 Then
+                        Dim streetLine As String = tableStreet.Rows(0).Item(0).ToString
                         Dim codeLine As String = ""
                         Dim codeNum As String = ""
 
-                        cnnx.Close()
-                        cnnx.Open()
                         cmdLastServiceLine.Connection = cnnx
                         cmdLastServiceLine.CommandType = CommandType.Text
                         cmdLastServiceLine.CommandText = "SELECT MAX(service_line.idserviceline) AS id FROM service_line"
-                        drLast = cmdLastServiceLine.ExecuteReader
+                        ada.SelectCommand = cmdLastServiceLine
+                        ada.Fill(tableLast)
 
-                        If drLast.HasRows Then
-                            drLast.Read()
-                            codeNum = CInt(drLast(0).ToString) + index
+                        If tableLast.Rows.Count > 0 Then
+                            codeNum = CInt(tableLast.Rows(0).Item(0).ToString) + index
                         Else
                             codeNum = "1"
                         End If
 
                         codeLine = Year(Today).ToString & "-" & Trim(streetLine) & "-" & codeNum.PadLeft(5, "0")
 
-                        cnnx.Close()
-                        cnnx.Open()
                         cmdCheck.Connection = cnnx
                         cmdCheck.CommandType = CommandType.Text
                         cmdCheck.CommandText = "SELECT code FROM service_line WHERE code LIKE @codserviceline"
                         cmdCheck.Parameters.AddWithValue("codserviceline", codeLine)
-                        drCheck = cmdCheck.ExecuteReader
+                        ada.SelectCommand = cmdCheck
+                        ada.Fill(tableCheck)
 
-                        If drCheck.HasRows Then
+                        If tableCheck.Rows.Count > 0 Then
                             index += 1
                         Else
                             Return codeLine
@@ -196,92 +189,108 @@ Module dataFunctions
         Return vResult
     End Function
 
-    Public Function listYearRate() As DataSet
+    Public Sub listYearRate(vControl As ComboBox)
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
 
-        If cnnx.DataSource.Equals("") Then
-            Return Nothing
-        Else
+        If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 ada.SelectCommand = New MySqlCommand("SELECT idyearrate, year FROM years_rate", cnnx)
                 ada.Fill(ds)
-                Return ds
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idyearrate"
+                vControl.DisplayMember = "year"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
             Catch ex As Exception
-                Return Nothing
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
             End Try
         End If
-    End Function
+    End Sub
 
-    Public Function listRates() As DataSet
+    Public Sub listRates(vControl As ComboBox)
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
 
-        If cnnx.DataSource.Equals("") Then
-            Return Nothing
-        Else
+        If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 ada.SelectCommand = New MySqlCommand("SELECT idrate, name FROM rates", cnnx)
                 ada.Fill(ds)
-                Return ds
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idrate"
+                vControl.DisplayMember = "name"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
             Catch ex As Exception
-                Return Nothing
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
             End Try
         End If
-    End Function
+    End Sub
 
-    Public Function listAvenues() As DataSet
+    Public Sub listAvenues(vControl As ComboBox)
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
 
-        If cnnx.DataSource.Equals("") Then
-            Return Nothing
-        Else
+        If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 ada.SelectCommand = New MySqlCommand("SELECT idstreet, name FROM streets ORDER BY name", cnnx)
                 ada.Fill(ds)
-                Return ds
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idstreet"
+                vControl.DisplayMember = "name"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
             Catch ex As Exception
-                Return Nothing
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
             End Try
         End If
-    End Function
+    End Sub
 
-    Public Function listUserTypes() As DataSet
+    Public Sub listUserTypes(vControl As ComboBox)
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
 
-        If cnnx.DataSource.Equals("") Then
-            Return Nothing
-        Else
+        If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 ada.SelectCommand = New MySqlCommand("SELECT idusertype, name FROM user_type", cnnx)
                 ada.Fill(ds)
-                Return ds
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idusertype"
+                vControl.DisplayMember = "name"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
             Catch ex As Exception
-                Return Nothing
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
             End Try
         End If
-    End Function
+    End Sub
 
-    Public Function listUsersInAccount(vIdInternalLine As String) As DataSet
+    Public Sub listUsersInAccount(vIdInternalLine As String, Optional vCombo As ComboBox = Nothing, Optional vList As ListBox = Nothing)
         Dim ds As New DataSet
         Dim cmd As New MySqlCommand
 
-        If cnnx.DataSource.Equals("") Then
-            Return Nothing
-        Else
+        If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT users_line.userreg AS iduser, TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) AS fullname " &
@@ -290,12 +299,40 @@ Module dataFunctions
 
                 Dim ada As New MySqlDataAdapter(cmd)
                 ada.Fill(ds)
-                Return ds
+
+                If Not IsNothing(vCombo) Then
+                    vCombo.DataSource = ds.Tables(0)
+                    vCombo.ValueMember = "iduser"
+                    vCombo.DisplayMember = "fullname"
+
+                    If vCombo.Items.Count > 0 Then
+                        vCombo.SelectedIndex = 0
+                    End If
+                End If
+
+                If Not IsNothing(vList) Then
+                    vList.DataSource = ds.Tables(0)
+                    vList.ValueMember = "iduser"
+                    vList.DisplayMember = "fullname"
+
+                    If vList.Items.Count > 0 Then
+                        vList.SelectedIndex = 0
+                    End If
+                End If
             Catch ex As Exception
-                Return Nothing
+                MsgBox(ex.Message)
+                If Not IsNothing(vCombo) Then
+                    vCombo.Enabled = False
+                    vCombo.SelectedIndex = -1
+                End If
+
+                If Not IsNothing(vList) Then
+                    vList.Enabled = False
+                    vList.SelectedIndex = -1
+                End If
             End Try
         End If
-    End Function
+    End Sub
 
     Public Sub listUsers(txtBusq As String, typeBusq As Integer, dgUsers As DataGridView)
         Dim cmd As New MySqlCommand
@@ -1285,6 +1322,16 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub showRateType(Optional vfrmMdiParent As Form = Nothing)
+        Dim frm As New frmRateType
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
     Public Sub showEditLine(vIdServiceLine As String)
         Dim frm As New frmEditLine
         frm.vIdServiceLine = vIdServiceLine
@@ -1596,7 +1643,7 @@ Module dataFunctions
         Dim cmdGetReceiptDetail As New MySqlCommand
         Dim dr As MySqlDataReader
 
-        If Not (cnnx.DataSource.Equals("")) Then
+        If Not cnnx.DataSource.Equals("") Then
             If Not (vIdPayment = Nothing) Then
                 cnnx.Close()
                 cnnx.Open()
@@ -2105,43 +2152,39 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub exportingExcel(vPrgWorking As ProgressBar, vYearRate As String, vCrit As Integer, Optional vOptionFill As Boolean = False, Optional vOptionMes As Boolean = False, Optional vMes As Integer = 0)
+    Public Sub exportingExcel(vPrgWorking As ProgressBar, vYear As String, vIdYearRate As String, vCrit As Integer, Optional vOptionFill As Boolean = False, Optional vOptionMes As Boolean = False, Optional vMes As Integer = 0)
         Dim cmd As New MySqlCommand
         Dim ada As New MySqlDataAdapter
-        Dim TablaExcel, TablaLeyenda As New DataTable
+        Dim TableExcel, TableLeyenda As New DataTable
 
         vMes += 1
 
         If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT
                 service_line.idserviceline, 
                 INTERLINE.idinternalline, 
-                years_rate.idyearrate, 
+                (SELECT @idyearrate) AS idyear, 
                 rates.idrate, 
                 service_line.code, 
                 INTERLINE.code, 
                 streets.name, 
                 (SELECT GROUP_CONCAT(DISTINCT TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR "", "") FROM internal_line INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline) AS users, 
                 rates.name, 
-                years_rate.year,
+                (SELECT @year) AS datayear, 
                 INTERLINE.pricerate 
                 FROM internal_line INTERLINE
                 INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline 
                 INNER JOIN rates ON rates.idrate = INTERLINE.rate 
                 INNER JOIN streets ON streets.idstreet = service_line.street 
-                INNER JOIN rate_price ON rate_price.rate = rates.idrate
-                INNER JOIN years_rate ON years_rate.idyearrate = rate_price.yearrate 
-                WHERE rate_price.yearrate = @idyearrate
                 ORDER BY users ASC"
-                cmd.Parameters.AddWithValue("idyearrate", vYearRate)
+                cmd.Parameters.AddWithValue("idyearrate", vIdYearRate)
+                cmd.Parameters.AddWithValue("year", vYear)
 
                 ada.SelectCommand = cmd
-                ada.Fill(TablaExcel)
+                ada.Fill(TableExcel)
 
                 'dr = cmd.ExecuteReader
 
@@ -2194,20 +2237,20 @@ Module dataFunctions
 
                     'Dim index As Integer = 2
                     vPrgWorking.Minimum = 1
-                    vPrgWorking.Maximum = TablaExcel.Rows.Count
-                    For index As Integer = 0 To TablaExcel.Rows.Count - 1
+                    vPrgWorking.Maximum = TableExcel.Rows.Count
+                    For index As Integer = 0 To TableExcel.Rows.Count - 1
                         Dim flecha As Integer = index + 2
-                        .Range("A" & flecha).Value = TablaExcel.Rows(index).Item(0).ToString
-                        .Range("B" & flecha).Value = TablaExcel.Rows(index).Item(1).ToString
-                        .Range("C" & flecha).Value = TablaExcel.Rows(index).Item(2).ToString
-                        .Range("D" & flecha).Value = TablaExcel.Rows(index).Item(3).ToString
-                        .Range("E" & flecha).Value = TablaExcel.Rows(index).Item(4).ToString
-                        .Range("F" & flecha).Value = TablaExcel.Rows(index).Item(5).ToString
-                        .Range("G" & flecha).Value = TablaExcel.Rows(index).Item(6).ToString
-                        .Range("H" & flecha).Value = TablaExcel.Rows(index).Item(7).ToString
-                        .Range("I" & flecha).Value = TablaExcel.Rows(index).Item(8).ToString
-                        .Range("J" & flecha).Value = TablaExcel.Rows(index).Item(9).ToString
-                        .Range("K" & flecha).Value = TablaExcel.Rows(index).Item(10).ToString
+                        .Range("A" & flecha).Value = TableExcel.Rows(index).Item(0).ToString
+                        .Range("B" & flecha).Value = TableExcel.Rows(index).Item(1).ToString
+                        .Range("C" & flecha).Value = TableExcel.Rows(index).Item(2).ToString
+                        .Range("D" & flecha).Value = TableExcel.Rows(index).Item(3).ToString
+                        .Range("E" & flecha).Value = TableExcel.Rows(index).Item(4).ToString
+                        .Range("F" & flecha).Value = TableExcel.Rows(index).Item(5).ToString
+                        .Range("G" & flecha).Value = TableExcel.Rows(index).Item(6).ToString
+                        .Range("H" & flecha).Value = TableExcel.Rows(index).Item(7).ToString
+                        .Range("I" & flecha).Value = TableExcel.Rows(index).Item(8).ToString
+                        .Range("J" & flecha).Value = TableExcel.Rows(index).Item(9).ToString
+                        .Range("K" & flecha).Value = TableExcel.Rows(index).Item(10).ToString
 
                         If vOptionMes Then
                             .Range("M" & flecha).Value = vMes
@@ -2216,7 +2259,7 @@ Module dataFunctions
                         End If
 
                         If vOptionFill Then
-                            .Range("N" & flecha).Value = TablaExcel.Rows(index).Item(10).ToString
+                            .Range("N" & flecha).Value = TableExcel.Rows(index).Item(10).ToString
                         Else
                             .Range("N" & flecha).Value = 0
                         End If
@@ -2234,7 +2277,7 @@ Module dataFunctions
                 FROM rate_types"
 
                 ada.SelectCommand = cmd
-                ada.Fill(TablaLeyenda)
+                ada.Fill(TableLeyenda)
 
                 Hoja = Libro.Worksheets.Add("Leyenda")
 
@@ -2249,13 +2292,13 @@ Module dataFunctions
                     .Columns("D").Width = 12
 
                     vPrgWorking.Minimum = 1
-                    vPrgWorking.Maximum = TablaLeyenda.Rows.Count
-                    For index As Integer = 0 To TablaLeyenda.Rows.Count - 1
+                    vPrgWorking.Maximum = TableLeyenda.Rows.Count
+                    For index As Integer = 0 To TableLeyenda.Rows.Count - 1
                         Dim flecha As Integer = index + 2
-                        .Cell("A" & flecha).Value = TablaLeyenda.Rows(index).Item(0).ToString
-                        .Cell("B" & flecha).Value = TablaLeyenda.Rows(index).Item(1).ToString
-                        .Cell("C" & flecha).Value = TablaLeyenda.Rows(index).Item(2).ToString
-                        .Cell("D" & flecha).Value = CBool(TablaLeyenda.Rows(index).Item(3))
+                        .Cell("A" & flecha).Value = TableLeyenda.Rows(index).Item(0).ToString
+                        .Cell("B" & flecha).Value = TableLeyenda.Rows(index).Item(1).ToString
+                        .Cell("C" & flecha).Value = TableLeyenda.Rows(index).Item(2).ToString
+                        .Cell("D" & flecha).Value = CBool(TableLeyenda.Rows(index).Item(3))
                         vPrgWorking.Value = index + 1
                     Next
                 End With
@@ -2309,12 +2352,11 @@ Module dataFunctions
 
     Public Function addAccountYear(vIdInternalLine As String, vIdYearRate As String) As Integer
         Dim cmdCheked, cmdInsertAccountYear As New MySqlCommand
-        Dim drChecked As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim TableCheck As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmdCheked.Connection = cnnx
                 cmdCheked.CommandType = CommandType.Text
                 cmdCheked.CommandText = "SELECT 
@@ -2323,12 +2365,15 @@ Module dataFunctions
                 WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @idyearrate"
                 cmdCheked.Parameters.AddWithValue("idinternalline", vIdInternalLine)
                 cmdCheked.Parameters.AddWithValue("idyearrate", vIdYearRate)
-                drChecked = cmdCheked.ExecuteReader()
-                Dim check As Boolean = drChecked.HasRows
+                ada.SelectCommand = cmdCheked
+                ada.Fill(TableCheck)
+
+                Dim check As Boolean = False
+                If TableCheck.Rows.Count > 0 Then
+                    check = True
+                End If
 
                 If Not check Then
-                    cnnx.Close()
-                    cnnx.Open()
                     cmdInsertAccountYear.Connection = cnnx
                     cmdInsertAccountYear.CommandType = CommandType.Text
                     cmdInsertAccountYear.CommandText = "INSERT INTO account_line(internalline, yearrate, debttotal, saldototal) VALUES(" & vIdInternalLine & ", " & vIdYearRate & ", 0, 0)"
@@ -2348,13 +2393,12 @@ Module dataFunctions
     End Function
 
     Public Function addAccountDetail(vIdInternalLine As String, vIdYearRate As String, vIdDetail As String, vMonth As String, vDebtAmount As Decimal) As Integer
-        Dim cmdChekedDetail, cmdChekedYear, cmdInsertAccountDetail, cmdUpdateAccountYear As New MySqlCommand
-        Dim drCheckedDetail, drChekedYear As MySqlDataReader
+        Dim cmdChekedDetail, cmdChekedYear, cmdChekedRateType, cmdInsertAccountDetail, cmdUpdateAccountYear As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim TableCheckYear, TableCheckDetail, TableCheckRateType As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmdChekedYear.Connection = cnnx
                 cmdChekedYear.CommandType = CommandType.Text
                 cmdChekedYear.CommandText = "SELECT 
@@ -2363,27 +2407,28 @@ Module dataFunctions
                 WHERE account_line.internalline = @idinternalline AND account_line.yearrate = @idyearrate"
                 cmdChekedYear.Parameters.AddWithValue("idinternalline", vIdInternalLine)
                 cmdChekedYear.Parameters.AddWithValue("idyearrate", vIdYearRate)
-                drChekedYear = cmdChekedYear.ExecuteReader()
+                ada.SelectCommand = cmdChekedYear
+                ada.Fill(TableCheckYear)
 
                 Dim vIdAccountLine As String
-                Dim chekedYear As Boolean = drChekedYear.HasRows
+                Dim chekedYear As Boolean = False
+
+                If TableCheckYear.Rows.Count > 0 Then
+                    chekedYear = True
+                End If
 
                 If chekedYear Then
-                    drChekedYear.Read()
-                    vIdAccountLine = drChekedYear(0).ToString
+                    vIdAccountLine = TableCheckYear.Rows(0).Item(0).ToString
                 Else
                     vIdAccountLine = 0
                     chekedYear = False
                 End If
 
                 If chekedYear Then
-                    cnnx.Close()
-                    cnnx.Open()
                     cmdChekedDetail.Connection = cnnx
                     cmdChekedDetail.CommandType = CommandType.Text
                     cmdChekedDetail.CommandText = "SELECT 
-                    account_detail.idaccountdetail, 
-                    rate_types.periodic 
+                    * 
                     FROM account_detail 
                     INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
                     WHERE account_detail.accountline = @idaccountline AND account_detail.yearrate = @idyearrate AND account_detail.ratetype = @idratetype AND account_detail.month = @month"
@@ -2391,19 +2436,31 @@ Module dataFunctions
                     cmdChekedDetail.Parameters.AddWithValue("idyearrate", vIdYearRate)
                     cmdChekedDetail.Parameters.AddWithValue("idratetype", vIdDetail)
                     cmdChekedDetail.Parameters.AddWithValue("month", vMonth)
-                    drCheckedDetail = cmdChekedDetail.ExecuteReader()
-                    Dim checkDetail As Boolean = drCheckedDetail.HasRows
+                    ada.SelectCommand = cmdChekedDetail
+                    ada.Fill(TableCheckDetail)
 
-                    drCheckedDetail.Read()
-                    If CBool(drCheckedDetail(1).ToString) And vMonth > 0 Then
-                        checkDetail = False
-                    Else
+                    Dim checkDetail As Boolean = False
+
+                    If TableCheckDetail.Rows.Count > 0 Then
                         checkDetail = True
+                    Else
+                        cmdChekedRateType.Connection = cnnx
+                        cmdChekedRateType.CommandType = CommandType.Text
+                        cmdChekedRateType.CommandText = "SELECT rate_types.periodic FROM rate_types WHERE rate_types.idratetype = @idratetype"
+                        cmdChekedRateType.Parameters.AddWithValue("idratetype", vIdDetail)
+                        ada.SelectCommand = cmdChekedRateType
+                        ada.Fill(TableCheckRateType)
+
+                        If TableCheckRateType.Rows.Count > 0 Then
+                            If CBool(TableCheckRateType.Rows(0).Item(0).ToString) = True And vMonth > 0 Then
+                                checkDetail = False
+                            Else
+                                checkDetail = True
+                            End If
+                        End If
                     End If
 
                     If Not checkDetail Then
-                        cnnx.Close()
-                        cnnx.Open()
                         cmdInsertAccountDetail.Connection = cnnx
                         cmdInsertAccountDetail.CommandType = CommandType.Text
                         cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", " & vIdDetail & ", " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
@@ -2434,4 +2491,37 @@ Module dataFunctions
             Return 0
         End If
     End Function
+
+    Public Sub getRateTypes(dgRates As DataGridView)
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim TableRates As New DataTable
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cnnx.Close()
+                cnnx.Open()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                idratetype, 
+                name, 
+                description, 
+                periodic 
+                FROM rate_types"
+                ada.SelectCommand = cmd
+                ada.Fill(TableRates)
+
+                For index As Integer = 0 To TableRates.Rows.Count - 1
+                    dgRates.Rows.Add(TableRates.Rows(index).Item(0), TableRates.Rows(index).Item(1), TableRates.Rows(index).Item(2), CBool(TableRates.Rows(index).Item(3)))
+                Next
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                dgRates.Rows.Clear()
+            End Try
+        Else
+            dgRates.Rows.Clear()
+        End If
+    End Sub
 End Module

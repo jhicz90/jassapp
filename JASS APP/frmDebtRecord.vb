@@ -1,20 +1,11 @@
 ﻿Public Class frmDebtRecord
-    Dim dsUsersInAccount As DataSet = Nothing
     Public vIdServiceLine As String = Nothing
     Public vIdInternalLine As String = Nothing
     Public vNameLine As String = Nothing
     Private Sub frmDebtRecord_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconDebtrecord
 
-        dsUsersInAccount = listUsersInAccount(vIdInternalLine)
-
-        If Not dsUsersInAccount.HasErrors Then
-            lsxUsersInAccount.DataSource = dsUsersInAccount.Tables(0)
-            lsxUsersInAccount.ValueMember = "iduser"
-            lsxUsersInAccount.DisplayMember = "fullname"
-        Else
-            lsxUsersInAccount.Enabled = False
-        End If
+        listUsersInAccount(vIdInternalLine, Nothing, lsxUsersInAccount)
 
         If lsxUsersInAccount.Items.Count > 0 Then
             lsxUsersInAccount.Enabled = True

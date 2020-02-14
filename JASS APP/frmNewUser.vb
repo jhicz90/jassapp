@@ -4,20 +4,11 @@ Public Class frmNewuser
     Public vFrmGet As Integer = 0
     Public vIdUserReg As String = Nothing
     Public vIdInternalLine As String = Nothing
-    Dim dsUserTypes As DataSet = Nothing
     Dim dataUserEdited(13) As String
     Public Sub frmNewuser_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconAdduser
 
-        dsUserTypes = listUserTypes()
-
-        If Not (dsUserTypes.Equals(Nothing)) Then
-            cbxTypeUser.DataSource = dsUserTypes.Tables(0)
-            cbxTypeUser.ValueMember = "idusertype"
-            cbxTypeUser.DisplayMember = "name"
-        End If
-
-        cbxTypeUser.SelectedIndex = 0
+        listUserTypes(cbxTypeUser)
 
         If IsNothing(vIdUserReg) Then
             Close()

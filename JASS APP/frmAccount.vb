@@ -1,7 +1,6 @@
 ﻿Public Class frmAccount
     Public vIdServiceLine As String = Nothing
     Public vIdInternalLine As String = Nothing
-    Dim dsRates As DataSet = Nothing
     Private Sub frmAccount_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconNewline
 
@@ -9,13 +8,7 @@
     End Sub
 
     Private Sub loadAccount(vIdLine As String, vIdInternal As String)
-        dsRates = listRates()
-
-        If Not dsRates.HasErrors Then
-            cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "idrate"
-            cbxRates.DisplayMember = "name"
-        End If
+        listRates(cbxRates)
 
         If vIdInternal <> "new" Then
             If vIdLine.Equals(Nothing) Or vIdInternal.Equals(Nothing) Then

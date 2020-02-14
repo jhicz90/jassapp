@@ -39,6 +39,10 @@
         showDeclarationServices(Me)
     End Sub
 
+    Private Sub tsmiRateType_Click(sender As Object, e As EventArgs) Handles tsmiRateType.Click
+        showRateType(Me)
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         Do
             If MdiChildren.Count > 0 Then

@@ -3,20 +3,13 @@
 Public Class frmFindUsers
     Public vFrmGet As Integer = 0
     Public vFrmIn As Form = Nothing
-    Dim dsRates As DataSet = Nothing
     Private Sub frmFindUsers_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconSearch
 
         txtFind.Text = ""
         txtFind.Focus()
 
-        dsRates = listRates()
-
-        If Not dsRates.HasErrors Then
-            cbxRates.DataSource = dsRates.Tables(0)
-            cbxRates.ValueMember = "idrate"
-            cbxRates.DisplayMember = "name"
-        End If
+        listRates(cbxRates)
 
         'vFrmGet: Cuando es 1 es para buscar sin ingresar tarifa, cuando es 2 es para buscar e ingresar tarifa
         Select Case vFrmGet

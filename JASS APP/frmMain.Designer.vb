@@ -41,6 +41,7 @@ Partial Class frmMain
         Me.tsmiCollectBox = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMonthRates = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiDeclarationServices = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRateType = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdWindows = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiMinWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMaxWindows = New System.Windows.Forms.ToolStripMenuItem()
@@ -171,7 +172,7 @@ Partial Class frmMain
         '
         'tsdpdCollect
         '
-        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiMonthRates, Me.tsmiDeclarationServices})
+        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiMonthRates, Me.tsmiDeclarationServices, Me.tsmiRateType})
         Me.tsdpdCollect.Image = Global.JASS_APP.My.Resources.Resources.coins_32
         Me.tsdpdCollect.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdCollect.Name = "tsdpdCollect"
@@ -200,6 +201,12 @@ Partial Class frmMain
         Me.tsmiDeclarationServices.Name = "tsmiDeclarationServices"
         Me.tsmiDeclarationServices.Size = New System.Drawing.Size(200, 22)
         Me.tsmiDeclarationServices.Text = "Declaración de servicios"
+        '
+        'tsmiRateType
+        '
+        Me.tsmiRateType.Name = "tsmiRateType"
+        Me.tsmiRateType.Size = New System.Drawing.Size(200, 22)
+        Me.tsmiRateType.Text = "Tipos de tarifas"
         '
         'tsdpdWindows
         '
@@ -320,4 +327,5 @@ Partial Class frmMain
     Friend WithEvents tsmiConfigPrints As ToolStripMenuItem
     Friend WithEvents tsmiPreviewReceipt As ToolStripMenuItem
     Friend WithEvents tsmiDeclarationServices As ToolStripMenuItem
+    Friend WithEvents tsmiRateType As ToolStripMenuItem
 End Class

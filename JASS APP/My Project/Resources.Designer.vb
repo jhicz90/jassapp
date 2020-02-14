@@ -551,6 +551,16 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        '''</summary>
+        Friend ReadOnly Property iconListrate() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("iconListrate", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         '''</summary>
         Friend ReadOnly Property iconLogoapp() As System.Drawing.Bitmap
@@ -576,6 +586,16 @@ Namespace My.Resources
         Friend ReadOnly Property iconPrint() As System.Drawing.Icon
             Get
                 Dim obj As Object = ResourceManager.GetObject("iconPrint", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        '''</summary>
+        Friend ReadOnly Property iconRate() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("iconRate", resourceCulture)
                 Return CType(obj,System.Drawing.Icon)
             End Get
         End Property

@@ -1,27 +1,13 @@
 ﻿Imports System.ComponentModel
 Imports ClosedXML.Excel
 Public Class frmDeclarationServices
-    Dim dsYearsRate As DataSet = Nothing
     Dim vAction As Integer = 0
     Dim vExporOrImport As Boolean = False
     Private Sub frmDeclarationServices_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconDeclareservice
         CheckForIllegalCrossThreadCalls = False
 
-        dsYearsRate = listYearRate()
-
-        If Not dsYearsRate.HasErrors Then
-            cbxYearRate.DataSource = dsYearsRate.Tables(0)
-            cbxYearRate.ValueMember = "idyearrate"
-            cbxYearRate.DisplayMember = "year"
-            If cbxYearRate.Items.Count > 0 Then
-                cbxYearRate.SelectedIndex = 0
-            End If
-        Else
-            cbxYearRate.Enabled = False
-            cbxYearRate.SelectedIndex = -1
-        End If
-
+        listYearRate(cbxYearRate)
         newDeclaration()
     End Sub
 
@@ -37,7 +23,7 @@ Public Class frmDeclarationServices
     Public Sub exportExcel()
         Try
             Libro.SaveAs(dialogSaveExcel.FileName)
-            exportingExcel(prgWorking, cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
+            exportingExcel(prgWorking, cbxYearRate.Text, cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
             Libro.Save()
             MsgBox("Exportación terminada con exito.", MsgBoxStyle.Information, "Excel")
             vExporOrImport = False
