@@ -37,7 +37,7 @@ Public Class frmDeclarationServices
     Public Sub exportExcel()
         Try
             Libro.SaveAs(dialogSaveExcel.FileName)
-            exportingExcel(cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
+            exportingExcel(prgWorking, cbxYearRate.SelectedValue, cbxCrit.SelectedIndex, chkFillAccountsRate.Checked, chkMonths.Checked, cbxMonths.SelectedIndex)
             Libro.Save()
             MsgBox("Exportación terminada con exito.", MsgBoxStyle.Information, "Excel")
             vExporOrImport = False

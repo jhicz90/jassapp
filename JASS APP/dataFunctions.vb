@@ -2105,9 +2105,10 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub exportingExcel(vYearRate As String, vCrit As Integer, Optional vOptionFill As Boolean = False, Optional vOptionMes As Boolean = False, Optional vMes As Integer = 0)
+    Public Sub exportingExcel(vPrgWorking As ProgressBar, vYearRate As String, vCrit As Integer, Optional vOptionFill As Boolean = False, Optional vOptionMes As Boolean = False, Optional vMes As Integer = 0)
         Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim TablaExcel, TablaLeyenda As New DataTable
 
         vMes += 1
 
@@ -2139,7 +2140,10 @@ Module dataFunctions
                 ORDER BY users ASC"
                 cmd.Parameters.AddWithValue("idyearrate", vYearRate)
 
-                dr = cmd.ExecuteReader
+                ada.SelectCommand = cmd
+                ada.Fill(TablaExcel)
+
+                'dr = cmd.ExecuteReader
 
                 With Hoja
                     .Name = "Servicios"
@@ -2188,36 +2192,37 @@ Module dataFunctions
                     .Columns("M").Width = 15
                     .Columns("N").Width = 12
 
-                    Dim index As Integer = 2
-                    While dr.Read
-                        '.Range("A" & index & ":K" & index).Value = {dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, dr(5).ToString, dr(6).ToString, dr(7).ToString, dr(8).ToString, dr(9).ToString, dr(10).ToString}
-                        .Range("A" & index).Value = dr(0).ToString
-                        .Range("B" & index).Value = dr(1).ToString
-                        .Range("C" & index).Value = dr(2).ToString
-                        .Range("D" & index).Value = dr(3).ToString
-                        .Range("E" & index).Value = dr(4).ToString
-                        .Range("F" & index).Value = dr(5).ToString
-                        .Range("G" & index).Value = dr(6).ToString
-                        .Range("H" & index).Value = dr(7).ToString
-                        .Range("I" & index).Value = dr(8).ToString
-                        .Range("J" & index).Value = dr(9).ToString
-                        .Range("K" & index).Value = dr(10).ToString
+                    'Dim index As Integer = 2
+                    vPrgWorking.Minimum = 1
+                    vPrgWorking.Maximum = TablaExcel.Rows.Count
+                    For index As Integer = 0 To TablaExcel.Rows.Count - 1
+                        Dim flecha As Integer = index + 2
+                        .Range("A" & flecha).Value = TablaExcel.Rows(index).Item(0).ToString
+                        .Range("B" & flecha).Value = TablaExcel.Rows(index).Item(1).ToString
+                        .Range("C" & flecha).Value = TablaExcel.Rows(index).Item(2).ToString
+                        .Range("D" & flecha).Value = TablaExcel.Rows(index).Item(3).ToString
+                        .Range("E" & flecha).Value = TablaExcel.Rows(index).Item(4).ToString
+                        .Range("F" & flecha).Value = TablaExcel.Rows(index).Item(5).ToString
+                        .Range("G" & flecha).Value = TablaExcel.Rows(index).Item(6).ToString
+                        .Range("H" & flecha).Value = TablaExcel.Rows(index).Item(7).ToString
+                        .Range("I" & flecha).Value = TablaExcel.Rows(index).Item(8).ToString
+                        .Range("J" & flecha).Value = TablaExcel.Rows(index).Item(9).ToString
+                        .Range("K" & flecha).Value = TablaExcel.Rows(index).Item(10).ToString
 
                         If vOptionMes Then
-                            .Range("M" & index).Value = vMes
+                            .Range("M" & flecha).Value = vMes
                         Else
-                            .Range("M" & index).Value = 0
+                            .Range("M" & flecha).Value = 0
                         End If
 
                         If vOptionFill Then
-                            .Range("N" & index).Value = dr(10).ToString
+                            .Range("N" & flecha).Value = TablaExcel.Rows(index).Item(10).ToString
                         Else
-                            .Range("N" & index).Value = 0
+                            .Range("N" & flecha).Value = 0
                         End If
 
-                        index += 1
-                    End While
-                    dr.Close()
+                        vPrgWorking.Value = index + 1
+                    Next
                 End With
 
                 'Consulta para la siguiente hoja
@@ -2227,7 +2232,9 @@ Module dataFunctions
                 description, 
                 periodic 
                 FROM rate_types"
-                dr = cmd.ExecuteReader
+
+                ada.SelectCommand = cmd
+                ada.Fill(TablaLeyenda)
 
                 Hoja = Libro.Worksheets.Add("Leyenda")
 
@@ -2241,14 +2248,16 @@ Module dataFunctions
                     .Columns("C").Width = 45
                     .Columns("D").Width = 12
 
-                    Dim index As Integer = 2
-                    While dr.Read
-                        .Cell("A" & index).Value = dr(0).ToString
-                        .Cell("B" & index).Value = dr(1).ToString
-                        .Cell("C" & index).Value = dr(2).ToString
-                        .Cell("D" & index).Value = CBool(dr(3).ToString)
-                        index += 1
-                    End While
+                    vPrgWorking.Minimum = 1
+                    vPrgWorking.Maximum = TablaLeyenda.Rows.Count
+                    For index As Integer = 0 To TablaLeyenda.Rows.Count - 1
+                        Dim flecha As Integer = index + 2
+                        .Cell("A" & flecha).Value = TablaLeyenda.Rows(index).Item(0).ToString
+                        .Cell("B" & flecha).Value = TablaLeyenda.Rows(index).Item(1).ToString
+                        .Cell("C" & flecha).Value = TablaLeyenda.Rows(index).Item(2).ToString
+                        .Cell("D" & flecha).Value = CBool(TablaLeyenda.Rows(index).Item(3))
+                        vPrgWorking.Value = index + 1
+                    Next
                 End With
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
@@ -2373,8 +2382,10 @@ Module dataFunctions
                     cmdChekedDetail.Connection = cnnx
                     cmdChekedDetail.CommandType = CommandType.Text
                     cmdChekedDetail.CommandText = "SELECT 
-                    * 
+                    account_detail.idaccountdetail, 
+                    rate_types.periodic 
                     FROM account_detail 
+                    INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
                     WHERE account_detail.accountline = @idaccountline AND account_detail.yearrate = @idyearrate AND account_detail.ratetype = @idratetype AND account_detail.month = @month"
                     cmdChekedDetail.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                     cmdChekedDetail.Parameters.AddWithValue("idyearrate", vIdYearRate)
@@ -2382,6 +2393,13 @@ Module dataFunctions
                     cmdChekedDetail.Parameters.AddWithValue("month", vMonth)
                     drCheckedDetail = cmdChekedDetail.ExecuteReader()
                     Dim checkDetail As Boolean = drCheckedDetail.HasRows
+
+                    drCheckedDetail.Read()
+                    If CBool(drCheckedDetail(1).ToString) And vMonth > 0 Then
+                        checkDetail = False
+                    Else
+                        checkDetail = True
+                    End If
 
                     If Not checkDetail Then
                         cnnx.Close()
