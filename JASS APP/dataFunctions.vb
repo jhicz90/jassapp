@@ -1446,56 +1446,56 @@ Module dataFunctions
 
     Public Sub getAccountCollectCharge(vIdAccountLine As String, dgAccountCharge As DataGridView)
         Dim cmdGetAccountCollectCharge As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableCollect As New DataTable
 
-        If Not (cnnx.DataSource.Equals("")) Then
+        If Not cnnx.DataSource.Equals("") Then
             If Not (vIdAccountLine = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdGetAccountCollectCharge.Connection = cnnx
-                cmdGetAccountCollectCharge.CommandType = CommandType.Text
-                cmdGetAccountCollectCharge.CommandText = "SELECT 
-                account_detail.idaccountdetail, 
-                account_detail.accountline, 
-                years_rate.idyearrate, 
-                rate_types.idratetype, 
-                account_detail.month, 
-                rate_types.name AS cargo, 
-                rate_types.periodic, 
-                account_detail.debttotal, 
-                (account_detail.debttotal - account_detail.saldototal) AS saldo, 
-                account_detail.saldototal, 
-                years_rate.year 
-                FROM account_detail 
-                INNER JOIN years_rate ON years_rate.idyearrate = account_detail.yearrate 
-                INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
-                WHERE account_detail.accountline = @idaccountline 
-                ORDER BY account_detail.idaccountdetail ASC"
-                cmdGetAccountCollectCharge.Parameters.AddWithValue("idaccountline", vIdAccountLine)
 
                 Try
-                    dr = cmdGetAccountCollectCharge.ExecuteReader()
+                    cmdGetAccountCollectCharge.Connection = cnnx
+                    cmdGetAccountCollectCharge.CommandType = CommandType.Text
+                    cmdGetAccountCollectCharge.CommandText = "SELECT 
+                    account_detail.idaccountdetail, 
+                    account_detail.accountline, 
+                    years_rate.idyearrate, 
+                    rate_types.idratetype, 
+                    account_detail.month, 
+                    rate_types.name AS cargo, 
+                    rate_types.periodic, 
+                    account_detail.debttotal, 
+                    (account_detail.debttotal - account_detail.saldototal) AS saldo, 
+                    account_detail.saldototal, 
+                    years_rate.year 
+                    FROM account_detail 
+                    INNER JOIN years_rate ON years_rate.idyearrate = account_detail.yearrate 
+                    INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype
+                    WHERE account_detail.accountline = @idaccountline 
+                    ORDER BY account_detail.idaccountdetail ASC"
+                    cmdGetAccountCollectCharge.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                    ada.SelectCommand = cmdGetAccountCollectCharge
+                    ada.Fill(tableCollect)
 
-                    If dr.HasRows Then
+                    If tableCollect.Rows.Count > 0 Then
                         dgAccountCharge.Rows.Clear()
-                        While dr.Read
+                        For index As Integer = 0 To tableCollect.Rows.Count - 1
                             Dim vNameMonth As String
-                            If CInt(dr(4).ToString) = 0 Then
+                            If CInt(tableCollect.Rows(index).Item(4).ToString) = 0 Then
                                 vNameMonth = ""
                             Else
-                                vNameMonth = UCase(MonthName(dr(4).ToString))
+                                vNameMonth = UCase(MonthName(tableCollect.Rows(index).Item(4).ToString))
                             End If
-                            Dim vCharge As Boolean = dr(6).ToString
+                            Dim vCharge As Boolean = tableCollect.Rows(index).Item(6).ToString
                             Dim vNameCharge As String
 
                             If vCharge Then
-                                vNameCharge = dr(5).ToString & " " & vNameMonth & " " & dr(10).ToString
+                                vNameCharge = tableCollect.Rows(index).Item(5).ToString & " " & vNameMonth & " " & tableCollect.Rows(index).Item(10).ToString
                             Else
-                                vNameCharge = dr(5).ToString
+                                vNameCharge = tableCollect.Rows(index).Item(5).ToString
                             End If
 
-                            dgAccountCharge.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, dr(3).ToString, dr(4).ToString, False, vNameCharge, Format(CDec(dr(7).ToString), "###,##0.00"), Format(CDec(dr(8).ToString), "###,##0.00"), Format(CDec(dr(9).ToString), "###,##0.00"))
-                        End While
+                            dgAccountCharge.Rows.Add(tableCollect.Rows(index).Item(0).ToString, tableCollect.Rows(index).Item(1).ToString, tableCollect.Rows(index).Item(2).ToString, tableCollect.Rows(index).Item(3).ToString, tableCollect.Rows(index).Item(4).ToString, False, vNameCharge, Format(CDec(tableCollect.Rows(index).Item(7).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(8).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(9).ToString), "###,##0.00"))
+                        Next
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
                     End If
@@ -1531,58 +1531,62 @@ Module dataFunctions
 
     Public Sub receiptsHistory(dgHistory As DataGridView, vIdInternalLine As String, Optional vSeeAll As Integer = 0, Optional vYear As Integer = 0)
         Dim cmdGetAccountReceipts As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableReceipts As New DataTable
 
-        If Not (cnnx.DataSource.Equals("")) Then
+        If Not cnnx.DataSource.Equals("") Then
             If Not (vIdInternalLine = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdGetAccountReceipts.Connection = cnnx
-                cmdGetAccountReceipts.CommandType = CommandType.Text
-                Dim strCommand As String = "SELECT 
-                payments.idpayment, 
-                payments.codepay, 
-                payments.accountline, 
-                years_rate.year, 
-                payments.canceled, 
-                payments.amounttotal, 
-                payments.payer, 
-                UCASE(user_sys.name) as usercollect, 
-                payments.created, 
-                payments.updated 
-                FROM payments 
-                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate 
-                INNER JOIN account_line ON account_line.idaccountline = payments.accountline 
-                INNER JOIN internal_line ON internal_line.idinternalline = account_line.internalline 
-                INNER JOIN user_sys ON user_sys.idusersys = payments.collector
-                WHERE internal_line.idinternalline = @idinternalline"
-
-                If vSeeAll <> 0 Then
-                    '0: ver todos los recibos, 1: ver los no anulados, 2: ver los anulados
-                    strCommand = strCommand & " AND payments.canceled = @canceled"
-                End If
-                strCommand = strCommand & " ORDER BY payments.created DESC"
-                cmdGetAccountReceipts.CommandText = strCommand
-                cmdGetAccountReceipts.Parameters.AddWithValue("idinternalline", vIdInternalLine)
-                If vSeeAll <> 0 Then
-                    If vSeeAll = 1 Then
-                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 0)
-                    ElseIf vSeeAll = 2 Then
-                        cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 1)
-                    End If
-                End If
 
                 Try
-                    dr = cmdGetAccountReceipts.ExecuteReader()
+                    cmdGetAccountReceipts.Connection = cnnx
+                    cmdGetAccountReceipts.CommandType = CommandType.Text
+                    Dim strCommand As String = "SELECT 
+                    payments.idpayment, 
+                    payments.codepay, 
+                    payments.accountline, 
+                    years_rate.year, 
+                    payments.canceled, 
+                    payments.amounttotal, 
+                    payments.payer, 
+                    UCASE(user_sys.name) as usercollect, 
+                    payments.created, 
+                    payments.updated 
+                    FROM payments 
+                    INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate 
+                    INNER JOIN account_line ON account_line.idaccountline = payments.accountline 
+                    INNER JOIN internal_line ON internal_line.idinternalline = account_line.internalline 
+                    INNER JOIN user_sys ON user_sys.idusersys = payments.collector
+                    WHERE internal_line.idinternalline = @idinternalline"
+
+                    If vSeeAll <> 0 Then
+                        '0: ver todos los recibos, 1: ver los no anulados, 2: ver los anulados
+                        strCommand = strCommand & " AND payments.canceled = @canceled"
+                    End If
+                    strCommand = strCommand & " ORDER BY payments.created DESC"
+
+                    cmdGetAccountReceipts.CommandText = strCommand
+                    cmdGetAccountReceipts.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+
+                    If vSeeAll <> 0 Then
+                        If vSeeAll = 1 Then
+                            cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 0)
+                        ElseIf vSeeAll = 2 Then
+                            cmdGetAccountReceipts.Parameters.AddWithValue("canceled", 1)
+                        End If
+                    End If
+
+                    ada.SelectCommand = cmdGetAccountReceipts
+                    ada.Fill(tableReceipts)
+
                     dgHistory.Rows.Clear()
-                    If dr.HasRows Then
-                        While dr.Read
-                            dgHistory.Rows.Add(dr(0).ToString, dr(2).ToString, dr(3).ToString, dr(1).ToString, Format(CDec(dr(5).ToString), "###,##0.00"), dr(6).ToString, dr(7).ToString, dr(8).ToString)
-                        End While
+
+                    If tableReceipts.Rows.Count > 0 Then
+                        For index As Integer = 0 To tableReceipts.Rows.Count - 1
+                            dgHistory.Rows.Add(tableReceipts.Rows(index).Item(0).ToString, tableReceipts.Rows(index).Item(2).ToString, tableReceipts.Rows(index).Item(3).ToString, tableReceipts.Rows(index).Item(1).ToString, Format(CDec(tableReceipts.Rows(index).Item(5).ToString), "###,##0.00"), tableReceipts.Rows(index).Item(6).ToString, tableReceipts.Rows(index).Item(7).ToString, tableReceipts.Rows(index).Item(8).ToString)
+                        Next
                     Else
                         MsgBox("No hay pagos que mostrar", vbCritical, "Aviso")
                     End If
-                    dr.Close()
                 Catch ex As Exception
                     dgHistory.Rows.Clear()
                     MsgBox("Ocurrio un error en la consulta de registros", vbCritical, "Aviso")
@@ -1595,58 +1599,56 @@ Module dataFunctions
 
     Public Sub receiptDetail(dgDetail As DataGridView, vIdPayment As String)
         Dim cmdGetReceiptDetail As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableReceipts As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
             If Not (vIdPayment = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdGetReceiptDetail.Connection = cnnx
-                cmdGetReceiptDetail.CommandType = CommandType.Text
-                cmdGetReceiptDetail.CommandText = "SELECT 
-                payments.idpayment, 
-                payments.accountline, 
-                account_detail.idaccountdetail, 
-                years_rate.year, 
-                account_detail.month, 
-                rate_types.name, 
-                rate_types.periodic, 
-                payment_detail.payamount 
-                FROM payment_detail 
-                INNER JOIN payments ON payments.idpayment = payment_detail.payment 
-                INNER JOIN account_detail ON account_detail.idaccountdetail = payment_detail.accountdetail 
-                INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype 
-                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate
-                WHERE payment_detail.payment = @idpayment"
-                cmdGetReceiptDetail.Parameters.AddWithValue("idpayment", vIdPayment)
-
                 Try
-                    dr = cmdGetReceiptDetail.ExecuteReader()
+                    cmdGetReceiptDetail.Connection = cnnx
+                    cmdGetReceiptDetail.CommandType = CommandType.Text
+                    cmdGetReceiptDetail.CommandText = "SELECT 
+                    payments.idpayment, 
+                    payments.accountline, 
+                    account_detail.idaccountdetail, 
+                    years_rate.year, 
+                    account_detail.month, 
+                    rate_types.name, 
+                    rate_types.periodic, 
+                    payment_detail.payamount 
+                    FROM payment_detail 
+                    INNER JOIN payments ON payments.idpayment = payment_detail.payment 
+                    INNER JOIN account_detail ON account_detail.idaccountdetail = payment_detail.accountdetail 
+                    INNER JOIN rate_types ON rate_types.idratetype = account_detail.ratetype 
+                    INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate
+                    WHERE payment_detail.payment = @idpayment"
+                    cmdGetReceiptDetail.Parameters.AddWithValue("idpayment", vIdPayment)
+                    ada.SelectCommand = cmdGetReceiptDetail
+                    ada.Fill(tableReceipts)
 
                     dgDetail.Rows.Clear()
-                    If dr.HasRows Then
-                        While dr.Read
+                    If tableReceipts.Rows.Count > 0 Then
+                        For index As Integer = 0 To tableReceipts.Rows.Count - 1
                             Dim vNameMonth As String
-                            If CInt(dr(4).ToString) = 0 Then
+                            If CInt(tableReceipts.Rows(index).Item(4).ToString) = 0 Then
                                 vNameMonth = ""
                             Else
-                                vNameMonth = UCase(MonthName(dr(4).ToString))
+                                vNameMonth = UCase(MonthName(tableReceipts.Rows(index).Item(4).ToString))
                             End If
-                            Dim vCharge As Boolean = dr(6).ToString
+                            Dim vCharge As Boolean = tableReceipts.Rows(index).Item(6).ToString
                             Dim vNameCharge As String
 
                             If vCharge Then
-                                vNameCharge = dr(5).ToString & " " & vNameMonth & " " & dr(3).ToString
+                                vNameCharge = tableReceipts.Rows(index).Item(5).ToString & " " & vNameMonth & " " & tableReceipts.Rows(index).Item(3).ToString
                             Else
-                                vNameCharge = dr(5).ToString
+                                vNameCharge = tableReceipts.Rows(index).Item(5).ToString
                             End If
 
-                            dgDetail.Rows.Add(dr(0).ToString, dr(1).ToString, dr(2).ToString, vNameCharge, Format(CDec(dr(7).ToString), "###,##0.00"))
-                        End While
+                            dgDetail.Rows.Add(tableReceipts.Rows(index).Item(0).ToString, tableReceipts.Rows(index).Item(1).ToString, tableReceipts.Rows(index).Item(2).ToString, vNameCharge, Format(CDec(tableReceipts.Rows(index).Item(7).ToString), "###,##0.00"))
+                        Next
                     Else
                         MsgBox("No hay pagos que mostrar", vbCritical, "Aviso")
                     End If
-                    dr.Close()
                 Catch ex As Exception
                     dgDetail.Rows.Clear()
                     MsgBox("Ocurrio un error en la consulta", vbCritical, "Aviso")
@@ -1665,16 +1667,15 @@ Module dataFunctions
             If DateDiff(DateInterval.Day, CDate(Format(vDatePay, "dd/MM/yyyy")), Today) <= 7 Then
                 If MsgBox("¿Desea anular el recibo N°" & vNumReceipt & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
                     If Not (vIdPayment = Nothing And dgDetail.Rows.Count > 0) Then
+
                         Dim vIdAccountLine As String = dgDetail.Item(1, 0).Value
+
                         Try
-                            cnnx.Close()
-                            cnnx.Open()
                             cmdUpdateReceipt.Connection = cnnx
                             cmdUpdateReceipt.CommandType = CommandType.Text
                             cmdUpdateReceipt.CommandText = "UPDATE payments SET payments.canceled = 1 WHERE payments.idpayment = @idpayment"
                             cmdUpdateReceipt.Parameters.AddWithValue("idpayment", vIdPayment)
                             cmdUpdateReceipt.ExecuteNonQuery()
-                            cmdUpdateReceipt.Dispose()
 
                             For index As Integer = 0 To dgDetail.Rows.Count - 1
                                 Dim cmdUpdateAccountDetail As New MySqlCommand
@@ -1691,7 +1692,6 @@ Module dataFunctions
                                 cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", dgDetail.Item(2, index).Value)
                                 cmdUpdateAccountDetail.Parameters.AddWithValue("idpayment", vIdPayment)
                                 cmdUpdateAccountDetail.ExecuteNonQuery()
-                                cmdUpdateAccountDetail.Dispose()
                             Next
 
                             cmdUpdateAccountLine.Connection = cnnx
@@ -1703,7 +1703,6 @@ Module dataFunctions
                             WHERE account_line.idaccountline = @idaccountline"
                             cmdUpdateAccountLine.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                             cmdUpdateAccountLine.ExecuteNonQuery()
-                            cmdUpdateAccountLine.Dispose()
 
                             Return True
                         Catch ex As Exception
@@ -1732,7 +1731,6 @@ Module dataFunctions
         Dim dataConceptReceipt(12) As String
         Dim indexConcept As Integer = 0
         Dim amountPayTotal As Decimal
-        Dim dgAccountCopy As DataGridView = dgAccount
 
         If dgAccount.Rows.Count > 0 Then
             For index As Integer = 0 To dgAccount.Rows.Count - 1
@@ -1787,8 +1785,6 @@ Module dataFunctions
 
         If Not cnnx.DataSource.Equals("") Then
             If Not (vIdPaymnent = Nothing And vIdAccountLine = Nothing And idDetailAccount = Nothing And amountPay = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
                 insertPaymentDetail.Connection = cnnx
                 insertPaymentDetail.CommandType = CommandType.Text
                 insertPaymentDetail.CommandText = "INSERT INTO payment_detail(payment, accountline, accountdetail, payamount) VALUES(@idpay, @internalline, @accountdetail, @payamount)"
@@ -1796,9 +1792,7 @@ Module dataFunctions
                 insertPaymentDetail.Parameters.AddWithValue("internalline", vIdAccountLine)
                 insertPaymentDetail.Parameters.AddWithValue("accountdetail", idDetailAccount)
                 insertPaymentDetail.Parameters.AddWithValue("payamount", amountPay)
-
                 insertPaymentDetail.ExecuteNonQuery()
-                insertPaymentDetail.Dispose()
             Else
                 MsgBox("Faltan datos para registrar el pago detalle", vbCritical, "Aviso")
             End If
@@ -1812,8 +1806,6 @@ Module dataFunctions
 
         If Not cnnx.DataSource.Equals("") Then
             If Not (idPaymnent = Nothing And vCodNumReceipt = Nothing And vIdAccount = Nothing And amountPayTotal = Nothing And payerUser = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
                 insertPaymentDetail.Connection = cnnx
                 insertPaymentDetail.CommandType = CommandType.Text
                 insertPaymentDetail.CommandText = "INSERT INTO payments(idpayment, codepay, accountline, yearrate, amounttotal, payer, collector) VALUES(@idpay, @codepay, @accountline, @yearrate, @amounttotal, @payer, @collector)"
@@ -1824,9 +1816,7 @@ Module dataFunctions
                 insertPaymentDetail.Parameters.AddWithValue("amounttotal", amountPayTotal)
                 insertPaymentDetail.Parameters.AddWithValue("payer", payerUser)
                 insertPaymentDetail.Parameters.AddWithValue("collector", My.Settings.vUserIdLogin)
-
                 insertPaymentDetail.ExecuteNonQuery()
-                insertPaymentDetail.Dispose()
             Else
                 MsgBox("Faltan datos para registrar el pago", vbCritical, "Aviso")
             End If
@@ -1837,30 +1827,25 @@ Module dataFunctions
 
     Public Sub getAccountYearUpdated(yearRate As Integer, vIdInternalLine As String, vIdAccount As String)
         Dim cmdGetAccountYearDetail, cmdUpdateAccountYear As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableAccount As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
-
             If Not (vIdInternalLine = Nothing And vIdAccount = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdGetAccountYearDetail.Connection = cnnx
-                cmdGetAccountYearDetail.CommandType = CommandType.Text
-                cmdGetAccountYearDetail.CommandText = "SELECT DISTINCTROW 
-                SUM(account_detail.saldototal) AS total 
-                FROM account_detail WHERE account_detail.yearrate = @yearrate AND account_detail.accountline = @idaccountline"
-                cmdGetAccountYearDetail.Parameters.AddWithValue("yearrate", yearRate)
-                cmdGetAccountYearDetail.Parameters.AddWithValue("idaccountline", vIdAccount)
-
                 Try
-                    dr = cmdGetAccountYearDetail.ExecuteReader()
+                    cmdGetAccountYearDetail.Connection = cnnx
+                    cmdGetAccountYearDetail.CommandType = CommandType.Text
+                    cmdGetAccountYearDetail.CommandText = "SELECT DISTINCTROW 
+                    SUM(account_detail.saldototal) AS total 
+                    FROM account_detail WHERE account_detail.yearrate = @yearrate AND account_detail.accountline = @idaccountline"
+                    cmdGetAccountYearDetail.Parameters.AddWithValue("yearrate", yearRate)
+                    cmdGetAccountYearDetail.Parameters.AddWithValue("idaccountline", vIdAccount)
+                    ada.SelectCommand = cmdGetAccountYearDetail
+                    ada.Fill(tableAccount)
 
-                    If dr.HasRows Then
-                        dr.Read()
-
+                    If tableAccount.Rows.Count > 0 Then
                         Dim saldoTotalYear As Decimal = 0
-                        saldoTotalYear = Val(dr(0).ToString)
-                        dr.Close()
+                        saldoTotalYear = Val(tableAccount.Rows(0).Item(0).ToString)
 
                         cmdUpdateAccountYear.Connection = cnnx
                         cmdUpdateAccountYear.CommandType = CommandType.Text
@@ -1869,10 +1854,7 @@ Module dataFunctions
                         cmdUpdateAccountYear.Parameters.AddWithValue("accountsaldo", saldoTotalYear)
                         cmdUpdateAccountYear.Parameters.AddWithValue("idaccountline", vIdAccount)
                         cmdUpdateAccountYear.Parameters.AddWithValue("yearrate", yearRate)
-
                         cmdUpdateAccountYear.ExecuteNonQuery()
-                        cmdUpdateAccountYear.Dispose()
-                        cmdGetAccountYearDetail.Dispose()
                     Else
                         MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
                     End If
@@ -1894,18 +1876,14 @@ Module dataFunctions
         If Not cnnx.DataSource.Equals("") Then
 
             If Not idAccountDetail = Nothing Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdUpdateAccountDetail.Connection = cnnx
-                cmdUpdateAccountDetail.CommandType = CommandType.Text
-                cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET account_detail.saldototal = @amountsaldo 
-                WHERE account_detail.idaccountdetail = @idaccountdetail"
-                cmdUpdateAccountDetail.Parameters.AddWithValue("amountsaldo", CDec(amountSaldo - amountPay))
-                cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", idAccountDetail)
-
                 Try
+                    cmdUpdateAccountDetail.Connection = cnnx
+                    cmdUpdateAccountDetail.CommandType = CommandType.Text
+                    cmdUpdateAccountDetail.CommandText = "UPDATE account_detail SET account_detail.saldototal = @amountsaldo 
+                    WHERE account_detail.idaccountdetail = @idaccountdetail"
+                    cmdUpdateAccountDetail.Parameters.AddWithValue("amountsaldo", CDec(amountSaldo - amountPay))
+                    cmdUpdateAccountDetail.Parameters.AddWithValue("idaccountdetail", idAccountDetail)
                     cmdUpdateAccountDetail.ExecuteNonQuery()
-                    cmdUpdateAccountDetail.Dispose()
 
                     Return True
                 Catch ex As Exception
@@ -1925,46 +1903,42 @@ Module dataFunctions
 
     Public Function getAccount(vIdServiceLine As String, vIdInternalLine As String) As String()
         Dim cmdGetAccount As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableAccount As New DataTable
 
         If Not cnnx.DataSource.Equals("") Then
             If Not (vIdServiceLine = Nothing And vIdInternalLine = Nothing) Then
-                cnnx.Close()
-                cnnx.Open()
-                cmdGetAccount.Connection = cnnx
-                cmdGetAccount.CommandType = CommandType.Text
-                cmdGetAccount.CommandText = "SELECT 
-                internal_line.idinternalline, 
-                internal_line.serviceline, 
-                internal_line.code, 
-                service_line.code, 
-                internal_line.rate, 
-                internal_line.pricerate, 
-                internal_line.created, 
-                internal_line.updated 
-                FROM internal_line 
-                INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline 
-                WHERE internal_line.serviceline = @idserviceline AND internal_line.idinternalline = @idinternalline"
-                cmdGetAccount.Parameters.AddWithValue("idinternalline", vIdInternalLine)
-                cmdGetAccount.Parameters.AddWithValue("idserviceline", vIdServiceLine)
-
                 Try
-                    dr = cmdGetAccount.ExecuteReader()
+                    cmdGetAccount.Connection = cnnx
+                    cmdGetAccount.CommandType = CommandType.Text
+                    cmdGetAccount.CommandText = "SELECT 
+                    internal_line.idinternalline, 
+                    internal_line.serviceline, 
+                    internal_line.code, 
+                    service_line.code, 
+                    internal_line.rate, 
+                    internal_line.pricerate, 
+                    internal_line.created, 
+                    internal_line.updated 
+                    FROM internal_line 
+                    INNER JOIN service_line ON service_line.idserviceline = internal_line.serviceline 
+                    WHERE internal_line.serviceline = @idserviceline AND internal_line.idinternalline = @idinternalline"
+                    cmdGetAccount.Parameters.AddWithValue("idinternalline", vIdInternalLine)
+                    cmdGetAccount.Parameters.AddWithValue("idserviceline", vIdServiceLine)
+                    ada.SelectCommand = cmdGetAccount
+                    ada.Fill(tableAccount)
 
-                    If dr.HasRows Then
-                        dr.Read()
-
+                    If tableAccount.Rows.Count > 0 Then
                         Dim dataAccount(7) As String
-                        dataAccount(0) = dr(0).ToString 'Id de internalline
-                        dataAccount(1) = dr(1).ToString 'Id de serviceline
-                        dataAccount(2) = dr(2).ToString 'Code de internalline
-                        dataAccount(3) = dr(3).ToString 'Code de serviceline
-                        dataAccount(4) = dr(4).ToString 'Id de rate
-                        dataAccount(5) = dr(5).ToString 'Precio rate
-                        dataAccount(6) = Format(dr(6).ToString, "Short Date")
-                        dataAccount(7) = Format(dr(7).ToString, "Short Date")
+                        dataAccount(0) = tableAccount.Rows(0).Item(0).ToString 'Id de internalline
+                        dataAccount(1) = tableAccount.Rows(0).Item(1).ToString 'Id de serviceline
+                        dataAccount(2) = tableAccount.Rows(0).Item(2).ToString 'Code de internalline
+                        dataAccount(3) = tableAccount.Rows(0).Item(3).ToString 'Code de serviceline
+                        dataAccount(4) = tableAccount.Rows(0).Item(4).ToString 'Id de rate
+                        dataAccount(5) = tableAccount.Rows(0).Item(5).ToString 'Precio rate
+                        dataAccount(6) = Format(tableAccount.Rows(0).Item(6).ToString, "Short Date")
+                        dataAccount(7) = Format(tableAccount.Rows(0).Item(7).ToString, "Short Date")
 
-                        cmdGetAccount.Dispose()
                         Return dataAccount
                     Else
                         MsgBox("No hay registro de cuenta", vbCritical, "Aviso")
@@ -1987,52 +1961,48 @@ Module dataFunctions
 
     Public Function getLine(vIdServiceLine As String) As String()
         Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableLine As New DataTable
 
         If cnnx.DataSource.Equals("") Then
             Return Nothing
         Else
-            cnnx.Close()
-            cnnx.Open()
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-            cmd.CommandText = "SELECT 
-            service_line.idserviceline, 
-            service_line.code AS servicecode, 
-            service_line.name AS servicename, 
-            service_line.street, 
-            streets.code AS streetcode, 
-            streets.name AS streetname, 
-            service_line.address, 
-            service_line.installdate, 
-            service_line.description, 
-            service_line.created, 
-            service_line.updated 
-            FROM service_line 
-            INNER JOIN streets ON streets.idstreet = service_line.street 
-            WHERE service_line.idserviceline = @idserviceline"
-            cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
-
             Try
-                dr = cmd.ExecuteReader()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                service_line.idserviceline, 
+                service_line.code AS servicecode, 
+                service_line.name AS servicename, 
+                service_line.street, 
+                streets.code AS streetcode, 
+                streets.name AS streetname, 
+                service_line.address, 
+                service_line.installdate, 
+                service_line.description, 
+                service_line.created, 
+                service_line.updated 
+                FROM service_line 
+                INNER JOIN streets ON streets.idstreet = service_line.street 
+                WHERE service_line.idserviceline = @idserviceline"
+                cmd.Parameters.AddWithValue("idserviceline", vIdServiceLine)
+                ada.SelectCommand = cmd
+                ada.Fill(tableLine)
 
-                If dr.HasRows Then
-                    dr.Read()
-
+                If tableLine.Rows.Count > 0 Then
                     Dim dataLine(10) As String
-                    dataLine(0) = dr(0).ToString 'Id de linea
-                    dataLine(1) = dr(1).ToString 'Codigo de linea
-                    dataLine(2) = dr(2).ToString 'Nombre de linea
-                    dataLine(3) = dr(3).ToString 'Id de sector
-                    dataLine(4) = dr(4).ToString 'Codigo de sector
-                    dataLine(5) = dr(5).ToString 'Nombre del sector
-                    dataLine(6) = dr(6).ToString 'Direccion de la linea
-                    dataLine(7) = dr(7).ToString 'Fecha de instalacion
-                    dataLine(8) = dr(8).ToString 'Descripcion de linea
-                    dataLine(9) = dr(9).ToString 'Fecha de registro
-                    dataLine(10) = dr(10).ToString 'Fecha de actualizacion
+                    dataLine(0) = tableLine.Rows(0).Item(0).ToString 'Id de linea
+                    dataLine(1) = tableLine.Rows(0).Item(1).ToString 'Codigo de linea
+                    dataLine(2) = tableLine.Rows(0).Item(2).ToString 'Nombre de linea
+                    dataLine(3) = tableLine.Rows(0).Item(3).ToString 'Id de sector
+                    dataLine(4) = tableLine.Rows(0).Item(4).ToString 'Codigo de sector
+                    dataLine(5) = tableLine.Rows(0).Item(5).ToString 'Nombre del sector
+                    dataLine(6) = tableLine.Rows(0).Item(6).ToString 'Direccion de la linea
+                    dataLine(7) = tableLine.Rows(0).Item(7).ToString 'Fecha de instalacion
+                    dataLine(8) = tableLine.Rows(0).Item(8).ToString 'Descripcion de linea
+                    dataLine(9) = tableLine.Rows(0).Item(9).ToString 'Fecha de registro
+                    dataLine(10) = tableLine.Rows(0).Item(10).ToString 'Fecha de actualizacion
 
-                    dr.Close()
                     Return dataLine
                 Else
                     Return Nothing
@@ -2045,59 +2015,52 @@ Module dataFunctions
 
     Public Function getUser(vIdUserReg As String) As String()
         Dim cmd As New MySqlCommand
-        Dim dr As MySqlDataReader
+        Dim ada As New MySqlDataAdapter
+        Dim tableUsers As New DataTable
 
         If cnnx.DataSource.Equals("") Or IsNothing(vIdUserReg) Then
             Return Nothing
         Else
-            cnnx.Close()
-            cnnx.Open()
-            cmd.Connection = cnnx
-            cmd.CommandType = CommandType.Text
-            cmd.CommandText = "SELECT
-            user_reg.iduserreg,
-            user_reg.names,
-            user_reg.surnames,
-            user_reg.usertype,
-            user_type.name,
-            user_reg.docid,
-            user_reg.address,
-            user_reg.cellphone,
-            user_reg.telephone,
-            user_reg.created,
-            user_reg.updated
-            FROM user_reg
-            INNER JOIN user_type ON user_type.idusertype = user_reg.usertype
-            WHERE user_reg.iduserreg = @iduserreg"
-            cmd.Parameters.AddWithValue("iduserreg", vIdUserReg)
-
             Try
-                dr = cmd.ExecuteReader()
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                user_reg.iduserreg,
+                user_reg.names,
+                user_reg.surnames,
+                user_reg.usertype,
+                user_type.name,
+                user_reg.docid,
+                user_reg.address,
+                user_reg.cellphone,
+                user_reg.telephone,
+                user_reg.created,
+                user_reg.updated
+                FROM user_reg
+                INNER JOIN user_type ON user_type.idusertype = user_reg.usertype
+                WHERE user_reg.iduserreg = @iduserreg"
+                cmd.Parameters.AddWithValue("iduserreg", vIdUserReg)
+                ada.SelectCommand = cmd
+                ada.Fill(tableUsers)
 
-                If dr.HasRows Then
-                    dr.Read()
-
+                If tableUsers.Rows.Count > 0 Then
                     Dim dataUser(10) As String
-                    dataUser(0) = dr(0).ToString 'Codigo de usuario
-                    dataUser(1) = dr(1).ToString 'Nombres
-                    dataUser(2) = dr(2).ToString 'Apellidos
-                    dataUser(3) = dr(3).ToString 'Tipo de usuario
-                    dataUser(4) = dr(4).ToString 'Nombre de tipo de usuario
-                    dataUser(5) = dr(5).ToString 'Numero de documento
-                    dataUser(6) = dr(6).ToString 'Direccion
-                    dataUser(7) = dr(7).ToString 'Celular
-                    dataUser(8) = dr(8).ToString 'Telefono
-                    dataUser(9) = dr(9).ToString 'Fecha creado
-                    dataUser(10) = dr(10).ToString 'Fecha actualizado
+                    dataUser(0) = tableUsers.Rows(0).Item(0).ToString 'Codigo de usuario
+                    dataUser(1) = tableUsers.Rows(0).Item(1).ToString 'Nombres
+                    dataUser(2) = tableUsers.Rows(0).Item(2).ToString 'Apellidos
+                    dataUser(3) = tableUsers.Rows(0).Item(3).ToString 'Tipo de usuario
+                    dataUser(4) = tableUsers.Rows(0).Item(4).ToString 'Nombre de tipo de usuario
+                    dataUser(5) = tableUsers.Rows(0).Item(5).ToString 'Numero de documento
+                    dataUser(6) = tableUsers.Rows(0).Item(6).ToString 'Direccion
+                    dataUser(7) = tableUsers.Rows(0).Item(7).ToString 'Celular
+                    dataUser(8) = tableUsers.Rows(0).Item(8).ToString 'Telefono
+                    dataUser(9) = tableUsers.Rows(0).Item(9).ToString 'Fecha creado
+                    dataUser(10) = tableUsers.Rows(0).Item(10).ToString 'Fecha actualizado
 
-                    cmd.Dispose()
                     Return dataUser
                 Else
                     Return Nothing
                 End If
-
-                dr.Close()
-                cmd.Dispose()
             Catch ex As Exception
                 MsgBox("Ocurrio un error al buscar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
@@ -2453,8 +2416,6 @@ Module dataFunctions
 
         If Not cnnx.DataSource.Equals("") Then
             Try
-                cnnx.Close()
-                cnnx.Open()
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT 
