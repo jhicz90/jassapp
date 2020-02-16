@@ -51,6 +51,7 @@ Partial Class frmMain
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
+        Me.tsmiCollectDaily = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -244,6 +245,7 @@ Partial Class frmMain
         '
         'tsdpdReports
         '
+        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily})
         Me.tsdpdReports.Image = Global.JASS_APP.My.Resources.Resources.analyze_32
         Me.tsdpdReports.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdReports.Name = "tsdpdReports"
@@ -277,6 +279,12 @@ Partial Class frmMain
         Me.stStatusToolbar.Size = New System.Drawing.Size(1045, 22)
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
+        '
+        'tsmiCollectDaily
+        '
+        Me.tsmiCollectDaily.Name = "tsmiCollectDaily"
+        Me.tsmiCollectDaily.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiCollectDaily.Text = "Cobranza diaria"
         '
         'frmMain
         '
@@ -328,4 +336,5 @@ Partial Class frmMain
     Friend WithEvents tsmiPreviewReceipt As ToolStripMenuItem
     Friend WithEvents tsmiDeclarationServices As ToolStripMenuItem
     Friend WithEvents tsmiRateType As ToolStripMenuItem
+    Friend WithEvents tsmiCollectDaily As ToolStripMenuItem
 End Class

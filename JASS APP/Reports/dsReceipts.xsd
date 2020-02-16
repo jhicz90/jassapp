@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsReceipts" targetNamespace="http://tempuri.org/dsReceipts.xsd" xmlns:mstns="http://tempuri.org/dsReceipts.xsd" xmlns="http://tempuri.org/dsReceipts.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsReceipts" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsReceipts" msprop:Generator_UserDSName="dsReceipts">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtReceipts" msprop:Generator_TableClassName="dtReceiptsDataTable" msprop:Generator_TableVarName="tabledtReceipts" msprop:Generator_RowChangedName="dtReceiptsRowChanged" msprop:Generator_TablePropName="dtReceipts" msprop:Generator_RowDeletingName="dtReceiptsRowDeleting" msprop:Generator_RowChangingName="dtReceiptsRowChanging" msprop:Generator_RowEvHandlerName="dtReceiptsRowChangeEventHandler" msprop:Generator_RowDeletedName="dtReceiptsRowDeleted" msprop:Generator_RowClassName="dtReceiptsRow" msprop:Generator_UserTableName="dtReceipts" msprop:Generator_RowEvArgName="dtReceiptsRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="idpayment" msprop:Generator_ColumnVarNameInTable="columnidpayment" msprop:Generator_ColumnPropNameInRow="idpayment" msprop:Generator_ColumnPropNameInTable="idpaymentColumn" msprop:Generator_UserColumnName="idpayment" type="xs:string" minOccurs="0" />
+              <xs:element name="codepay" msprop:Generator_ColumnVarNameInTable="columncodepay" msprop:Generator_ColumnPropNameInRow="codepay" msprop:Generator_ColumnPropNameInTable="codepayColumn" msprop:Generator_UserColumnName="codepay" type="xs:string" minOccurs="0" />
+              <xs:element name="year" msprop:Generator_ColumnVarNameInTable="columnyear" msprop:Generator_ColumnPropNameInRow="year" msprop:Generator_ColumnPropNameInTable="yearColumn" msprop:Generator_UserColumnName="year" type="xs:string" minOccurs="0" />
+              <xs:element name="amounttotal" msprop:Generator_ColumnVarNameInTable="columnamounttotal" msprop:Generator_ColumnPropNameInRow="amounttotal" msprop:Generator_ColumnPropNameInTable="amounttotalColumn" msprop:Generator_UserColumnName="amounttotal" type="xs:decimal" minOccurs="0" />
+              <xs:element name="name" msprop:Generator_ColumnVarNameInTable="columnname" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_UserColumnName="name" type="xs:string" minOccurs="0" />
+              <xs:element name="created" msprop:Generator_ColumnVarNameInTable="columncreated" msprop:Generator_ColumnPropNameInRow="created" msprop:Generator_ColumnPropNameInTable="createdColumn" msprop:Generator_UserColumnName="created" type="xs:dateTime" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

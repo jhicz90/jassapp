@@ -43,6 +43,10 @@
         showRateType(Me)
     End Sub
 
+    Private Sub tsmiCollectDaily_Click(sender As Object, e As EventArgs) Handles tsmiCollectDaily.Click
+        showReportReceipts()
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         Do
             If MdiChildren.Count > 0 Then

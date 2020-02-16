@@ -18,6 +18,7 @@ Module dataFunctions
                 cnnx.ConnectionString = cnnstr.ToString
                 cnnx.Open()
             End If
+
             Return True
         Catch ex As Exception
             MsgBox("No pudo completarse la conección a la base de datos.", vbCritical, "Aviso")
@@ -810,7 +811,7 @@ Module dataFunctions
                     End If
                 Catch ex As Exception
                     MsgBox("Ocurrio un error al guardar el registro", vbExclamation, "Aviso")
-                MsgBox(ex.Message)
+                    MsgBox(ex.Message)
                 End Try
             Else
                 MsgBox("No se envio el codigo de la linea a insertar", vbExclamation, "Aviso")
@@ -1244,6 +1245,7 @@ Module dataFunctions
             frm.MdiParent = vfrmMdiParent
             frm.Show()
         End If
+        frm.txtFind.Focus()
     End Sub
 
     Public Sub showFindCollect(vfrmMdiParent As Form)
@@ -1255,6 +1257,7 @@ Module dataFunctions
             frm.MdiParent = vfrmMdiParent
             frm.Show()
         End If
+        frm.txtFind.Focus()
     End Sub
 
     Public Sub showDeclarationServices(vfrmMdiParent As Form)
@@ -1289,6 +1292,11 @@ Module dataFunctions
             frm.MdiParent = vfrmMdiParent
             frm.Show()
         End If
+    End Sub
+
+    Public Sub showReportReceipts()
+        Dim frm As New frmReportReceipts
+        frm.Show()
     End Sub
 
     Public Sub showEditLine(vIdServiceLine As String)
@@ -1427,7 +1435,7 @@ Module dataFunctions
                             Else
                                 vState = "Cancelado"
                             End If
-                            dgAccountYear.Rows.Add(tableLastReceipt.Rows(index).Item(0).ToString, CInt(tableLastReceipt.Rows(index).Item(1).ToString), Format(tableLastReceipt.Rows(index).Item(2).ToString, "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(2).ToString) - CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), vState)
+                            dgAccountYear.Rows.Add(tableLastReceipt.Rows(index).Item(0).ToString, CInt(tableLastReceipt.Rows(index).Item(1).ToString), Format(CDec(tableLastReceipt.Rows(index).Item(2).ToString), "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(2).ToString) - CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), vState)
                         Next
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -2439,4 +2447,38 @@ Module dataFunctions
             dgRates.Rows.Clear()
         End If
     End Sub
+
+    Public Function reportReceipts() As dsReceipts
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim ds As New dsReceipts
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                payments.idpayment, 
+                payments.codepay, 
+                years_rate.year, 
+                payments.amounttotal, 
+                user_sys.name, 
+                payments.created 
+                FROM payments 
+                INNER JOIN user_sys ON user_sys.idusersys = payments.collector 
+                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate
+                ORDER BY payments.created ASC"
+                ada.SelectCommand = cmd
+                ada.Fill(ds, "dtReceipts")
+
+                Return ds
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return ds
+            End Try
+        Else
+            Return ds
+        End If
+    End Function
 End Module
