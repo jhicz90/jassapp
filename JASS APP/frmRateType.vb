@@ -25,7 +25,7 @@
         txtRateTypeName.Focus()
     End Sub
 
-    Private Sub dtgRateType_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgRateType.CellContentDoubleClick
+    Private Sub dtgRateType_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dtgRateType.CellMouseDoubleClick
         If e.RowIndex <> -1 Then
             Dim dataRate() As String = getRateType(dtgRateType.Item(0, e.RowIndex).Value)
             idRateType = dataRate(0)
