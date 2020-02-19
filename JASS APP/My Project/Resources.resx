@@ -136,6 +136,12 @@
   <data name="analyze_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\analyze-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="attendance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\attendance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="attendance_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\attendance-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="bill" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\bill.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -246,6 +252,9 @@
   </data>
   <data name="iconApp" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iconApp.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="iconAttendance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\iconAttendance.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="iconCashbook" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iconCashbook.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -360,6 +369,12 @@
   </data>
   <data name="refund_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\refund-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="report_card" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\report-card.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="report_card_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\report-card-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="restore_window" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\restore-window.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

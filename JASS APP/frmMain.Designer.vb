@@ -48,10 +48,11 @@ Partial Class frmMain
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsmiCloseWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdReports = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.tsmiCollectDaily = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
-        Me.tsmiCollectDaily = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiCollectDailyResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -245,7 +246,7 @@ Partial Class frmMain
         '
         'tsdpdReports
         '
-        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily})
+        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily, Me.tsmiCollectDailyResume})
         Me.tsdpdReports.Image = Global.JASS_APP.My.Resources.Resources.analyze_32
         Me.tsdpdReports.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdReports.Name = "tsdpdReports"
@@ -254,6 +255,12 @@ Partial Class frmMain
         Me.tsdpdReports.Text = "Reportes"
         Me.tsdpdReports.ToolTipText = "Reportes - Imprima o exporte reportes sobre" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cobranza, padrón de usuario o lineas" &
     " de servicio."
+        '
+        'tsmiCollectDaily
+        '
+        Me.tsmiCollectDaily.Name = "tsmiCollectDaily"
+        Me.tsmiCollectDaily.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiCollectDaily.Text = "Reporte a detalle de cobranza diaria"
         '
         'tsdpdHelp
         '
@@ -280,11 +287,11 @@ Partial Class frmMain
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
         '
-        'tsmiCollectDaily
+        'tsmiCollectDailyResume
         '
-        Me.tsmiCollectDaily.Name = "tsmiCollectDaily"
-        Me.tsmiCollectDaily.Size = New System.Drawing.Size(180, 22)
-        Me.tsmiCollectDaily.Text = "Cobranza diaria"
+        Me.tsmiCollectDailyResume.Name = "tsmiCollectDailyResume"
+        Me.tsmiCollectDailyResume.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiCollectDailyResume.Text = "Reporte resumen de cobranza diaria"
         '
         'frmMain
         '
@@ -337,4 +344,5 @@ Partial Class frmMain
     Friend WithEvents tsmiDeclarationServices As ToolStripMenuItem
     Friend WithEvents tsmiRateType As ToolStripMenuItem
     Friend WithEvents tsmiCollectDaily As ToolStripMenuItem
+    Friend WithEvents tsmiCollectDailyResume As ToolStripMenuItem
 End Class

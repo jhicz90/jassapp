@@ -47,6 +47,10 @@
         showReportReceipts()
     End Sub
 
+    Private Sub tsmiCollectDailyResume_Click(sender As Object, e As EventArgs) Handles tsmiCollectDailyResume.Click
+        showReportReceiptsResume()
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         Do
             If MdiChildren.Count > 0 Then
@@ -75,7 +79,8 @@
     End Sub
 
     Private Sub tsmiPreviewReceipt_Click(sender As Object, e As EventArgs) Handles tsmiPreviewReceipt.Click
-        My.Settings.vPreviewPrint = tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
+        tsmiPreviewReceipt.Checked = Not My.Settings.vPreviewPrint
+        My.Settings.vPreviewPrint = tsmiPreviewReceipt.Checked
     End Sub
 
     Private Sub frmMain_Closed(sender As Object, e As EventArgs) Handles Me.Closed

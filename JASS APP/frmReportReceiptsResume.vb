@@ -1,7 +1,6 @@
 ﻿Imports Microsoft.Reporting.WinForms
-Public Class frmReportReceipts
-    Public dateSinceTo As String = ""
-    Private Sub frmReportReceipts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+Public Class frmReportReceiptsResume
+    Private Sub frmReportReceiptsResume_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconAttendance
 
         listUserSys(cbxUsersSys)
@@ -20,24 +19,12 @@ Public Class frmReportReceipts
         dataReport(7) = chkStreet.Checked
         dataReport(8) = cbxStreets.SelectedValue
 
-        Dim ds As dsReceipts = reportReceipts(dataReport)
-        Dim dtReport As New ReportDataSource("dsReceipts", ds.Tables(0))
+        Dim ds As dsReceipts = reportReceiptsResume(dataReport)
+        Dim dtReport As New ReportDataSource("dsReceipts", ds.Tables(1))
         rptReceipts.LocalReport.DataSources.Clear()
         rptReceipts.LocalReport.DataSources.Add(dtReport)
         rptReceipts.SetDisplayMode(DisplayMode.PrintLayout)
         rptReceipts.ZoomMode = ZoomMode.FullPage
-
-        Dim parameters As New List(Of ReportParameter)()
-        If chkDateRange.Checked Then
-            If dtpSince.Value = dtpTo.Value Then
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value
-            Else
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
-            End If
-        End If
-        parameters.Add(New ReportParameter("rptParamDateSinceTo", dateSinceTo))
-        rptReceipts.LocalReport.SetParameters(parameters)
-
         rptReceipts.RefreshReport()
     End Sub
 
@@ -97,22 +84,10 @@ Public Class frmReportReceipts
         dataReport(7) = chkStreet.Checked
         dataReport(8) = cbxStreets.SelectedValue
 
-        Dim ds As dsReceipts = reportReceipts(dataReport)
-        Dim dtReport As New ReportDataSource("dsReceipts", ds.Tables(0))
+        Dim ds As dsReceipts = reportReceiptsResume(dataReport)
+        Dim dtReport As New ReportDataSource("dsReceipts", ds.Tables(1))
         rptReceipts.LocalReport.DataSources.Clear()
         rptReceipts.LocalReport.DataSources.Add(dtReport)
-
-        Dim parameters As New List(Of ReportParameter)()
-        If chkDateRange.Checked Then
-            If dtpSince.Value = dtpTo.Value Then
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value
-            Else
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
-            End If
-        End If
-        parameters.Add(New ReportParameter("rptParamDateSinceTo", dateSinceTo))
-        rptReceipts.LocalReport.SetParameters(parameters)
-
         rptReceipts.RefreshReport()
     End Sub
 End Class

@@ -286,6 +286,30 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub listUserSys(vControl As ComboBox)
+        Dim ds As New DataSet
+        Dim ada As New MySqlDataAdapter
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                ada.SelectCommand = New MySqlCommand("SELECT idusersys, name FROM user_sys", cnnx)
+                ada.Fill(ds)
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idusersys"
+                vControl.DisplayMember = "name"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
+            End Try
+        End If
+    End Sub
+
     Public Sub listUsersInAccount(vIdInternalLine As String, Optional vCombo As ComboBox = Nothing, Optional vList As ListBox = Nothing)
         Dim ds As New DataSet
         Dim cmd As New MySqlCommand
@@ -1296,6 +1320,11 @@ Module dataFunctions
 
     Public Sub showReportReceipts()
         Dim frm As New frmReportReceipts
+        frm.Show()
+    End Sub
+
+    Public Sub showReportReceiptsResume()
+        Dim frm As New frmReportReceiptsResume
         frm.Show()
     End Sub
 
@@ -2448,28 +2477,146 @@ Module dataFunctions
         End If
     End Sub
 
-    Public Function reportReceipts() As dsReceipts
+    Public Function reportReceipts(dataReport() As String) As dsReceipts
         Dim cmd As New MySqlCommand
         Dim ada As New MySqlDataAdapter
         Dim ds As New dsReceipts
 
         If Not cnnx.DataSource.Equals("") Then
             Try
+                Dim cmdstr As String = ""
+
+                cmdstr &= " WHERE "
+
+                If CBool(dataReport(0)) Then
+                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%d/%m/%Y"") BETWEEN """ & FormatDateTime(dataReport(1), DateFormat.ShortDate) & """ AND """ & FormatDateTime(dataReport(2), DateFormat.ShortDate) & """)"
+                Else
+                    cmdstr &= " (payments.created <> """")"
+                End If
+
+                If CBool(dataReport(3)) Then
+                    cmdstr = cmdstr & " AND (user_sys.idusersys = " & dataReport(4) & ")"
+                Else
+                    cmdstr &= " AND (user_sys.idusersys <> """")"
+                End If
+
+                If CBool(dataReport(5)) Then
+                    cmdstr = cmdstr & " AND (payments.yearrate = " & dataReport(6) & ")"
+                Else
+                    cmdstr &= " AND (payments.yearrate <> """")"
+                End If
+
+                If CBool(dataReport(7)) Then
+                    cmdstr = cmdstr & " AND (service_line.street = " & dataReport(8) & ")"
+                Else
+                    cmdstr &= " AND (service_line.street <> """")"
+                End If
+
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
-                cmd.CommandText = "SELECT 
-                payments.idpayment, 
-                payments.codepay, 
-                years_rate.year, 
-                payments.amounttotal, 
-                user_sys.name, 
-                payments.created 
-                FROM payments 
-                INNER JOIN user_sys ON user_sys.idusersys = payments.collector 
-                INNER JOIN years_rate ON years_rate.idyearrate = payments.yearrate
-                ORDER BY payments.created ASC"
+                cmd.CommandText = "SELECT
+                  payments.idpayment, 
+                  CONCAT(user_reg.surnames, "" "", user_reg.names) AS fullname, 
+                  payments.payer, 
+                  payments.codepay, 
+                  IF(payments.canceled,""Anulado"","""") AS state,
+                  years_rate.year, 
+                  IF(payments.canceled,0,payments.amounttotal) AS amount, 
+                  user_sys.name, 
+                  DATE_FORMAT(payments.created,""%d/%m/%Y"") AS created 
+                FROM
+                  payments
+                  INNER JOIN user_sys
+                    ON user_sys.idusersys = payments.collector
+                  INNER JOIN years_rate
+                    ON years_rate.idyearrate = payments.yearrate
+                  INNER JOIN account_line
+                    ON account_line.idaccountline = payments.accountline
+                  INNER JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                  INNER JOIN users_line
+                    ON users_line.internalline = internal_line.idinternalline
+                  INNER JOIN user_reg
+                    ON user_reg.iduserreg = users_line.userreg 
+                  INNER JOIN service_line 
+                    ON service_line.idserviceline = internal_line.serviceline " & cmdstr &
+                "ORDER BY payments.created ASC"
                 ada.SelectCommand = cmd
                 ada.Fill(ds, "dtReceipts")
+
+                Return ds
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return ds
+            End Try
+        Else
+            Return ds
+        End If
+    End Function
+
+    Public Function reportReceiptsResume(dataReport() As String) As dsReceipts
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim ds As New dsReceipts
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                Dim cmdstr As String = ""
+
+                cmdstr &= " WHERE "
+
+                If CBool(dataReport(0)) Then
+                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%d/%m/%Y"") BETWEEN """ & FormatDateTime(dataReport(1), DateFormat.ShortDate) & """ AND """ & FormatDateTime(dataReport(2), DateFormat.ShortDate) & """)"
+                Else
+                    cmdstr &= " (payments.created <> """")"
+                End If
+
+                If CBool(dataReport(3)) Then
+                    cmdstr = cmdstr & " AND (user_sys.idusersys = " & dataReport(4) & ")"
+                Else
+                    cmdstr &= " AND (user_sys.idusersys <> """")"
+                End If
+
+                If CBool(dataReport(5)) Then
+                    cmdstr = cmdstr & " AND (payments.yearrate = " & dataReport(6) & ")"
+                Else
+                    cmdstr &= " AND (payments.yearrate <> """")"
+                End If
+
+                If CBool(dataReport(7)) Then
+                    cmdstr = cmdstr & " AND (service_line.street = " & dataReport(8) & ")"
+                Else
+                    cmdstr &= " AND (service_line.street <> """")"
+                End If
+
+                cmdstr &= " AND payments.canceled = 0 "
+
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                  years_rate.year, 
+                  IFNULL(SUM(payments.amounttotal),0) AS amounttotal 
+                FROM
+                  payments
+                  INNER JOIN user_sys
+                    ON user_sys.idusersys = payments.collector
+                  INNER JOIN years_rate
+                    ON years_rate.idyearrate = payments.yearrate
+                  INNER JOIN account_line
+                    ON account_line.idaccountline = payments.accountline
+                  INNER JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                  INNER JOIN users_line 
+                    ON users_line.internalline = internal_line.idinternalline
+                  INNER JOIN user_reg
+                    ON user_reg.iduserreg = users_line.userreg 
+                  INNER JOIN service_line 
+                    ON service_line.idserviceline = internal_line.serviceline " & cmdstr &
+                "GROUP BY years_rate.year 
+                 ORDER BY payments.created ASC"
+                ada.SelectCommand = cmd
+                ada.Fill(ds, "dtReceiptsResume")
 
                 Return ds
             Catch ex As Exception

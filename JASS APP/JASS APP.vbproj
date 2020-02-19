@@ -271,6 +271,12 @@
     <Compile Include="frmReportReceipts.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmReportReceiptsResume.Designer.vb">
+      <DependentUpon>frmReportReceiptsResume.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportReceiptsResume.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmSeePays.Designer.vb">
       <DependentUpon>frmSeePays.vb</DependentUpon>
     </Compile>
@@ -356,6 +362,9 @@
     <EmbeddedResource Include="frmReportReceipts.resx">
       <DependentUpon>frmReportReceipts.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmReportReceiptsResume.resx">
+      <DependentUpon>frmReportReceiptsResume.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmSeePays.resx">
       <DependentUpon>frmSeePays.vb</DependentUpon>
     </EmbeddedResource>
@@ -365,7 +374,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Reports\rptReceiptsResumen.rdlc" />
+    <EmbeddedResource Include="Reports\rptReceiptsDaily.rdlc" />
+    <EmbeddedResource Include="Reports\rptReceiptsResume.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="My Project\Application.myapp">
@@ -548,23 +558,22 @@
     <None Include="Resources\iconRate.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="SqlServerTypes\Loader.cs" />
-    <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="SqlServerTypes\x64\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\msvcr120.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
+    <None Include="Resources\report-card-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report-card.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attendance-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\attendance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconAttendance.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
