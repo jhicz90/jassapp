@@ -1,6 +1,9 @@
 ﻿Imports Microsoft.Reporting.WinForms
 Public Class frmReportReceipts
     Public dateSinceTo As String = ""
+    Public collectUserSys As String = ""
+    Public sectorStreet As String = ""
+    Public yearRate As String = ""
     Private Sub frmReportReceipts_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Icon = My.Resources.iconAttendance
 
@@ -26,18 +29,7 @@ Public Class frmReportReceipts
         rptReceipts.LocalReport.DataSources.Add(dtReport)
         rptReceipts.SetDisplayMode(DisplayMode.PrintLayout)
         rptReceipts.ZoomMode = ZoomMode.FullPage
-
-        Dim parameters As New List(Of ReportParameter)()
-        If chkDateRange.Checked Then
-            If dtpSince.Value = dtpTo.Value Then
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value
-            Else
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
-            End If
-        End If
-        parameters.Add(New ReportParameter("rptParamDateSinceTo", dateSinceTo))
-        rptReceipts.LocalReport.SetParameters(parameters)
-
+        critReport()
         rptReceipts.RefreshReport()
     End Sub
 
@@ -67,6 +59,44 @@ Public Class frmReportReceipts
         Else
             cbxStreets.Enabled = False
         End If
+    End Sub
+
+    Public Sub critReport()
+        Dim parameters As New List(Of ReportParameter)()
+
+        If chkDateRange.Checked Then
+            If dtpSince.Value = dtpTo.Value Then
+                dateSinceTo = "Rango de fechas: " & dtpSince.Value
+            Else
+                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
+            End If
+        Else
+            dateSinceTo = "Rango de fechas: Todo"
+        End If
+
+        If chkCollectUserSys.Checked Then
+            collectUserSys = "Cobrado por: " & cbxUsersSys.Text
+        Else
+            collectUserSys = "Cobrado por: Sin criterio"
+        End If
+
+        If chkStreet.Checked Then
+            sectorStreet = "Calle: " & cbxStreets.Text
+        Else
+            sectorStreet = "Calle: Sin criterio"
+        End If
+
+        If chkYearRate.Checked Then
+            yearRate = "Año: " & cbxYearRate.Text
+        Else
+            yearRate = "Año: Todo"
+        End If
+
+        parameters.Add(New ReportParameter("rptParamDateSinceTo", dateSinceTo))
+        parameters.Add(New ReportParameter("rptParamUserSys", collectUserSys))
+        parameters.Add(New ReportParameter("rptParamStreet", sectorStreet))
+        parameters.Add(New ReportParameter("rptParamYearRate", yearRate))
+        rptReceipts.LocalReport.SetParameters(parameters)
     End Sub
 
     Private Sub chkDateRange_CheckedChanged(sender As Object, e As EventArgs) Handles chkDateRange.CheckedChanged
@@ -101,18 +131,7 @@ Public Class frmReportReceipts
         Dim dtReport As New ReportDataSource("dsReceipts", ds.Tables(0))
         rptReceipts.LocalReport.DataSources.Clear()
         rptReceipts.LocalReport.DataSources.Add(dtReport)
-
-        Dim parameters As New List(Of ReportParameter)()
-        If chkDateRange.Checked Then
-            If dtpSince.Value = dtpTo.Value Then
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value
-            Else
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
-            End If
-        End If
-        parameters.Add(New ReportParameter("rptParamDateSinceTo", dateSinceTo))
-        rptReceipts.LocalReport.SetParameters(parameters)
-
+        critReport()
         rptReceipts.RefreshReport()
     End Sub
 End Class

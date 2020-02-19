@@ -575,5 +575,17 @@
   <ItemGroup>
     <None Include="Resources\iconAttendance.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add-user-group-woman-man-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add-user-group-woman-man.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hand-service-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hand-service.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

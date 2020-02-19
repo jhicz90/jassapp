@@ -39,7 +39,6 @@ Partial Class frmMain
         Me.tsmiFindUsers = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdCollect = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiCollectBox = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiMonthRates = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiDeclarationServices = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRateType = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdWindows = New System.Windows.Forms.ToolStripDropDownButton()
@@ -49,10 +48,10 @@ Partial Class frmMain
         Me.tsmiCloseWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdReports = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiCollectDaily = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiCollectDailyResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
-        Me.tsmiCollectDailyResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -174,7 +173,7 @@ Partial Class frmMain
         '
         'tsdpdCollect
         '
-        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiMonthRates, Me.tsmiDeclarationServices, Me.tsmiRateType})
+        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiDeclarationServices, Me.tsmiRateType})
         Me.tsdpdCollect.Image = Global.JASS_APP.My.Resources.Resources.coins_32
         Me.tsdpdCollect.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdCollect.Name = "tsdpdCollect"
@@ -192,12 +191,6 @@ Partial Class frmMain
         Me.tsmiCollectBox.Size = New System.Drawing.Size(200, 22)
         Me.tsmiCollectBox.Text = "Caja de cobranza"
         '
-        'tsmiMonthRates
-        '
-        Me.tsmiMonthRates.Name = "tsmiMonthRates"
-        Me.tsmiMonthRates.Size = New System.Drawing.Size(200, 22)
-        Me.tsmiMonthRates.Text = "Tarifas mensuales"
-        '
         'tsmiDeclarationServices
         '
         Me.tsmiDeclarationServices.Name = "tsmiDeclarationServices"
@@ -208,7 +201,7 @@ Partial Class frmMain
         '
         Me.tsmiRateType.Name = "tsmiRateType"
         Me.tsmiRateType.Size = New System.Drawing.Size(200, 22)
-        Me.tsmiRateType.Text = "Tipos de tarifas"
+        Me.tsmiRateType.Text = "Tarifas y servicios"
         '
         'tsdpdWindows
         '
@@ -262,6 +255,12 @@ Partial Class frmMain
         Me.tsmiCollectDaily.Size = New System.Drawing.Size(263, 22)
         Me.tsmiCollectDaily.Text = "Reporte a detalle de cobranza diaria"
         '
+        'tsmiCollectDailyResume
+        '
+        Me.tsmiCollectDailyResume.Name = "tsmiCollectDailyResume"
+        Me.tsmiCollectDailyResume.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiCollectDailyResume.Text = "Reporte resumen de cobranza diaria"
+        '
         'tsdpdHelp
         '
         Me.tsdpdHelp.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiAbout})
@@ -286,12 +285,6 @@ Partial Class frmMain
         Me.stStatusToolbar.Size = New System.Drawing.Size(1045, 22)
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
-        '
-        'tsmiCollectDailyResume
-        '
-        Me.tsmiCollectDailyResume.Name = "tsmiCollectDailyResume"
-        Me.tsmiCollectDailyResume.Size = New System.Drawing.Size(263, 22)
-        Me.tsmiCollectDailyResume.Text = "Reporte resumen de cobranza diaria"
         '
         'frmMain
         '
@@ -328,7 +321,6 @@ Partial Class frmMain
     Friend WithEvents tsmiFindLines As ToolStripMenuItem
     Friend WithEvents tsdpdCollect As ToolStripDropDownButton
     Friend WithEvents tsmiCollectBox As ToolStripMenuItem
-    Friend WithEvents tsmiMonthRates As ToolStripMenuItem
     Friend WithEvents tsdpdWindows As ToolStripDropDownButton
     Friend WithEvents tsmiCloseWindows As ToolStripMenuItem
     Friend WithEvents tsdpdReports As ToolStripDropDownButton

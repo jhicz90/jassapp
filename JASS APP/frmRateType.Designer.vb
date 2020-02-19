@@ -24,7 +24,7 @@ Partial Class frmRateType
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtRateTypeName = New System.Windows.Forms.TextBox()
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.txtRateTypeDescp = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.chkPeriodic = New System.Windows.Forms.CheckBox()
         Me.btnSave = New System.Windows.Forms.Button()
@@ -33,6 +33,7 @@ Partial Class frmRateType
         Me.clmNameRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmDesc = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPeriodic = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.btnNew = New System.Windows.Forms.Button()
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -48,17 +49,19 @@ Partial Class frmRateType
         '
         'txtRateTypeName
         '
+        Me.txtRateTypeName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
         Me.txtRateTypeName.Location = New System.Drawing.Point(168, 16)
         Me.txtRateTypeName.Name = "txtRateTypeName"
         Me.txtRateTypeName.Size = New System.Drawing.Size(200, 20)
         Me.txtRateTypeName.TabIndex = 1
         '
-        'TextBox1
+        'txtRateTypeDescp
         '
-        Me.TextBox1.Location = New System.Drawing.Point(168, 42)
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(200, 20)
-        Me.TextBox1.TabIndex = 3
+        Me.txtRateTypeDescp.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
+        Me.txtRateTypeDescp.Location = New System.Drawing.Point(168, 42)
+        Me.txtRateTypeDescp.Name = "txtRateTypeDescp"
+        Me.txtRateTypeDescp.Size = New System.Drawing.Size(200, 20)
+        Me.txtRateTypeDescp.TabIndex = 3
         '
         'Label2
         '
@@ -142,21 +145,34 @@ Partial Class frmRateType
         Me.clmPeriodic.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.clmPeriodic.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         '
+        'btnNew
+        '
+        Me.btnNew.Image = Global.JASS_APP.My.Resources.Resources.hand_service_32
+        Me.btnNew.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnNew.Location = New System.Drawing.Point(574, 12)
+        Me.btnNew.Name = "btnNew"
+        Me.btnNew.Size = New System.Drawing.Size(96, 64)
+        Me.btnNew.TabIndex = 7
+        Me.btnNew.Text = "NUEVO"
+        Me.btnNew.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnNew.UseVisualStyleBackColor = True
+        '
         'frmRateType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(784, 261)
+        Me.Controls.Add(Me.btnNew)
         Me.Controls.Add(Me.dtgRateType)
         Me.Controls.Add(Me.btnSave)
         Me.Controls.Add(Me.chkPeriodic)
-        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.txtRateTypeDescp)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.txtRateTypeName)
         Me.Controls.Add(Me.Label1)
         Me.Name = "frmRateType"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Tipos de Tarifas"
+        Me.Text = "Tarifas y servicios"
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -165,7 +181,7 @@ Partial Class frmRateType
 
     Friend WithEvents Label1 As Label
     Friend WithEvents txtRateTypeName As TextBox
-    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents txtRateTypeDescp As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents chkPeriodic As CheckBox
     Public WithEvents btnSave As Button
@@ -174,4 +190,5 @@ Partial Class frmRateType
     Friend WithEvents clmNameRate As DataGridViewTextBoxColumn
     Friend WithEvents clmDesc As DataGridViewTextBoxColumn
     Friend WithEvents clmPeriodic As DataGridViewCheckBoxColumn
+    Public WithEvents btnNew As Button
 End Class

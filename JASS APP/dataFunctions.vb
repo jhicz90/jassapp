@@ -2446,7 +2446,7 @@ Module dataFunctions
         End If
     End Function
 
-    Public Sub getRateTypes(dgRates As DataGridView)
+    Public Sub listRateTypes(dgRates As DataGridView)
         Dim cmd As New MySqlCommand
         Dim ada As New MySqlDataAdapter
         Dim TableRates As New DataTable
@@ -2464,6 +2464,7 @@ Module dataFunctions
                 ada.SelectCommand = cmd
                 ada.Fill(TableRates)
 
+                dgRates.Rows.Clear()
                 For index As Integer = 0 To TableRates.Rows.Count - 1
                     dgRates.Rows.Add(TableRates.Rows(index).Item(0), TableRates.Rows(index).Item(1), TableRates.Rows(index).Item(2), CBool(TableRates.Rows(index).Item(3)))
                 Next
@@ -2474,6 +2475,82 @@ Module dataFunctions
             End Try
         Else
             dgRates.Rows.Clear()
+        End If
+    End Sub
+
+    Public Function getRateType(vIdRateType As String) As String()
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim TableRates As New DataTable
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                idratetype, 
+                name, 
+                description, 
+                periodic 
+                FROM rate_types WHERE rate_types.idratetype = @idratetype"
+                cmd.Parameters.AddWithValue("idratetype", vIdRateType)
+                ada.SelectCommand = cmd
+                ada.Fill(TableRates)
+
+                If TableRates.Rows.Count > 0 Then
+                    Dim dataRate(3) As String
+                    dataRate(0) = TableRates.Rows(0).Item(0).ToString
+                    dataRate(1) = TableRates.Rows(0).Item(1).ToString
+                    dataRate(2) = TableRates.Rows(0).Item(2).ToString
+                    dataRate(3) = TableRates.Rows(0).Item(3).ToString
+                    Return dataRate
+                Else
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return Nothing
+            End Try
+        Else
+            Return Nothing
+        End If
+    End Function
+
+    Public Sub addupdRateType(vIdRateType As String, vNameRateType As String, vDescRateType As String, vPeriodic As Boolean)
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+
+        If vIdRateType <> "" And vNameRateType.Trim <> "" And vDescRateType.Trim <> "" Then
+            If Not cnnx.DataSource.Equals("") Then
+                Try
+                    cmd.Connection = cnnx
+                    cmd.CommandType = CommandType.Text
+                    If vIdRateType = "new" Then
+                        cmd.CommandText = "INSERT INTO rate_types(name, description, periodic) VALUES(@name, @desc, @periodic)"
+                        cmd.Parameters.AddWithValue("name", vNameRateType)
+                        cmd.Parameters.AddWithValue("desc", vDescRateType)
+                        cmd.Parameters.AddWithValue("periodic", CInt(vPeriodic))
+                        cmd.ExecuteNonQuery()
+                        MsgBox("El registro se guardo exitosamente", vbInformation, "Aviso")
+                    Else
+                        cmd.CommandText = "UPDATE rate_types SET rate_types.name = @name, rate_types.description = @desc, rate_types.periodic = @periodic WHERE rate_types.idratetype = @idratetype"
+                        cmd.Parameters.AddWithValue("name", vNameRateType)
+                        cmd.Parameters.AddWithValue("desc", vDescRateType)
+                        cmd.Parameters.AddWithValue("periodic", CInt(vPeriodic))
+                        cmd.Parameters.AddWithValue("idratetype", vIdRateType)
+                        cmd.ExecuteNonQuery()
+                        MsgBox("El registro se actualizo", vbInformation, "Aviso")
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                    MsgBox(ex.Message)
+                End Try
+            Else
+                MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("Faltan datos en los campos", vbCritical, "Aviso")
         End If
     End Sub
 
@@ -2489,7 +2566,7 @@ Module dataFunctions
                 cmdstr &= " WHERE "
 
                 If CBool(dataReport(0)) Then
-                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%d/%m/%Y"") BETWEEN """ & FormatDateTime(dataReport(1), DateFormat.ShortDate) & """ AND """ & FormatDateTime(dataReport(2), DateFormat.ShortDate) & """)"
+                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
                 Else
                     cmdstr &= " (payments.created <> """")"
                 End If
@@ -2567,7 +2644,7 @@ Module dataFunctions
                 cmdstr &= " WHERE "
 
                 If CBool(dataReport(0)) Then
-                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%d/%m/%Y"") BETWEEN """ & FormatDateTime(dataReport(1), DateFormat.ShortDate) & """ AND """ & FormatDateTime(dataReport(2), DateFormat.ShortDate) & """)"
+                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
                 Else
                     cmdstr &= " (payments.created <> """")"
                 End If
