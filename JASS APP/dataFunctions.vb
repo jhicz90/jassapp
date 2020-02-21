@@ -2504,6 +2504,7 @@ Module dataFunctions
         Dim ada As New MySqlDataAdapter
         Dim TableRates As New DataTable
 
+        dgRates.Rows.Clear()
         If Not cnnx.DataSource.Equals("") Then
             Try
                 cmd.Connection = cnnx
@@ -2517,7 +2518,6 @@ Module dataFunctions
                 ada.SelectCommand = cmd
                 ada.Fill(TableRates)
 
-                dgRates.Rows.Clear()
                 For index As Integer = 0 To TableRates.Rows.Count - 1
                     dgRates.Rows.Add(TableRates.Rows(index).Item(0), TableRates.Rows(index).Item(1), TableRates.Rows(index).Item(2), CBool(TableRates.Rows(index).Item(3)))
                 Next
@@ -2526,8 +2526,36 @@ Module dataFunctions
                 MsgBox(ex.Message)
                 dgRates.Rows.Clear()
             End Try
-        Else
-            dgRates.Rows.Clear()
+        End If
+    End Sub
+
+    Public Sub listYears(dgYears As DataGridView)
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim TableYears As New DataTable
+
+        dgYears.Rows.Clear()
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                idyearrate, 
+                year, 
+                active, 
+                nameyear 
+                FROM years_rate"
+                ada.SelectCommand = cmd
+                ada.Fill(TableYears)
+
+                For index As Integer = 0 To TableYears.Rows.Count - 1
+                    dgYears.Rows.Add(TableYears.Rows(index).Item(0), TableYears.Rows(index).Item(1), CBool(TableYears.Rows(index).Item(2)), TableYears.Rows(index).Item(3))
+                Next
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                dgYears.Rows.Clear()
+            End Try
         End If
     End Sub
 

@@ -3,18 +3,24 @@
     Dim nameRateType As String = ""
     Dim descpRateType As String = ""
     Dim monthlyRateType As Boolean = False
+
+    Dim idYear As String = "new"
+    Dim yearName As String = ""
     Private Sub frmRateType_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconRate
 
+        nudYear.Maximum = Year(Today)
+
         listRateTypes(dtgRateType)
+        listYears(dtgYears)
     End Sub
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSaveService.Click
         addupdRateType(idRateType, txtRateTypeName.Text, txtRateTypeDescp.Text, chkPeriodic.Checked)
         listRateTypes(dtgRateType)
     End Sub
 
-    Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNew.Click
+    Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNewService.Click
         idRateType = "new"
         nameRateType = ""
         descpRateType = ""
