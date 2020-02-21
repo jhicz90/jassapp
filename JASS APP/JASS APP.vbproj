@@ -587,5 +587,47 @@
   <ItemGroup>
     <None Include="Resources\hand-service.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\receipt-check-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\receipt-check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checklist-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\checklist.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\todo-list-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\todo-list.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reload-update-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\reload-update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\in-progress-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\in-progress.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\administrative-tools-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\administrative-tools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database-view.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database-view-32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

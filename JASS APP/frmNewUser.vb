@@ -2,7 +2,7 @@
 
 Public Class frmNewuser
     Public vFrmGet As Integer = 0
-    Public vIdUserReg As String = Nothing
+    Public vIdUserReg As String = "new"
     Public vIdInternalLine As String = Nothing
     Dim dataUserEdited(13) As String
     Public Sub frmNewuser_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -39,7 +39,7 @@ Public Class frmNewuser
     End Sub
 
     Public Sub newUser()
-        vIdUserReg = Nothing
+        vIdUserReg = "new"
         txtCodUser.Text = ""
         txtNames.Text = ""
         txtSurnames.Text = ""

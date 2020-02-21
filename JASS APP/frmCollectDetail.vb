@@ -2,6 +2,7 @@
     Public vIdServiceLine As String = Nothing
     Public vIdInternalLine As String = Nothing
     Public vNameLine As String = Nothing
+    Public vNameStreet As String = Nothing
     Public vDataReceipt(1) As String
     Private vDebitAmount, vDebtAmount As Decimal
     Private Sub frmCollectDetail_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -22,6 +23,7 @@
         txtCodLine.Text = dataAccount(3)
         txtCodAccount.Text = dataAccount(2)
         txtNameLine.Text = vNameLine
+        txtStreet.Text = vNameStreet
 
         txtDebitAccount.Text = Format(vDebitAmount, "###,##0.00")
         If vDebitAmount > 0 Then
@@ -55,23 +57,22 @@
         If e.RowIndex <> -1 Then
             getAccountCollectCharge(dtgAccountYear.Item(0, e.RowIndex).Value, dtgAccountMounth)
             dtgAccountMounth.Focus()
-            'If dtgAccountMounth.Rows.Count > 0 Then
-            '    dtgAccountMounth.Item(5, dtgAccountMounth.Rows.GetFirstRow(0)).Selected = True
-            'End If
         End If
     End Sub
 
-    Private Sub dtgAccountMounth_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellContentClick
+    Private Sub dtgAccountMounth_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountMounth.CellClick
         Dim limite As Integer = 0
         If e.RowIndex <> -1 Then
             If dtgAccountMounth.Columns(e.ColumnIndex).Name = "clmOpcionMes" Then
                 For index As Integer = 0 To dtgAccountMounth.Rows.Count - 1
                     If dtgAccountMounth.Item(5, index).Value = True Then
                         limite += 1
+                    Else
+                        limite -= 1
                     End If
                 Next
 
-                If limite < 6 Then
+                If limite <= 6 Then
                     If dtgAccountMounth.Item(5, e.RowIndex).Value = False And dtgAccountMounth.Item(9, e.RowIndex).Value > 0 Then
                         dtgAccountMounth.Item(5, e.RowIndex).Value = True
                     Else
@@ -90,10 +91,12 @@
             For index As Integer = 0 To dtgAccountMounth.Rows.Count - 1
                 If dtgAccountMounth.Item(5, index).Value = True Then
                     limite += 1
+                Else
+                    limite -= 1
                 End If
             Next
 
-            If limite < 6 Then
+            If limite <= 6 Then
                 If dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = False And dtgAccountMounth.Item(9, dtgAccountMounth.SelectedRows(0).Index).Value > 0 Then
                     dtgAccountMounth.Item(5, dtgAccountMounth.SelectedRows(0).Index).Value = True
                 Else

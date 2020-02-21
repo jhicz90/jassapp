@@ -11,6 +11,8 @@ Public Class frmReportReceipts
         listYearRate(cbxYearRate)
         listAvenues(cbxStreets)
         initReport()
+        dtpSince.Value = Today
+        dtpTo.Value = Today
 
         Dim dataReport(8) As String
         dataReport(0) = chkDateRange.Checked
@@ -28,7 +30,7 @@ Public Class frmReportReceipts
         rptReceipts.LocalReport.DataSources.Clear()
         rptReceipts.LocalReport.DataSources.Add(dtReport)
         rptReceipts.SetDisplayMode(DisplayMode.PrintLayout)
-        rptReceipts.ZoomMode = ZoomMode.FullPage
+        rptReceipts.ZoomMode = ZoomMode.PageWidth
         critReport()
         rptReceipts.RefreshReport()
     End Sub

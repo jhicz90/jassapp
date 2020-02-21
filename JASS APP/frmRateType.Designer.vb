@@ -34,13 +34,19 @@ Partial Class frmRateType
         Me.clmDesc = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPeriodic = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.btnNew = New System.Windows.Forms.Button()
+        Me.tabRates = New System.Windows.Forms.TabControl()
+        Me.tabpageServices = New System.Windows.Forms.TabPage()
+        Me.tabpageYear = New System.Windows.Forms.TabPage()
+        Me.tabpageRates = New System.Windows.Forms.TabPage()
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.tabRates.SuspendLayout()
+        Me.tabpageServices.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(19, 19)
+        Me.Label1.Location = New System.Drawing.Point(13, 13)
         Me.Label1.Margin = New System.Windows.Forms.Padding(10)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(136, 13)
@@ -50,7 +56,7 @@ Partial Class frmRateType
         'txtRateTypeName
         '
         Me.txtRateTypeName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.txtRateTypeName.Location = New System.Drawing.Point(168, 16)
+        Me.txtRateTypeName.Location = New System.Drawing.Point(162, 10)
         Me.txtRateTypeName.Name = "txtRateTypeName"
         Me.txtRateTypeName.Size = New System.Drawing.Size(200, 20)
         Me.txtRateTypeName.TabIndex = 1
@@ -58,7 +64,7 @@ Partial Class frmRateType
         'txtRateTypeDescp
         '
         Me.txtRateTypeDescp.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper
-        Me.txtRateTypeDescp.Location = New System.Drawing.Point(168, 42)
+        Me.txtRateTypeDescp.Location = New System.Drawing.Point(162, 36)
         Me.txtRateTypeDescp.Name = "txtRateTypeDescp"
         Me.txtRateTypeDescp.Size = New System.Drawing.Size(200, 20)
         Me.txtRateTypeDescp.TabIndex = 3
@@ -66,7 +72,7 @@ Partial Class frmRateType
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(19, 45)
+        Me.Label2.Location = New System.Drawing.Point(13, 39)
         Me.Label2.Margin = New System.Windows.Forms.Padding(10)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(66, 13)
@@ -76,7 +82,7 @@ Partial Class frmRateType
         'chkPeriodic
         '
         Me.chkPeriodic.AutoSize = True
-        Me.chkPeriodic.Location = New System.Drawing.Point(374, 18)
+        Me.chkPeriodic.Location = New System.Drawing.Point(368, 12)
         Me.chkPeriodic.Name = "chkPeriodic"
         Me.chkPeriodic.Size = New System.Drawing.Size(120, 17)
         Me.chkPeriodic.TabIndex = 4
@@ -85,9 +91,10 @@ Partial Class frmRateType
         '
         'btnSave
         '
+        Me.btnSave.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnSave.Image = Global.JASS_APP.My.Resources.Resources.save_32
         Me.btnSave.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnSave.Location = New System.Drawing.Point(676, 12)
+        Me.btnSave.Location = New System.Drawing.Point(674, 6)
         Me.btnSave.Name = "btnSave"
         Me.btnSave.Size = New System.Drawing.Size(96, 64)
         Me.btnSave.TabIndex = 5
@@ -106,14 +113,14 @@ Partial Class frmRateType
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.dtgRateType.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dtgRateType.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdRateType, Me.clmNameRate, Me.clmDesc, Me.clmPeriodic})
-        Me.dtgRateType.Location = New System.Drawing.Point(12, 82)
+        Me.dtgRateType.Location = New System.Drawing.Point(6, 76)
         Me.dtgRateType.MultiSelect = False
         Me.dtgRateType.Name = "dtgRateType"
         Me.dtgRateType.ReadOnly = True
         Me.dtgRateType.RowHeadersVisible = False
         Me.dtgRateType.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
         Me.dtgRateType.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgRateType.Size = New System.Drawing.Size(760, 167)
+        Me.dtgRateType.Size = New System.Drawing.Size(762, 342)
         Me.dtgRateType.TabIndex = 6
         '
         'clmIdRateType
@@ -147,9 +154,10 @@ Partial Class frmRateType
         '
         'btnNew
         '
+        Me.btnNew.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btnNew.Image = Global.JASS_APP.My.Resources.Resources.hand_service_32
         Me.btnNew.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnNew.Location = New System.Drawing.Point(574, 12)
+        Me.btnNew.Location = New System.Drawing.Point(572, 6)
         Me.btnNew.Name = "btnNew"
         Me.btnNew.Size = New System.Drawing.Size(96, 64)
         Me.btnNew.TabIndex = 7
@@ -157,25 +165,70 @@ Partial Class frmRateType
         Me.btnNew.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.btnNew.UseVisualStyleBackColor = True
         '
+        'tabRates
+        '
+        Me.tabRates.Controls.Add(Me.tabpageServices)
+        Me.tabRates.Controls.Add(Me.tabpageYear)
+        Me.tabRates.Controls.Add(Me.tabpageRates)
+        Me.tabRates.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tabRates.Location = New System.Drawing.Point(0, 0)
+        Me.tabRates.Name = "tabRates"
+        Me.tabRates.SelectedIndex = 0
+        Me.tabRates.Size = New System.Drawing.Size(784, 450)
+        Me.tabRates.TabIndex = 8
+        '
+        'tabpageServices
+        '
+        Me.tabpageServices.Controls.Add(Me.Label1)
+        Me.tabpageServices.Controls.Add(Me.btnNew)
+        Me.tabpageServices.Controls.Add(Me.txtRateTypeName)
+        Me.tabpageServices.Controls.Add(Me.dtgRateType)
+        Me.tabpageServices.Controls.Add(Me.Label2)
+        Me.tabpageServices.Controls.Add(Me.btnSave)
+        Me.tabpageServices.Controls.Add(Me.txtRateTypeDescp)
+        Me.tabpageServices.Controls.Add(Me.chkPeriodic)
+        Me.tabpageServices.Location = New System.Drawing.Point(4, 22)
+        Me.tabpageServices.Name = "tabpageServices"
+        Me.tabpageServices.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabpageServices.Size = New System.Drawing.Size(776, 424)
+        Me.tabpageServices.TabIndex = 0
+        Me.tabpageServices.Text = "Declaración de servicios"
+        Me.tabpageServices.UseVisualStyleBackColor = True
+        '
+        'tabpageYear
+        '
+        Me.tabpageYear.Location = New System.Drawing.Point(4, 22)
+        Me.tabpageYear.Name = "tabpageYear"
+        Me.tabpageYear.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabpageYear.Size = New System.Drawing.Size(776, 424)
+        Me.tabpageYear.TabIndex = 1
+        Me.tabpageYear.Text = "Año"
+        Me.tabpageYear.UseVisualStyleBackColor = True
+        '
+        'tabpageRates
+        '
+        Me.tabpageRates.Location = New System.Drawing.Point(4, 22)
+        Me.tabpageRates.Name = "tabpageRates"
+        Me.tabpageRates.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabpageRates.Size = New System.Drawing.Size(776, 235)
+        Me.tabpageRates.TabIndex = 2
+        Me.tabpageRates.Text = "Tarifas de servicios"
+        Me.tabpageRates.UseVisualStyleBackColor = True
+        '
         'frmRateType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(784, 261)
-        Me.Controls.Add(Me.btnNew)
-        Me.Controls.Add(Me.dtgRateType)
-        Me.Controls.Add(Me.btnSave)
-        Me.Controls.Add(Me.chkPeriodic)
-        Me.Controls.Add(Me.txtRateTypeDescp)
-        Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.txtRateTypeName)
-        Me.Controls.Add(Me.Label1)
+        Me.ClientSize = New System.Drawing.Size(784, 450)
+        Me.Controls.Add(Me.tabRates)
         Me.Name = "frmRateType"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Tarifas y servicios"
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.tabRates.ResumeLayout(False)
+        Me.tabpageServices.ResumeLayout(False)
+        Me.tabpageServices.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -191,4 +244,8 @@ Partial Class frmRateType
     Friend WithEvents clmDesc As DataGridViewTextBoxColumn
     Friend WithEvents clmPeriodic As DataGridViewCheckBoxColumn
     Public WithEvents btnNew As Button
+    Friend WithEvents tabRates As TabControl
+    Friend WithEvents tabpageServices As TabPage
+    Friend WithEvents tabpageYear As TabPage
+    Friend WithEvents tabpageRates As TabPage
 End Class

@@ -165,21 +165,21 @@ Partial Class frmReportReceipts
         '
         'dtpTo
         '
+        Me.dtpTo.Checked = False
         Me.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpTo.Location = New System.Drawing.Point(267, 9)
         Me.dtpTo.Name = "dtpTo"
         Me.dtpTo.Size = New System.Drawing.Size(120, 20)
         Me.dtpTo.TabIndex = 2
-        Me.dtpTo.Value = New Date(2020, 2, 18, 0, 0, 0, 0)
         '
         'dtpSince
         '
+        Me.dtpSince.Checked = False
         Me.dtpSince.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpSince.Location = New System.Drawing.Point(141, 9)
         Me.dtpSince.Name = "dtpSince"
         Me.dtpSince.Size = New System.Drawing.Size(120, 20)
         Me.dtpSince.TabIndex = 1
-        Me.dtpSince.Value = New Date(2020, 2, 18, 0, 0, 0, 0)
         '
         'chkDateRange
         '

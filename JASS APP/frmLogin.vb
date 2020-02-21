@@ -27,6 +27,25 @@ Public Class frmLogin
     End Sub
 
     Private Sub frmLogin_Load(sender As Object, e As EventArgs) Handles Me.Load
-        'DatabaseConnect()
+        checkMysql()
+    End Sub
+
+    Public Sub checkMysql()
+        Dim cheking As Integer = detectedMysql()
+
+        If cheking = 1 Then
+            lblState.Text = "DB: Iniciada"
+            OK.Enabled = True
+        ElseIf cheking = 2 Then
+            lblState.Text = "DB: Ejecutada"
+            OK.Enabled = True
+        Else
+            lblState.Text = "DB: No iniciada"
+            OK.Enabled = False
+        End If
+    End Sub
+
+    Private Sub btnCheckMysql_Click(sender As Object, e As EventArgs) Handles btnCheckMysql.Click
+        checkMysql()
     End Sub
 End Class

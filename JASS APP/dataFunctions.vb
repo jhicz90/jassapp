@@ -27,6 +27,35 @@ Module dataFunctions
         End Try
     End Function
 
+    Public Function detectedMysql() As Integer
+        Dim mysqlExe As New Process
+        Dim routeFile As String = "C:\xampp\mysql\bin\mysqld.exe"
+
+        Try
+            Dim execute As Boolean
+            For Each p In Process.GetProcesses()
+                If Not p Is Nothing Then
+                    If p.ProcessName = "mysqld" Then
+                        execute = True
+                        Exit For
+                    Else
+                        execute = False
+                    End If
+                End If
+            Next
+
+            If execute = True Then
+                Return 2
+            Else
+                mysqlExe.StartInfo.FileName = routeFile
+                mysqlExe.Start()
+                Return 1
+            End If
+        Catch ex As Exception
+            Return 0
+        End Try
+    End Function
+
     Public Function userLogin(ByVal nameusr As String, ByVal passwd As String) As Boolean
         Dim cmd As New MySqlCommand
         Dim ada As New MySqlDataAdapter
@@ -867,7 +896,7 @@ Module dataFunctions
                 cmdInsertUser.Parameters.AddWithValue("address", dataUser(5))
                 cmdInsertUser.Parameters.AddWithValue("cellphone", dataUser(6))
                 cmdInsertUser.Parameters.AddWithValue("telephone", dataUser(7))
-                cmdInsertUser.ExecuteReader()
+                cmdInsertUser.ExecuteNonQuery()
 
                 If vLineToUser = True And Not IsNothing(vIdInternalLine) Then
                     cmdInsertLineUser.Connection = cnnx
@@ -1341,11 +1370,12 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
-    Public Sub showAccountCollect(vIdServiceLine As String, vIdInternalLine As String, vNameLine As String)
+    Public Sub showAccountCollect(vIdServiceLine As String, vIdInternalLine As String, vNameLine As String, vNameStreet As String)
         Dim frm As New frmCollectDetail
         frm.vIdServiceLine = vIdServiceLine
         frm.vIdInternalLine = vIdInternalLine
         frm.vNameLine = vNameLine
+        frm.vNameStreet = vNameStreet
         frm.ShowDialog()
     End Sub
 
@@ -1455,16 +1485,25 @@ Module dataFunctions
                     ada.SelectCommand = cmdGetAccountCollect
                     ada.Fill(tableLastReceipt)
 
+                    dgAccountYear.Rows.Clear()
                     If tableLastReceipt.Rows.Count > 0 Then
-                        dgAccountYear.Rows.Clear()
                         For index As Integer = 0 To tableLastReceipt.Rows.Count - 1
                             Dim vState As String
                             If CDec(tableLastReceipt.Rows(index).Item(3).ToString) > 0 Then
-                                vState = "Saldo Pendiente"
+                                vState = "SALDO PENDIENTE"
                             Else
-                                vState = "Cancelado"
+                                vState = "CANCELADO"
                             End If
                             dgAccountYear.Rows.Add(tableLastReceipt.Rows(index).Item(0).ToString, CInt(tableLastReceipt.Rows(index).Item(1).ToString), Format(CDec(tableLastReceipt.Rows(index).Item(2).ToString), "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(2).ToString) - CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), Format(CDec(tableLastReceipt.Rows(index).Item(3).ToString), "###,##0.00"), vState)
+
+                            dgAccountYear.Item(5, dgAccountYear.Rows.GetLastRow(0)).Style.ForeColor = Color.White
+                            If CDec(tableLastReceipt.Rows(index).Item(3).ToString) > 0 Then
+                                dgAccountYear.Item(5, dgAccountYear.Rows.GetLastRow(0)).Style.BackColor = Color.Red
+                                dgAccountYear.Item(5, dgAccountYear.Rows.GetLastRow(0)).Style.SelectionBackColor = Color.Red
+                            Else
+                                dgAccountYear.Item(5, dgAccountYear.Rows.GetLastRow(0)).Style.BackColor = Color.Green
+                                dgAccountYear.Item(5, dgAccountYear.Rows.GetLastRow(0)).Style.SelectionBackColor = Color.Green
+                            End If
                         Next
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -1513,8 +1552,8 @@ Module dataFunctions
                     ada.SelectCommand = cmdGetAccountCollectCharge
                     ada.Fill(tableCollect)
 
+                    dgAccountCharge.Rows.Clear()
                     If tableCollect.Rows.Count > 0 Then
-                        dgAccountCharge.Rows.Clear()
                         For index As Integer = 0 To tableCollect.Rows.Count - 1
                             Dim vNameMonth As String
                             If CInt(tableCollect.Rows(index).Item(4).ToString) = 0 Then
@@ -1531,7 +1570,23 @@ Module dataFunctions
                                 vNameCharge = tableCollect.Rows(index).Item(5).ToString
                             End If
 
-                            dgAccountCharge.Rows.Add(tableCollect.Rows(index).Item(0).ToString, tableCollect.Rows(index).Item(1).ToString, tableCollect.Rows(index).Item(2).ToString, tableCollect.Rows(index).Item(3).ToString, tableCollect.Rows(index).Item(4).ToString, False, vNameCharge, Format(CDec(tableCollect.Rows(index).Item(7).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(8).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(9).ToString), "###,##0.00"))
+                            Dim vState As String
+                            If CDec(tableCollect.Rows(index).Item(9).ToString) > 0 Then
+                                vState = "PENDIENTE"
+                            Else
+                                vState = "CANCELADO"
+                            End If
+
+                            dgAccountCharge.Rows.Add(tableCollect.Rows(index).Item(0).ToString, tableCollect.Rows(index).Item(1).ToString, tableCollect.Rows(index).Item(2).ToString, tableCollect.Rows(index).Item(3).ToString, tableCollect.Rows(index).Item(4).ToString, False, vNameCharge, Format(CDec(tableCollect.Rows(index).Item(7).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(8).ToString), "###,##0.00"), Format(CDec(tableCollect.Rows(index).Item(9).ToString), "###,##0.00"), vState)
+
+                            dgAccountCharge.Item(10, dgAccountCharge.Rows.GetLastRow(0)).Style.ForeColor = Color.White
+                            If CDec(tableCollect.Rows(index).Item(9).ToString) > 0 Then
+                                dgAccountCharge.Item(10, dgAccountCharge.Rows.GetLastRow(0)).Style.BackColor = Color.Red
+                                dgAccountCharge.Item(10, dgAccountCharge.Rows.GetLastRow(0)).Style.SelectionBackColor = Color.Red
+                            Else
+                                dgAccountCharge.Item(10, dgAccountCharge.Rows.GetLastRow(0)).Style.BackColor = Color.Green
+                                dgAccountCharge.Item(10, dgAccountCharge.Rows.GetLastRow(0)).Style.SelectionBackColor = Color.Green
+                            End If
                         Next
                     Else
                         MsgBox("No hay cuentas por año que mostrar", vbCritical, "Aviso")
@@ -2139,8 +2194,6 @@ Module dataFunctions
 
                 ada.SelectCommand = cmd
                 ada.Fill(TableExcel)
-
-                'dr = cmd.ExecuteReader
 
                 With Hoja
                     .Name = "Servicios"

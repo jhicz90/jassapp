@@ -37,6 +37,8 @@ Partial Class frmLogin
         Me.PasswordTextBox = New System.Windows.Forms.TextBox()
         Me.OK = New System.Windows.Forms.Button()
         Me.Cancel = New System.Windows.Forms.Button()
+        Me.btnCheckMysql = New System.Windows.Forms.Button()
+        Me.lblState = New System.Windows.Forms.Label()
         CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -49,7 +51,7 @@ Partial Class frmLogin
         Me.LogoPictureBox.Location = New System.Drawing.Point(0, 0)
         Me.LogoPictureBox.Margin = New System.Windows.Forms.Padding(4)
         Me.LogoPictureBox.Name = "LogoPictureBox"
-        Me.LogoPictureBox.Size = New System.Drawing.Size(165, 261)
+        Me.LogoPictureBox.Size = New System.Drawing.Size(165, 296)
         Me.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.LogoPictureBox.TabIndex = 0
         Me.LogoPictureBox.TabStop = False
@@ -110,13 +112,34 @@ Partial Class frmLogin
         Me.Cancel.TabIndex = 5
         Me.Cancel.Text = "&Cancelar"
         '
+        'btnCheckMysql
+        '
+        Me.btnCheckMysql.Image = Global.JASS_APP.My.Resources.Resources.database_view_32
+        Me.btnCheckMysql.Location = New System.Drawing.Point(336, 248)
+        Me.btnCheckMysql.Margin = New System.Windows.Forms.Padding(0)
+        Me.btnCheckMysql.Name = "btnCheckMysql"
+        Me.btnCheckMysql.Size = New System.Drawing.Size(48, 48)
+        Me.btnCheckMysql.TabIndex = 6
+        Me.btnCheckMysql.UseVisualStyleBackColor = True
+        '
+        'lblState
+        '
+        Me.lblState.AutoSize = True
+        Me.lblState.Location = New System.Drawing.Point(172, 271)
+        Me.lblState.Name = "lblState"
+        Me.lblState.Size = New System.Drawing.Size(102, 16)
+        Me.lblState.TabIndex = 7
+        Me.lblState.Text = "DB: Sin verificar"
+        '
         'frmLogin
         '
         Me.AcceptButton = Me.OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.Cancel
-        Me.ClientSize = New System.Drawing.Size(384, 261)
+        Me.ClientSize = New System.Drawing.Size(384, 296)
+        Me.Controls.Add(Me.lblState)
+        Me.Controls.Add(Me.btnCheckMysql)
         Me.Controls.Add(Me.Cancel)
         Me.Controls.Add(Me.OK)
         Me.Controls.Add(Me.PasswordTextBox)
@@ -143,4 +166,7 @@ Partial Class frmLogin
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
     End Sub
+
+    Friend WithEvents btnCheckMysql As Button
+    Friend WithEvents lblState As Label
 End Class

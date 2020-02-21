@@ -14,26 +14,15 @@
 
         txtNameLine.Text = ""
         txtAddressLine.Text = ""
-        cbxStreets.SelectedIndex = 0
         dtpInstallDate.Value = Format(Today, "Short Date")
         txtDescpLine.Text = ""
-        cbxRates.SelectedIndex = 0
         txtNames.Text = ""
         txtSurnames.Text = ""
         txtDocID.Text = ""
-        'cbxTypeUser.SelectedIndex = 0
         txtAddress.Text = ""
         txtTelephone.Text = ""
         txtCellphone.Text = ""
         txtNameLine.Focus()
-
-        'Dim codeLine As String
-        'codeLine = getCodeLine(cbxStreets.SelectedValue)
-        'If (codeLine <> Nothing) Then
-        '    txtCodLine.Text = codeLine
-        'Else
-        '    Close()
-        'End If
     End Sub
 
     Public Sub userFound(vActive As Boolean, Optional vDataUser() As String = Nothing)
@@ -50,7 +39,6 @@
             txtNames.Text = ""
             txtSurnames.Text = ""
             txtDocID.Text = ""
-            'cbxTypeUser.SelectedIndex = 0
             txtAddress.Text = ""
             txtTelephone.Text = ""
             txtCellphone.Text = ""
