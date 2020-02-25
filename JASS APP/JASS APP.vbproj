@@ -65,6 +65,9 @@
   <PropertyGroup>
     <ApplicationIcon>Resources\iconApp.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -183,6 +186,18 @@
       <DependentUpon>frmDebtRecord.vb</DependentUpon>
     </Compile>
     <Compile Include="frmDebtRecord.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDebtRecordDetail.Designer.vb">
+      <DependentUpon>frmDebtRecordDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDebtRecordDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDebtRecordYear.Designer.vb">
+      <DependentUpon>frmDebtRecordYear.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDebtRecordYear.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmDeclarationServices.Designer.vb">
@@ -320,6 +335,12 @@
     <EmbeddedResource Include="frmDebtRecord.resx">
       <DependentUpon>frmDebtRecord.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDebtRecordDetail.resx">
+      <DependentUpon>frmDebtRecordDetail.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDebtRecordYear.resx">
+      <DependentUpon>frmDebtRecordYear.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmDeclarationServices.resx">
       <DependentUpon>frmDeclarationServices.vb</DependentUpon>
     </EmbeddedResource>
@@ -378,6 +399,7 @@
     <EmbeddedResource Include="Reports\rptReceiptsResume.rdlc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

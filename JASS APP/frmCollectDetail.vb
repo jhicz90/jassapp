@@ -177,6 +177,11 @@
 
     Private Sub btnDebtRecord_Click(sender As Object, e As EventArgs) Handles btnDebtRecord.Click
         showDebtRecord(vIdServiceLine, vIdInternalLine, vNameLine)
+        CollectInit()
+        dtgAccountYear.Rows.Clear()
+        dtgAccountMounth.Rows.Clear()
+        cleanAll()
+        getAccountCollect(vIdServiceLine, vIdInternalLine, dtgAccountYear)
     End Sub
 
     Private Sub btnPay_Click(sender As Object, e As EventArgs) Handles btnPay.Click
@@ -189,8 +194,8 @@
             data(2) = cbxUsersInAccount.Text
             data(3) = getUser(cbxUsersInAccount.SelectedValue)(5)
             data(4) = getLine(vIdServiceLine)(5)
-            data(5) = Strings.Left(My.Settings.vUserNameLogin, 10)
-            data(6) = Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt")
+            data(5) = Strings.Left(My.Settings.vUserNameLogin, 40)
+            data(6) = Format(Today, "dd/MM/yyyy") & " " & Format(TimeOfDay, "hh:mm tt")
             data(7) = vDataReceipt(0)
 
             concepts = payAccount(dtgAccountMounth, Val(txtMountPay.Text), vIdInternalLine, data(7), data(1), data(2))

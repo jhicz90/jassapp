@@ -1393,6 +1393,18 @@ Module dataFunctions
         frm.ShowDialog()
     End Sub
 
+    Public Sub showGenerateYear(vIdInternalLine As String)
+        Dim frm As New frmDebtRecordYear
+        frm.vIdInternalLine = vIdInternalLine
+        frm.ShowDialog()
+    End Sub
+
+    Public Sub showGenerateDetail(vIdAccountLine As String)
+        Dim frm As New frmDebtRecordDetail
+        frm.vIdAccountLine = vIdAccountLine
+        frm.ShowDialog()
+    End Sub
+
     Public Sub showNewUser(vIdUserReg As String, vIdInternalLine As String, vFrmGet As Integer, Optional vfrmMdiParent As Form = Nothing)
         Dim frm As New frmNewuser
         frm.vIdUserReg = vIdUserReg
@@ -1816,6 +1828,68 @@ Module dataFunctions
             Return False
         End If
     End Function
+
+    Public Sub printReceiptCopy(vIdPayment As String, dgDetail As DataGridView)
+        Dim cmdReceipt, cmdReceiptDetail As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableReceipt As New DataTable
+        Dim data(7) As String
+        Dim concepts(12) As String
+
+        'data(0) = getLine(vIdServiceLine)(1)
+        'data(1) = vDataReceipt(1)
+        'data(2) = cbxUsersInAccount.Text
+        'data(3) = getUser(cbxUsersInAccount.SelectedValue)(5)
+        'data(4) = getLine(vIdServiceLine)(5)
+        'data(5) = Strings.Left(My.Settings.vUserNameLogin, 40)
+        'data(6) = Format(DateAndTime.Today, "dd/MM/yyyy") & " " & Format(DateAndTime.TimeOfDay, "hh:mm tt")
+        'data(7) = vDataReceipt(0)
+
+        If Not cnnx.DataSource.Equals("") Then
+            If Not (vIdPayment = Nothing) Then
+                cmdReceipt.Connection = cnnx
+                cmdReceipt.CommandType = CommandType.Text
+                cmdReceipt.CommandText = "SELECT 
+                service_line.code, 
+                payments.codepay, 
+                payments.payer, 
+                (SELECT user_reg.docid AS docid FROM users_line INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg WHERE users_line.internalline = INTERLINE.idinternalline LIMIT 1) AS docid,
+                streets.name,
+                user_sys.name,
+                payments.created 
+                FROM payments 
+                INNER JOIN account_line ON account_line.idaccountline = payments.accountline 
+                INNER JOIN internal_line AS INTERLINE ON INTERLINE.idinternalline = account_line.internalline
+                INNER JOIN service_line ON service_line.idserviceline = INTERLINE.serviceline
+                INNER JOIN streets ON streets.idstreet = service_line.street 
+                INNER JOIN user_sys ON user_sys.idusersys = payments.collector 
+                WHERE payments.idpayment = @idpay"
+                cmdReceipt.Parameters.AddWithValue("idpay", vIdPayment)
+                ada.SelectCommand = cmdReceipt
+                ada.Fill(tableReceipt)
+
+                data(0) = tableReceipt.Rows(0).Item(0).ToString
+                data(1) = tableReceipt.Rows(0).Item(1).ToString
+                data(2) = tableReceipt.Rows(0).Item(2).ToString
+                data(3) = tableReceipt.Rows(0).Item(3).ToString
+                data(4) = tableReceipt.Rows(0).Item(4).ToString
+                data(5) = tableReceipt.Rows(0).Item(5).ToString
+                data(6) = tableReceipt.Rows(0).Item(6).ToString
+                data(7) = ""
+
+                For index As Integer = 0 To dgDetail.Rows.Count - 1
+                    concepts(index) = dgDetail.Item(3, index).Value
+                    concepts(index + 6) = dgDetail.Item(4, index).Value
+                Next
+
+                showPrintReceipt(data, concepts)
+            Else
+                MsgBox("Faltan datos del pago detalle", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
 
     Public Function payAccount(dgAccount As DataGridView, amountPay As Decimal, Optional vIdInternalLine As String = Nothing, Optional vIdPay As Integer = Nothing, Optional vCodNumReceipt As String = Nothing, Optional vNamePayer As String = Nothing) As String()
         Dim rateYear As Integer = 0
@@ -2461,8 +2535,6 @@ Module dataFunctions
                         If TableCheckRateType.Rows.Count > 0 Then
                             If CBool(TableCheckRateType.Rows(0).Item(0).ToString) = True And vMonth > 0 Then
                                 checkDetail = False
-                            Else
-                                checkDetail = True
                             End If
                         End If
                     End If
@@ -2632,6 +2704,118 @@ Module dataFunctions
             End If
         Else
             MsgBox("Faltan datos en los campos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub addupdYear(vIdYear As String, vYear As Integer, vYearName As String, vActive As Integer, Optional vActiveYear As Boolean = False)
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableFindYear As New DataTable
+
+        If vIdYear <> "" And vYearName.Trim <> "" And vYear <> 0 Then
+            If Not cnnx.DataSource.Equals("") Then
+                Try
+                    cmd.Connection = cnnx
+                    cmd.CommandType = CommandType.Text
+                    If vIdYear = "new" Then
+                        cmd.CommandText = "SELECT * FROM years_rate WHERE years_rate.year = @year"
+                        cmd.Parameters.AddWithValue("year", vYear)
+                        ada.SelectCommand = cmd
+                        ada.Fill(tableFindYear)
+
+                        If tableFindYear.Rows.Count > 0 Then
+                            MsgBox("Ya existe el año que trata de ingresar", vbExclamation, "Aviso")
+                        Else
+                            cmd.CommandText = "INSERT INTO years_rate(year, nameyear) VALUES(@vyear, @nameyear)"
+                            cmd.Parameters.AddWithValue("vyear", vYear)
+                            cmd.Parameters.AddWithValue("nameyear", vYearName)
+                            cmd.ExecuteNonQuery()
+                            MsgBox("El registro se guardo exitosamente", vbInformation, "Aviso")
+                        End If
+                    Else
+                        If vActiveYear = True Then
+                            cmd.CommandText = "UPDATE years_rate SET years_rate.active = @active"
+                            cmd.Parameters.AddWithValue("active", False)
+                            cmd.ExecuteNonQuery()
+                        End If
+
+                        cmd.CommandText = "UPDATE years_rate SET years_rate.year = @year, years_rate.active = @yearactive, years_rate.nameyear = @nameyear WHERE years_rate.idyearrate = @idyearrate"
+                        cmd.Parameters.AddWithValue("year", vYear)
+                        cmd.Parameters.AddWithValue("yearactive", vActive)
+                        cmd.Parameters.AddWithValue("nameyear", vYearName)
+                        cmd.Parameters.AddWithValue("idyearrate", vIdYear)
+                        cmd.ExecuteNonQuery()
+                        MsgBox("El registro se actualizo", vbInformation, "Aviso")
+                    End If
+                Catch ex As Exception
+                    MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                    MsgBox(ex.Message)
+                End Try
+            Else
+                MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+            End If
+        Else
+            MsgBox("Faltan datos en los campos", vbCritical, "Aviso")
+        End If
+    End Sub
+
+    Public Sub updDetail(vIdAccountLine As String, vIdAccountDetail As String, vAmountNew As Decimal)
+        Dim cmd, cmdUpdateAccountYear As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableFindPays As New DataTable
+        Dim AccountAmountMax As Decimal = 0
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT 
+                IFNULL(SUM(payment_detail.payamount),0) AS sumpays
+                FROM payment_detail 
+                INNER JOIN payments ON payments.idpayment = payment_detail.payment
+                WHERE payments.canceled = 0 AND payment_detail.accountdetail = @idaccountdetail"
+                cmd.Parameters.AddWithValue("idaccountdetail", vIdAccountDetail)
+                ada.SelectCommand = cmd
+                ada.Fill(tableFindPays)
+
+                If tableFindPays.Rows.Count > 0 Then
+                    AccountAmountMax = CDec(tableFindPays.Rows(0).Item(0).ToString)
+                    If vAmountNew < AccountAmountMax Then
+                        MsgBox("La suma de los recibos cobrados en esta cuenta son mayores" & vbCr & "al nuevo monto ingresado. Si desea aplicar este cambio primero anule los recibos.", vbExclamation, "Aviso")
+                        Exit Sub
+                    Else
+                        cmd.CommandText = "UPDATE account_detail 
+                        SET account_detail.debttotal = @newamount, 
+                        account_detail.saldototal = @newamount 
+                        WHERE account_detail.idaccountdetail = @idaccountdet"
+                        cmd.Parameters.AddWithValue("newamount", vAmountNew)
+                        cmd.Parameters.AddWithValue("idaccountdet", vIdAccountDetail)
+                        cmd.ExecuteNonQuery()
+
+                        cmd.CommandText = "UPDATE account_detail 
+                        SET account_detail.saldototal = @amount - (SELECT SUM(payment_detail.payamount) FROM payment_detail INNER JOIN payments ON payments.idpayment = payment_detail.payment WHERE payments.canceled = 0 AND payment_detail.accountdetail = @idaccountdeta)
+                        WHERE account_detail.idaccountdetail = @idaccountdeta"
+                        cmd.Parameters.AddWithValue("amount", vAmountNew)
+                        cmd.Parameters.AddWithValue("idaccountdeta", vIdAccountDetail)
+                        cmd.ExecuteNonQuery()
+
+                        cmdUpdateAccountYear.Connection = cnnx
+                        cmdUpdateAccountYear.CommandType = CommandType.Text
+                        cmdUpdateAccountYear.CommandText = "UPDATE 
+                        account_line 
+                        SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline), 
+                        account_line.debttotal = (SELECT SUM(account_detail.debttotal) AS debttotal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                        WHERE account_line.idaccountline = @idaccountline"
+                        cmdUpdateAccountYear.Parameters.AddWithValue("idaccountline", vIdAccountLine)
+                        cmdUpdateAccountYear.ExecuteNonQuery()
+
+                        MsgBox("El registro se actualizo", vbInformation, "Aviso")
+                    End If
+                End If
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+            End Try
         End If
     End Sub
 

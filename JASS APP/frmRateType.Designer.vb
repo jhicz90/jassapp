@@ -29,33 +29,33 @@ Partial Class frmRateType
         Me.chkPeriodic = New System.Windows.Forms.CheckBox()
         Me.btnSaveService = New System.Windows.Forms.Button()
         Me.dtgRateType = New System.Windows.Forms.DataGridView()
-        Me.btnNewService = New System.Windows.Forms.Button()
-        Me.tabRates = New System.Windows.Forms.TabControl()
-        Me.tabpageServices = New System.Windows.Forms.TabPage()
-        Me.tabpageYear = New System.Windows.Forms.TabPage()
-        Me.dtgYears = New System.Windows.Forms.DataGridView()
-        Me.tabpageRates = New System.Windows.Forms.TabPage()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.txtYearName = New System.Windows.Forms.TextBox()
-        Me.nudYear = New System.Windows.Forms.NumericUpDown()
-        Me.btnNewYear = New System.Windows.Forms.Button()
-        Me.btnSaveYear = New System.Windows.Forms.Button()
-        Me.btnYearActive = New System.Windows.Forms.Button()
         Me.clmIdRateType = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmNameRate = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmDesc = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmPeriodic = New System.Windows.Forms.DataGridViewCheckBoxColumn()
+        Me.btnNewService = New System.Windows.Forms.Button()
+        Me.tabRates = New System.Windows.Forms.TabControl()
+        Me.tabpageServices = New System.Windows.Forms.TabPage()
+        Me.tabpageYear = New System.Windows.Forms.TabPage()
+        Me.btnYearActive = New System.Windows.Forms.Button()
+        Me.btnNewYear = New System.Windows.Forms.Button()
+        Me.btnSaveYear = New System.Windows.Forms.Button()
+        Me.nudYear = New System.Windows.Forms.NumericUpDown()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.txtYearName = New System.Windows.Forms.TextBox()
+        Me.dtgYears = New System.Windows.Forms.DataGridView()
         Me.clmIdYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmActive = New System.Windows.Forms.DataGridViewCheckBoxColumn()
         Me.clmYearName = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.tabpageRates = New System.Windows.Forms.TabPage()
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabRates.SuspendLayout()
         Me.tabpageServices.SuspendLayout()
         Me.tabpageYear.SuspendLayout()
-        CType(Me.dtgYears, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nudYear, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dtgYears, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -138,6 +138,37 @@ Partial Class frmRateType
         Me.dtgRateType.Size = New System.Drawing.Size(762, 342)
         Me.dtgRateType.TabIndex = 6
         '
+        'clmIdRateType
+        '
+        Me.clmIdRateType.HeaderText = "Id de Tarifa"
+        Me.clmIdRateType.Name = "clmIdRateType"
+        Me.clmIdRateType.ReadOnly = True
+        Me.clmIdRateType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        Me.clmIdRateType.Visible = False
+        '
+        'clmNameRate
+        '
+        Me.clmNameRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.clmNameRate.HeaderText = "Nombre"
+        Me.clmNameRate.Name = "clmNameRate"
+        Me.clmNameRate.ReadOnly = True
+        Me.clmNameRate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmDesc
+        '
+        Me.clmDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.clmDesc.HeaderText = "Descripción"
+        Me.clmDesc.Name = "clmDesc"
+        Me.clmDesc.ReadOnly = True
+        Me.clmDesc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmPeriodic
+        '
+        Me.clmPeriodic.HeaderText = "Mensualizada"
+        Me.clmPeriodic.Name = "clmPeriodic"
+        Me.clmPeriodic.ReadOnly = True
+        Me.clmPeriodic.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        '
         'btnNewService
         '
         Me.btnNewService.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -199,36 +230,54 @@ Partial Class frmRateType
         Me.tabpageYear.Text = "Año"
         Me.tabpageYear.UseVisualStyleBackColor = True
         '
-        'dtgYears
+        'btnYearActive
         '
-        Me.dtgYears.AllowUserToAddRows = False
-        Me.dtgYears.AllowUserToDeleteRows = False
-        Me.dtgYears.AllowUserToResizeColumns = False
-        Me.dtgYears.AllowUserToResizeRows = False
-        Me.dtgYears.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.dtgYears.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dtgYears.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdYear, Me.clmYear, Me.clmActive, Me.clmYearName})
-        Me.dtgYears.Location = New System.Drawing.Point(6, 76)
-        Me.dtgYears.MultiSelect = False
-        Me.dtgYears.Name = "dtgYears"
-        Me.dtgYears.ReadOnly = True
-        Me.dtgYears.RowHeadersVisible = False
-        Me.dtgYears.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
-        Me.dtgYears.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dtgYears.Size = New System.Drawing.Size(762, 342)
-        Me.dtgYears.TabIndex = 7
+        Me.btnYearActive.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnYearActive.Image = Global.JASS_APP.My.Resources.Resources.in_progress_32
+        Me.btnYearActive.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnYearActive.Location = New System.Drawing.Point(468, 6)
+        Me.btnYearActive.Name = "btnYearActive"
+        Me.btnYearActive.Size = New System.Drawing.Size(96, 64)
+        Me.btnYearActive.TabIndex = 16
+        Me.btnYearActive.Text = "Activar Año"
+        Me.btnYearActive.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnYearActive.UseVisualStyleBackColor = True
         '
-        'tabpageRates
+        'btnNewYear
         '
-        Me.tabpageRates.Location = New System.Drawing.Point(4, 22)
-        Me.tabpageRates.Name = "tabpageRates"
-        Me.tabpageRates.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabpageRates.Size = New System.Drawing.Size(776, 424)
-        Me.tabpageRates.TabIndex = 2
-        Me.tabpageRates.Text = "Tarifas de servicios"
-        Me.tabpageRates.UseVisualStyleBackColor = True
+        Me.btnNewYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnNewYear.Image = Global.JASS_APP.My.Resources.Resources.plus_1_year_32
+        Me.btnNewYear.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnNewYear.Location = New System.Drawing.Point(570, 6)
+        Me.btnNewYear.Name = "btnNewYear"
+        Me.btnNewYear.Size = New System.Drawing.Size(96, 64)
+        Me.btnNewYear.TabIndex = 15
+        Me.btnNewYear.Text = "NUEVO"
+        Me.btnNewYear.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnNewYear.UseVisualStyleBackColor = True
+        '
+        'btnSaveYear
+        '
+        Me.btnSaveYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnSaveYear.Image = Global.JASS_APP.My.Resources.Resources.save_32
+        Me.btnSaveYear.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.btnSaveYear.Location = New System.Drawing.Point(672, 6)
+        Me.btnSaveYear.Name = "btnSaveYear"
+        Me.btnSaveYear.Size = New System.Drawing.Size(96, 64)
+        Me.btnSaveYear.TabIndex = 14
+        Me.btnSaveYear.Text = "GUARDAR"
+        Me.btnSaveYear.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.btnSaveYear.UseVisualStyleBackColor = True
+        '
+        'nudYear
+        '
+        Me.nudYear.Location = New System.Drawing.Point(113, 11)
+        Me.nudYear.Maximum = New Decimal(New Integer() {2015, 0, 0, 0})
+        Me.nudYear.Minimum = New Decimal(New Integer() {2015, 0, 0, 0})
+        Me.nudYear.Name = "nudYear"
+        Me.nudYear.Size = New System.Drawing.Size(75, 20)
+        Me.nudYear.TabIndex = 13
+        Me.nudYear.Value = New Decimal(New Integer() {2015, 0, 0, 0})
         '
         'Label3
         '
@@ -258,85 +307,26 @@ Partial Class frmRateType
         Me.txtYearName.Size = New System.Drawing.Size(250, 20)
         Me.txtYearName.TabIndex = 11
         '
-        'nudYear
+        'dtgYears
         '
-        Me.nudYear.Location = New System.Drawing.Point(113, 11)
-        Me.nudYear.Maximum = New Decimal(New Integer() {2015, 0, 0, 0})
-        Me.nudYear.Minimum = New Decimal(New Integer() {2015, 0, 0, 0})
-        Me.nudYear.Name = "nudYear"
-        Me.nudYear.Size = New System.Drawing.Size(75, 20)
-        Me.nudYear.TabIndex = 13
-        Me.nudYear.Value = New Decimal(New Integer() {2015, 0, 0, 0})
-        '
-        'btnNewYear
-        '
-        Me.btnNewYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnNewYear.Image = Global.JASS_APP.My.Resources.Resources.plus_1_year_32
-        Me.btnNewYear.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnNewYear.Location = New System.Drawing.Point(570, 6)
-        Me.btnNewYear.Name = "btnNewYear"
-        Me.btnNewYear.Size = New System.Drawing.Size(96, 64)
-        Me.btnNewYear.TabIndex = 15
-        Me.btnNewYear.Text = "NUEVO"
-        Me.btnNewYear.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnNewYear.UseVisualStyleBackColor = True
-        '
-        'btnSaveYear
-        '
-        Me.btnSaveYear.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnSaveYear.Image = Global.JASS_APP.My.Resources.Resources.save_32
-        Me.btnSaveYear.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnSaveYear.Location = New System.Drawing.Point(672, 6)
-        Me.btnSaveYear.Name = "btnSaveYear"
-        Me.btnSaveYear.Size = New System.Drawing.Size(96, 64)
-        Me.btnSaveYear.TabIndex = 14
-        Me.btnSaveYear.Text = "GUARDAR"
-        Me.btnSaveYear.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnSaveYear.UseVisualStyleBackColor = True
-        '
-        'btnYearActive
-        '
-        Me.btnYearActive.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnYearActive.Image = Global.JASS_APP.My.Resources.Resources.in_progress_32
-        Me.btnYearActive.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.btnYearActive.Location = New System.Drawing.Point(468, 6)
-        Me.btnYearActive.Name = "btnYearActive"
-        Me.btnYearActive.Size = New System.Drawing.Size(96, 64)
-        Me.btnYearActive.TabIndex = 16
-        Me.btnYearActive.Text = "Activar Año"
-        Me.btnYearActive.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.btnYearActive.UseVisualStyleBackColor = True
-        '
-        'clmIdRateType
-        '
-        Me.clmIdRateType.HeaderText = "Id de Tarifa"
-        Me.clmIdRateType.Name = "clmIdRateType"
-        Me.clmIdRateType.ReadOnly = True
-        Me.clmIdRateType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        Me.clmIdRateType.Visible = False
-        '
-        'clmNameRate
-        '
-        Me.clmNameRate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.clmNameRate.HeaderText = "Nombre"
-        Me.clmNameRate.Name = "clmNameRate"
-        Me.clmNameRate.ReadOnly = True
-        Me.clmNameRate.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmDesc
-        '
-        Me.clmDesc.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.clmDesc.HeaderText = "Descripción"
-        Me.clmDesc.Name = "clmDesc"
-        Me.clmDesc.ReadOnly = True
-        Me.clmDesc.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmPeriodic
-        '
-        Me.clmPeriodic.HeaderText = "Mensualizada"
-        Me.clmPeriodic.Name = "clmPeriodic"
-        Me.clmPeriodic.ReadOnly = True
-        Me.clmPeriodic.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dtgYears.AllowUserToAddRows = False
+        Me.dtgYears.AllowUserToDeleteRows = False
+        Me.dtgYears.AllowUserToResizeColumns = False
+        Me.dtgYears.AllowUserToResizeRows = False
+        Me.dtgYears.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.dtgYears.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dtgYears.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.clmIdYear, Me.clmYear, Me.clmActive, Me.clmYearName})
+        Me.dtgYears.Location = New System.Drawing.Point(6, 76)
+        Me.dtgYears.MultiSelect = False
+        Me.dtgYears.Name = "dtgYears"
+        Me.dtgYears.ReadOnly = True
+        Me.dtgYears.RowHeadersVisible = False
+        Me.dtgYears.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing
+        Me.dtgYears.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.dtgYears.Size = New System.Drawing.Size(762, 342)
+        Me.dtgYears.TabIndex = 7
         '
         'clmIdYear
         '
@@ -369,6 +359,16 @@ Partial Class frmRateType
         Me.clmYearName.ReadOnly = True
         Me.clmYearName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
         '
+        'tabpageRates
+        '
+        Me.tabpageRates.Location = New System.Drawing.Point(4, 22)
+        Me.tabpageRates.Name = "tabpageRates"
+        Me.tabpageRates.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabpageRates.Size = New System.Drawing.Size(776, 424)
+        Me.tabpageRates.TabIndex = 2
+        Me.tabpageRates.Text = "Tarifas de servicios"
+        Me.tabpageRates.UseVisualStyleBackColor = True
+        '
         'frmRateType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -384,8 +384,8 @@ Partial Class frmRateType
         Me.tabpageServices.PerformLayout()
         Me.tabpageYear.ResumeLayout(False)
         Me.tabpageYear.PerformLayout()
-        CType(Me.dtgYears, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nudYear, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dtgYears, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

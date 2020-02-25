@@ -19,4 +19,8 @@
             Close()
         End If
     End Sub
+
+    Private Sub btnPrint_Click(sender As Object, e As EventArgs) Handles btnPrint.Click
+        printReceiptCopy(vIdPayment, dtgDetail)
+    End Sub
 End Class

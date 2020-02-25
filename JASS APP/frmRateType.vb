@@ -15,12 +15,7 @@
         listYears(dtgYears)
     End Sub
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSaveService.Click
-        addupdRateType(idRateType, txtRateTypeName.Text, txtRateTypeDescp.Text, chkPeriodic.Checked)
-        listRateTypes(dtgRateType)
-    End Sub
-
-    Private Sub btnNew_Click(sender As Object, e As EventArgs) Handles btnNewService.Click
+    Public Sub newService()
         idRateType = "new"
         nameRateType = ""
         descpRateType = ""
@@ -29,6 +24,22 @@
         txtRateTypeDescp.Text = descpRateType
         chkPeriodic.Checked = monthlyRateType
         txtRateTypeName.Focus()
+    End Sub
+
+    Public Sub newYear()
+        idYear = "new"
+        yearName = ""
+        txtYearName.Text = yearName
+        txtYearName.Focus()
+    End Sub
+
+    Private Sub btnSaveService_Click(sender As Object, e As EventArgs) Handles btnSaveService.Click
+        addupdRateType(idRateType, txtRateTypeName.Text, txtRateTypeDescp.Text, chkPeriodic.Checked)
+        listRateTypes(dtgRateType)
+    End Sub
+
+    Private Sub btnNewService_Click(sender As Object, e As EventArgs) Handles btnNewService.Click
+        newService()
     End Sub
 
     Private Sub dtgRateType_CellMouseDoubleClick(sender As Object, e As DataGridViewCellMouseEventArgs) Handles dtgRateType.CellMouseDoubleClick
@@ -42,6 +53,22 @@
             txtRateTypeDescp.Text = descpRateType
             chkPeriodic.Checked = monthlyRateType
             txtRateTypeName.Focus()
+        End If
+    End Sub
+
+    Private Sub btnSaveYear_Click(sender As Object, e As EventArgs) Handles btnSaveYear.Click
+        addupdYear(idYear, nudYear.Value, txtYearName.Text, 0)
+        listYears(dtgYears)
+    End Sub
+
+    Private Sub btnNewYear_Click(sender As Object, e As EventArgs) Handles btnNewYear.Click
+        newYear()
+    End Sub
+
+    Private Sub btnYearActive_Click(sender As Object, e As EventArgs) Handles btnYearActive.Click
+        If Not (dtgYears.Item(0, dtgYears.SelectedRows(0).Index).Value Is Nothing) Then
+            addupdYear(dtgYears.Item(0, dtgYears.SelectedRows(0).Index).Value, dtgYears.Item(1, dtgYears.SelectedRows(0).Index).Value, dtgYears.Item(3, dtgYears.SelectedRows(0).Index).Value, 1, True)
+            listYears(dtgYears)
         End If
     End Sub
 End Class

@@ -33,6 +33,7 @@ Partial Class frmPayDetail
         Me.txtNumReceipt = New System.Windows.Forms.TextBox()
         Me.txtCollector = New System.Windows.Forms.TextBox()
         Me.txtPayer = New System.Windows.Forms.TextBox()
+        Me.btnPrint = New System.Windows.Forms.Button()
         CType(Me.dtgDetail, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -134,12 +135,22 @@ Partial Class frmPayDetail
         Me.txtPayer.Size = New System.Drawing.Size(430, 20)
         Me.txtPayer.TabIndex = 5
         '
+        'btnPrint
+        '
+        Me.btnPrint.Location = New System.Drawing.Point(93, 236)
+        Me.btnPrint.Name = "btnPrint"
+        Me.btnPrint.Size = New System.Drawing.Size(75, 23)
+        Me.btnPrint.TabIndex = 6
+        Me.btnPrint.Text = "Imprimir"
+        Me.btnPrint.UseVisualStyleBackColor = True
+        '
         'frmPayDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btnClose
         Me.ClientSize = New System.Drawing.Size(454, 271)
+        Me.Controls.Add(Me.btnPrint)
         Me.Controls.Add(Me.txtPayer)
         Me.Controls.Add(Me.txtCollector)
         Me.Controls.Add(Me.txtNumReceipt)
@@ -167,4 +178,5 @@ Partial Class frmPayDetail
     Friend WithEvents txtNumReceipt As TextBox
     Friend WithEvents txtCollector As TextBox
     Friend WithEvents txtPayer As TextBox
+    Friend WithEvents btnPrint As Button
 End Class

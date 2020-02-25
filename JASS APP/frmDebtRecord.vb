@@ -13,11 +13,29 @@
             lsxUsersInAccount.Enabled = False
         End If
 
+        initDetail()
+    End Sub
+
+    Public Sub initDetail()
         getAccountCollect(vIdServiceLine, vIdInternalLine, dtgAccountYear)
         Dim dataAccount() As String = getAccount(vIdServiceLine, vIdInternalLine)
 
         txtCodLine.Text = dataAccount(3)
         txtCodAccount.Text = dataAccount(2)
         txtNameLine.Text = vNameLine
+    End Sub
+
+    Private Sub btnAddYear_Click(sender As Object, e As EventArgs) Handles btnAddYear.Click
+        showGenerateYear(vIdInternalLine)
+        initDetail()
+    End Sub
+
+    Private Sub dtgAccountYear_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountYear.CellClick
+        If e.RowIndex <> -1 Then
+            If dtgAccountYear.Columns(e.ColumnIndex).Name = "clmEdit" Then
+                showGenerateDetail(dtgAccountYear.Item(0, e.RowIndex).Value)
+                initDetail()
+            End If
+        End If
     End Sub
 End Class

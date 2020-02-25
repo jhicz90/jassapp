@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Programa de la institución JASS (Junta Administradora de servicios de saneamiento) para el manejo y seguimiento de la cobranza por servicio de distribución de agua potable y alcantarillado.")>
 <Assembly: AssemblyCompany("JhicZSoft")>
 <Assembly: AssemblyProduct("JASS APP")>
-<Assembly: AssemblyCopyright("Copyright ©  2019")>
+<Assembly: AssemblyCopyright("Copyright ©  2020")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' utilizando el carácter "*", como se muestra a continuación:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.3.2.0")>
-<Assembly: AssemblyFileVersion("1.3.2.0")>
+<Assembly: AssemblyVersion("1.8.0.0")>
+<Assembly: AssemblyFileVersion("1.8.0.0")>

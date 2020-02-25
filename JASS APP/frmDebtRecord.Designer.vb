@@ -163,7 +163,7 @@ Partial Class frmDebtRecord
         '
         'btnAddDebtDetail
         '
-        Me.btnAddDebtDetail.Image = Global.JASS_APP.My.Resources.Resources.event_32
+        Me.btnAddDebtDetail.Image = Global.JASS_APP.My.Resources.Resources.calendar_plus_32
         Me.btnAddDebtDetail.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.btnAddDebtDetail.Location = New System.Drawing.Point(152, 19)
         Me.btnAddDebtDetail.Name = "btnAddDebtDetail"
