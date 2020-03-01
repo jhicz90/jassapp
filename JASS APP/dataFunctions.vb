@@ -2763,7 +2763,6 @@ Module dataFunctions
         Dim cmd, cmdUpdateAccountYear As New MySqlCommand
         Dim ada As New MySqlDataAdapter
         Dim tableFindPays As New DataTable
-        Dim AccountAmountMax As Decimal = 0
 
         If Not cnnx.DataSource.Equals("") Then
             Try
@@ -2779,7 +2778,8 @@ Module dataFunctions
                 ada.Fill(tableFindPays)
 
                 If tableFindPays.Rows.Count > 0 Then
-                    AccountAmountMax = CDec(tableFindPays.Rows(0).Item(0).ToString)
+                    Dim AccountAmountMax As Decimal = CDec(tableFindPays.Rows(0).Item(0).ToString)
+
                     If vAmountNew < AccountAmountMax Then
                         MsgBox("La suma de los recibos cobrados en esta cuenta son mayores" & vbCr & "al nuevo monto ingresado. Si desea aplicar este cambio primero anule los recibos.", vbExclamation, "Aviso")
                         Exit Sub
@@ -2793,7 +2793,7 @@ Module dataFunctions
                         cmd.ExecuteNonQuery()
 
                         cmd.CommandText = "UPDATE account_detail 
-                        SET account_detail.saldototal = @amount - (SELECT SUM(payment_detail.payamount) FROM payment_detail INNER JOIN payments ON payments.idpayment = payment_detail.payment WHERE payments.canceled = 0 AND payment_detail.accountdetail = @idaccountdeta)
+                        SET account_detail.saldototal = @amount - (SELECT IFNULL(SUM(payment_detail.payamount),0) FROM payment_detail INNER JOIN payments ON payments.idpayment = payment_detail.payment WHERE payments.canceled = 0 AND payment_detail.accountdetail = @idaccountdeta)
                         WHERE account_detail.idaccountdetail = @idaccountdeta"
                         cmd.Parameters.AddWithValue("amount", vAmountNew)
                         cmd.Parameters.AddWithValue("idaccountdeta", vIdAccountDetail)
@@ -2803,8 +2803,8 @@ Module dataFunctions
                         cmdUpdateAccountYear.CommandType = CommandType.Text
                         cmdUpdateAccountYear.CommandText = "UPDATE 
                         account_line 
-                        SET account_line.saldototal = (SELECT SUM(account_detail.saldototal) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline), 
-                        account_line.debttotal = (SELECT SUM(account_detail.debttotal) AS debttotal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
+                        SET account_line.saldototal = (SELECT IFNULL(SUM(account_detail.saldototal),0) AS saldototal FROM account_detail WHERE account_detail.accountline = @idaccountline), 
+                        account_line.debttotal = (SELECT IFNULL(SUM(account_detail.debttotal),0) AS debttotal FROM account_detail WHERE account_detail.accountline = @idaccountline) 
                         WHERE account_line.idaccountline = @idaccountline"
                         cmdUpdateAccountYear.Parameters.AddWithValue("idaccountline", vIdAccountLine)
                         cmdUpdateAccountYear.ExecuteNonQuery()

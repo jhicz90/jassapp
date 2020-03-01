@@ -18,9 +18,11 @@
     End Sub
 
     Private Sub btnAddDebtDetail_Click(sender As Object, e As EventArgs) Handles btnAddDebtDetail.Click
-        If dtgAccountMounth.SelectedRows(0).Index <> -1 Then
-            updDetail(dtgAccountMounth.Item(1, dtgAccountMounth.SelectedRows(0).Index).Value, dtgAccountMounth.Item(0, dtgAccountMounth.SelectedRows(0).Index).Value, nudAmountNew.Value)
-            getAccountCollectCharge(vIdAccountLine, dtgAccountMounth)
+        If dtgAccountMounth.Rows.Count > 0 Then
+            If dtgAccountMounth.SelectedRows(0).Index <> -1 Then
+                updDetail(dtgAccountMounth.Item(1, dtgAccountMounth.SelectedRows(0).Index).Value, dtgAccountMounth.Item(0, dtgAccountMounth.SelectedRows(0).Index).Value, nudAmountNew.Value)
+                getAccountCollectCharge(vIdAccountLine, dtgAccountMounth)
+            End If
         End If
     End Sub
 End Class
