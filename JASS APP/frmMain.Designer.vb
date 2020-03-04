@@ -33,6 +33,8 @@ Partial Class frmMain
         Me.tsmiConfigPrints = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiPreviewReceipt = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiConfig = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiBackup = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiRestore = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiExit = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdRegister = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiFindLines = New System.Windows.Forms.ToolStripMenuItem()
@@ -66,7 +68,7 @@ Partial Class frmMain
         '
         'tsdpdFile
         '
-        Me.tsdpdFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNew, Me.tsmiPrint, Me.tsmiConfig, Me.tsmiExit})
+        Me.tsdpdFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNew, Me.tsmiPrint, Me.tsmiConfig, Me.tsmiBackup, Me.tsmiRestore, Me.tsmiExit})
         Me.tsdpdFile.Image = Global.JASS_APP.My.Resources.Resources.top_menu_32
         Me.tsdpdFile.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdFile.Name = "tsdpdFile"
@@ -77,12 +79,14 @@ Partial Class frmMain
         'tsmiNew
         '
         Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiSharedLine, Me.tsmiNewUser})
+        Me.tsmiNew.Image = Global.JASS_APP.My.Resources.Resources.btn_add
         Me.tsmiNew.Name = "tsmiNew"
-        Me.tsmiNew.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiNew.Size = New System.Drawing.Size(198, 22)
         Me.tsmiNew.Text = "Nuevo"
         '
         'tsmiNewLine
         '
+        Me.tsmiNewLine.Image = Global.JASS_APP.My.Resources.Resources.plumbing
         Me.tsmiNewLine.Name = "tsmiNewLine"
         Me.tsmiNewLine.ShortcutKeyDisplayString = "F3"
         Me.tsmiNewLine.ShortcutKeys = System.Windows.Forms.Keys.F3
@@ -105,6 +109,7 @@ Partial Class frmMain
         '
         'tsmiNewUser
         '
+        Me.tsmiNewUser.Image = Global.JASS_APP.My.Resources.Resources.new_contact
         Me.tsmiNewUser.Name = "tsmiNewUser"
         Me.tsmiNewUser.ShortcutKeys = System.Windows.Forms.Keys.F8
         Me.tsmiNewUser.Size = New System.Drawing.Size(180, 22)
@@ -113,8 +118,9 @@ Partial Class frmMain
         'tsmiPrint
         '
         Me.tsmiPrint.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiConfigPrints, Me.tsmiPreviewReceipt})
+        Me.tsmiPrint.Image = Global.JASS_APP.My.Resources.Resources.print
         Me.tsmiPrint.Name = "tsmiPrint"
-        Me.tsmiPrint.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiPrint.Size = New System.Drawing.Size(198, 22)
         Me.tsmiPrint.Text = "Impresora"
         '
         'tsmiConfigPrints
@@ -133,16 +139,32 @@ Partial Class frmMain
         '
         'tsmiConfig
         '
+        Me.tsmiConfig.Image = Global.JASS_APP.My.Resources.Resources.administrative_tools
         Me.tsmiConfig.Name = "tsmiConfig"
-        Me.tsmiConfig.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiConfig.Size = New System.Drawing.Size(198, 22)
         Me.tsmiConfig.Text = "Configuración"
+        '
+        'tsmiBackup
+        '
+        Me.tsmiBackup.Image = Global.JASS_APP.My.Resources.Resources.database_view
+        Me.tsmiBackup.Name = "tsmiBackup"
+        Me.tsmiBackup.Size = New System.Drawing.Size(198, 22)
+        Me.tsmiBackup.Text = "Copia de seguridad"
+        '
+        'tsmiRestore
+        '
+        Me.tsmiRestore.Image = Global.JASS_APP.My.Resources.Resources.reload_update
+        Me.tsmiRestore.Name = "tsmiRestore"
+        Me.tsmiRestore.Size = New System.Drawing.Size(198, 22)
+        Me.tsmiRestore.Text = "Restaurar base de datos"
         '
         'tsmiExit
         '
+        Me.tsmiExit.Image = Global.JASS_APP.My.Resources.Resources.close_window
         Me.tsmiExit.Name = "tsmiExit"
         Me.tsmiExit.ShortcutKeyDisplayString = "Alt + F4"
         Me.tsmiExit.ShortcutKeys = CType((System.Windows.Forms.Keys.Alt Or System.Windows.Forms.Keys.F4), System.Windows.Forms.Keys)
-        Me.tsmiExit.Size = New System.Drawing.Size(150, 22)
+        Me.tsmiExit.Size = New System.Drawing.Size(198, 22)
         Me.tsmiExit.Text = "&Salir"
         '
         'tsdpdRegister
@@ -159,6 +181,7 @@ Partial Class frmMain
         '
         'tsmiFindLines
         '
+        Me.tsmiFindLines.Image = Global.JASS_APP.My.Resources.Resources.plumbing
         Me.tsmiFindLines.Name = "tsmiFindLines"
         Me.tsmiFindLines.ShortcutKeyDisplayString = "F4"
         Me.tsmiFindLines.ShortcutKeys = System.Windows.Forms.Keys.F4
@@ -167,6 +190,7 @@ Partial Class frmMain
         '
         'tsmiFindUsers
         '
+        Me.tsmiFindUsers.Image = Global.JASS_APP.My.Resources.Resources.user_account
         Me.tsmiFindUsers.Name = "tsmiFindUsers"
         Me.tsmiFindUsers.Size = New System.Drawing.Size(209, 22)
         Me.tsmiFindUsers.Text = "Usuarios o representantes"
@@ -185,6 +209,7 @@ Partial Class frmMain
         '
         'tsmiCollectBox
         '
+        Me.tsmiCollectBox.Image = Global.JASS_APP.My.Resources.Resources.coin_in_hand
         Me.tsmiCollectBox.Name = "tsmiCollectBox"
         Me.tsmiCollectBox.ShortcutKeyDisplayString = "F5"
         Me.tsmiCollectBox.ShortcutKeys = System.Windows.Forms.Keys.F5
@@ -193,12 +218,14 @@ Partial Class frmMain
         '
         'tsmiDeclarationServices
         '
+        Me.tsmiDeclarationServices.Image = Global.JASS_APP.My.Resources.Resources._event
         Me.tsmiDeclarationServices.Name = "tsmiDeclarationServices"
         Me.tsmiDeclarationServices.Size = New System.Drawing.Size(200, 22)
         Me.tsmiDeclarationServices.Text = "Declaración de servicios"
         '
         'tsmiRateType
         '
+        Me.tsmiRateType.Image = Global.JASS_APP.My.Resources.Resources.todo_list
         Me.tsmiRateType.Name = "tsmiRateType"
         Me.tsmiRateType.Size = New System.Drawing.Size(200, 22)
         Me.tsmiRateType.Text = "Tarifas y servicios"
@@ -274,7 +301,7 @@ Partial Class frmMain
         'tsmiAbout
         '
         Me.tsmiAbout.Name = "tsmiAbout"
-        Me.tsmiAbout.Size = New System.Drawing.Size(136, 22)
+        Me.tsmiAbout.Size = New System.Drawing.Size(180, 22)
         Me.tsmiAbout.Text = "Acerda de..."
         '
         'stStatusToolbar
@@ -337,4 +364,6 @@ Partial Class frmMain
     Friend WithEvents tsmiRateType As ToolStripMenuItem
     Friend WithEvents tsmiCollectDaily As ToolStripMenuItem
     Friend WithEvents tsmiCollectDailyResume As ToolStripMenuItem
+    Friend WithEvents tsmiBackup As ToolStripMenuItem
+    Friend WithEvents tsmiRestore As ToolStripMenuItem
 End Class

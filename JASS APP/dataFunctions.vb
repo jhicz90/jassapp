@@ -1,4 +1,5 @@
 ﻿Imports System.Data.OleDb
+Imports System.IO
 Imports ClosedXML.Excel
 Imports MySql.Data.MySqlClient
 
@@ -55,6 +56,68 @@ Module dataFunctions
             Return 0
         End Try
     End Function
+
+    Public Sub backupDBMysql()
+        Dim dialogSaveBackup As New SaveFileDialog
+
+        Try
+            dialogSaveBackup.Filter = "SQL Backup (*.sql)|*.sql|Todos los archivos (*.*)|*.*"
+            dialogSaveBackup.FileName = "JASS backup - " & DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss") & ".sql"
+
+            If dialogSaveBackup.ShowDialog = DialogResult.OK Then
+                Dim backupFile As String = dialogSaveBackup.FileName
+                Dim backupProcess As New Process
+                backupProcess.StartInfo.FileName = "cmd.exe"
+                backupProcess.StartInfo.UseShellExecute = False
+                backupProcess.StartInfo.WorkingDirectory = "C:\xampp\mysql\bin\"
+                backupProcess.StartInfo.RedirectStandardInput = True
+                backupProcess.StartInfo.RedirectStandardOutput = True
+                backupProcess.Start()
+
+                Dim backupStream As StreamWriter = backupProcess.StandardInput
+                Dim myStreamReader As StreamReader = backupProcess.StandardOutput
+                backupStream.WriteLine("mysqldump --user=root --password= -h localhost jassdb > """ & backupFile & """")
+
+                backupStream.Close()
+                backupProcess.WaitForExit()
+                backupProcess.Close()
+                MsgBox("La copia de la base de datos JASS ah sido creada", vbInformation, "Aviso")
+            End If
+        Catch ex As Exception
+            MsgBox("Ocurrio un error en la copia de la base de datos", vbExclamation, "Aviso")
+        End Try
+    End Sub
+
+    Public Sub restoreDBMysql()
+        Dim dialogOpenBackup As New OpenFileDialog
+
+        Try
+            dialogOpenBackup.Filter = "SQL Backup (*.sql)|*.sql|Todos los archivos (*.*)|*.*"
+
+            If dialogOpenBackup.ShowDialog = DialogResult.OK Then
+                Dim backupFile As String = dialogOpenBackup.FileName
+                Dim backupProcess As New Process
+                backupProcess.StartInfo.FileName = "cmd.exe"
+                backupProcess.StartInfo.UseShellExecute = False
+                backupProcess.StartInfo.WorkingDirectory = "C:\xampp\mysql\bin\"
+                backupProcess.StartInfo.RedirectStandardInput = True
+                backupProcess.StartInfo.RedirectStandardOutput = True
+                backupProcess.Start()
+
+                Dim backupStream As StreamWriter = backupProcess.StandardInput
+                Dim myStreamReader As StreamReader = backupProcess.StandardOutput
+                backupStream.WriteLine("mysql -u root jassdb < """ & backupFile & """ && exit")
+
+                backupStream.Close()
+                backupProcess.WaitForExit()
+                backupProcess.Close()
+                MsgBox("La base de datos JASS ha sido restaurada correctamente." & vbCr & "Ahora el programa se cerrara para cargar los nuevos datos", vbInformation, "Aviso")
+                Application.Exit()
+            End If
+        Catch ex As Exception
+            MsgBox("Ocurrio un error en la restauración de la base de datos", vbExclamation, "Aviso")
+        End Try
+    End Sub
 
     Public Function userLogin(ByVal nameusr As String, ByVal passwd As String) As Boolean
         Dim cmd As New MySqlCommand
@@ -2464,7 +2527,7 @@ Module dataFunctions
                     Return 2
                 End If
             Catch ex As Exception
-                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                MsgBox("Ocurrio un error al cargar o grabar los datos del año", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
                 Return 0
             End Try
@@ -2505,7 +2568,7 @@ Module dataFunctions
                     chekedYear = False
                 End If
 
-                If chekedYear Then
+                If chekedYear And (vIdAccountLine <> "" And vIdYearRate <> "" And vIdDetail <> "") Then
                     cmdChekedDetail.Connection = cnnx
                     cmdChekedDetail.CommandType = CommandType.Text
                     cmdChekedDetail.CommandText = "SELECT 
@@ -2539,7 +2602,7 @@ Module dataFunctions
                         End If
                     End If
 
-                    If Not checkDetail Then
+                    If Not checkDetail And (vIdAccountLine <> "" And vIdYearRate <> "" And vIdDetail <> "") Then
                         cmdInsertAccountDetail.Connection = cnnx
                         cmdInsertAccountDetail.CommandType = CommandType.Text
                         cmdInsertAccountDetail.CommandText = "INSERT INTO account_detail(accountline, yearrate, ratetype, month, debttotal, saldototal) VALUES(" & vIdAccountLine & ", " & vIdYearRate & ", " & vIdDetail & ", " & vMonth & ", " & vDebtAmount & ", " & vDebtAmount & ")"
@@ -2562,7 +2625,7 @@ Module dataFunctions
                     Return 0
                 End If
             Catch ex As Exception
-                MsgBox("Ocurrio un error al cargar o grabar los datos", vbExclamation, "Aviso")
+                MsgBox("Ocurrio un error al cargar o grabar los datos de la cuenta detalle", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
                 Return 0
             End Try

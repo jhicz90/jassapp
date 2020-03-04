@@ -88,4 +88,12 @@
             cnnx.Close()
         End If
     End Sub
+
+    Private Sub tsmiBackup_Click(sender As Object, e As EventArgs) Handles tsmiBackup.Click
+        backupDBMysql()
+    End Sub
+
+    Private Sub tsmiRestore_Click(sender As Object, e As EventArgs) Handles tsmiRestore.Click
+        restoreDBMysql()
+    End Sub
 End Class

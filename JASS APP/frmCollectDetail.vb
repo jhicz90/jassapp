@@ -6,7 +6,7 @@
     Public vDataReceipt(1) As String
     Private vDebitAmount, vDebtAmount As Decimal
     Private Sub frmCollectDetail_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Icon = My.Resources.iconCollect
+        Icon = My.Resources.iconCoinInHand
 
         listUsersInAccount(vIdInternalLine, cbxUsersInAccount, Nothing)
 
