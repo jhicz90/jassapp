@@ -1226,11 +1226,11 @@ Module dataFunctions
 
             If Not (dataUser(0) = Nothing) Then
                 Try
-                    cmdUpdateLine.CommandText = "UPDATE user_reg SET names = @names, surnames = @surnamesuser, usertype = @usertype, docid = @docid, address = @address, cellphone = @cellphone, telephone = @telephone " &
+                    cmdUpdateLine.CommandText = "UPDATE user_reg SET names = @nameuser, surnames = @surnamesuser, usertype = @usertype, docid = @docid, address = @address, cellphone = @cellphone, telephone = @telephone " &
                     "WHERE user_reg.iduserreg = @iduserreg"
 
-                    cmdUpdateLine.Parameters.AddWithValue("names", dataUser(1))
-                    cmdUpdateLine.Parameters.AddWithValue("surnames", dataUser(2))
+                    cmdUpdateLine.Parameters.AddWithValue("nameuser", dataUser(1))
+                    cmdUpdateLine.Parameters.AddWithValue("surnamesuser", dataUser(2))
                     cmdUpdateLine.Parameters.AddWithValue("usertype", dataUser(3))
                     cmdUpdateLine.Parameters.AddWithValue("docid", dataUser(4))
                     cmdUpdateLine.Parameters.AddWithValue("address", dataUser(5))
@@ -1417,6 +1417,11 @@ Module dataFunctions
 
     Public Sub showReportReceiptsResume()
         Dim frm As New frmReportReceiptsResume
+        frm.Show()
+    End Sub
+
+    Public Sub showReportDebtsResume()
+        Dim frm As New frmReportDebtsResume
         frm.Show()
     End Sub
 
@@ -3001,6 +3006,40 @@ Module dataFunctions
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT
                   years_rate.year, 
+                  (SELECT
+                    SUM(payment_detail.payamount) AS ammounttotal
+                  FROM
+                    payment_detail
+                  INNER JOIN payments
+                    ON payments.idpayment = payment_detail.payment
+                  INNER JOIN account_detail
+                    ON account_detail.idaccountdetail = payment_detail.accountdetail
+                  INNER JOIN account_line
+                    ON account_line.idaccountline = payments.accountline
+                  INNER JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                  INNER JOIN service_line
+                    ON service_line.idserviceline = internal_line.serviceline
+                  INNER JOIN user_sys
+                    ON user_sys.idusersys = payments.collector" & cmdstr &
+                  " AND account_detail.ratetype = 1) AS payconsumption,
+                  (SELECT
+                    SUM(payment_detail.payamount) AS ammounttotal
+                  FROM
+                    payment_detail
+                  INNER JOIN payments
+                    ON payments.idpayment = payment_detail.payment
+                  INNER JOIN account_detail
+                    ON account_detail.idaccountdetail = payment_detail.accountdetail
+                  INNER JOIN account_line
+                    ON account_line.idaccountline = payments.accountline
+                  INNER JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                  INNER JOIN service_line 
+                    ON service_line.idserviceline = internal_line.serviceline
+                  INNER JOIN user_sys
+                    ON user_sys.idusersys = payments.collector" & cmdstr &
+                  " AND account_detail.ratetype <> 1) AS payothers,
                   IFNULL(SUM(payments.amounttotal),0) AS amounttotal 
                 FROM
                   payments
@@ -3022,6 +3061,77 @@ Module dataFunctions
                  ORDER BY payments.created ASC"
                 ada.SelectCommand = cmd
                 ada.Fill(ds, "dtReceiptsResume")
+
+                Return ds
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return ds
+            End Try
+        Else
+            Return ds
+        End If
+    End Function
+
+    Public Function reportDebtsResume(dataReport() As String) As dsDebts
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim ds As New dsDebts
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                Dim cmdstr As String = ""
+
+                cmdstr &= " WHERE "
+
+                If CBool(dataReport(0)) Then
+                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
+                Else
+                    cmdstr &= " (payments.created <> """")"
+                End If
+
+                If CBool(dataReport(3)) Then
+                    cmdstr = cmdstr & " AND (user_sys.idusersys = " & dataReport(4) & ")"
+                Else
+                    cmdstr &= " AND (user_sys.idusersys <> """")"
+                End If
+
+                If CBool(dataReport(5)) Then
+                    cmdstr = cmdstr & " AND (payments.yearrate = " & dataReport(6) & ")"
+                Else
+                    cmdstr &= " AND (payments.yearrate <> """")"
+                End If
+
+                If CBool(dataReport(7)) Then
+                    cmdstr = cmdstr & " AND (service_line.street = " & dataReport(8) & ")"
+                Else
+                    cmdstr &= " AND (service_line.street <> """")"
+                End If
+
+                cmdstr &= " AND payments.canceled = 0 "
+
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                  years_rate.year,
+                  IFNULL(SUM(account_detail.debttotal), 0) AS debtentered,
+                  (SELECT
+                    SUM(payments.amounttotal)
+                  FROM
+                    payments) AS paidout,
+                  (
+                    IFNULL(SUM(account_detail.debttotal), 0) -
+                    (SELECT
+                      IFNULL(SUM(payments.amounttotal), 0)
+                    FROM
+                      payments)
+                  ) AS debttodate
+                FROM
+                  account_detail
+                  INNER JOIN years_rate
+                    ON years_rate.idyearrate = account_detail.yearrate"
+                ada.SelectCommand = cmd
+                ada.Fill(ds, "dtDebtsResume")
 
                 Return ds
             Catch ex As Exception

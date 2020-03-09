@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class frmReportReceiptsResume
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+Partial Class frmReportDebtsResume
     Inherits System.Windows.Forms.Form
 
     'Form reemplaza a Dispose para limpiar la lista de componentes.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,11 +20,9 @@ Partial Class frmReportReceiptsResume
     'NOTA: el Diseñador de Windows Forms necesita el siguiente procedimiento
     'Se puede modificar usando el Diseñador de Windows Forms.  
     'No lo modifique con el editor de código.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.dtReceiptsResumeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
-        Me.dsReceipts = New JASS_APP.dsReceipts()
         Me.panelDatesRange = New System.Windows.Forms.Panel()
         Me.chkStreet = New System.Windows.Forms.CheckBox()
         Me.cbxStreets = New System.Windows.Forms.ComboBox()
@@ -36,21 +34,13 @@ Partial Class frmReportReceiptsResume
         Me.dtpTo = New System.Windows.Forms.DateTimePicker()
         Me.dtpSince = New System.Windows.Forms.DateTimePicker()
         Me.chkDateRange = New System.Windows.Forms.CheckBox()
-        Me.rptReceipts = New Microsoft.Reporting.WinForms.ReportViewer()
-        CType(Me.dtReceiptsResumeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.dsReceipts, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
+        Me.dtDebtsResumeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
+        Me.dsDebts = New JASS_APP.dsDebts()
         Me.panelDatesRange.SuspendLayout()
+        CType(Me.dtDebtsResumeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.dsDebts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'dtReceiptsResumeBindingSource
-        '
-        Me.dtReceiptsResumeBindingSource.DataMember = "dtReceiptsResume"
-        Me.dtReceiptsResumeBindingSource.DataSource = Me.dsReceipts
-        '
-        'dsReceipts
-        '
-        Me.dsReceipts.DataSetName = "dsReceipts"
-        Me.dsReceipts.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
         '
         'panelDatesRange
         '
@@ -71,7 +61,7 @@ Partial Class frmReportReceiptsResume
         Me.panelDatesRange.Margin = New System.Windows.Forms.Padding(0)
         Me.panelDatesRange.Name = "panelDatesRange"
         Me.panelDatesRange.Size = New System.Drawing.Size(984, 111)
-        Me.panelDatesRange.TabIndex = 2
+        Me.panelDatesRange.TabIndex = 4
         '
         'chkStreet
         '
@@ -175,41 +165,52 @@ Partial Class frmReportReceiptsResume
         Me.chkDateRange.Text = "Rango de fechas"
         Me.chkDateRange.UseVisualStyleBackColor = True
         '
-        'rptReceipts
+        'rptDebts
         '
-        Me.rptReceipts.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.rptDebts.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.rptReceipts.DocumentMapCollapsed = True
-        Me.rptReceipts.LocalReport.ReportEmbeddedResource = "JASS_APP.rptReceiptsResume.rdlc"
-        Me.rptReceipts.Location = New System.Drawing.Point(0, 114)
-        Me.rptReceipts.Name = "rptReceipts"
-        Me.rptReceipts.ServerReport.BearerToken = Nothing
-        Me.rptReceipts.Size = New System.Drawing.Size(984, 347)
-        Me.rptReceipts.TabIndex = 3
-        Me.rptReceipts.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        Me.rptDebts.DocumentMapCollapsed = True
+        Me.rptDebts.LocalReport.ReportEmbeddedResource = "JASS_APP.rptDebtsResume.rdlc"
+        Me.rptDebts.Location = New System.Drawing.Point(0, 114)
+        Me.rptDebts.Name = "rptDebts"
+        Me.rptDebts.ServerReport.BearerToken = Nothing
+        Me.rptDebts.Size = New System.Drawing.Size(984, 347)
+        Me.rptDebts.TabIndex = 5
+        Me.rptDebts.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         '
-        'frmReportReceiptsResume
+        'dtDebtsResumeBindingSource
+        '
+        Me.dtDebtsResumeBindingSource.DataMember = "dtDebtsResume"
+        Me.dtDebtsResumeBindingSource.DataSource = Me.dsDebts
+        '
+        'dsDebts
+        '
+        Me.dsDebts.DataSetName = "dsDebts"
+        Me.dsDebts.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
+        '
+        'frmReportDebtsResume
         '
         Me.AcceptButton = Me.btnReportRefresh
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(984, 461)
-        Me.Controls.Add(Me.rptReceipts)
+        Me.Controls.Add(Me.rptDebts)
         Me.Controls.Add(Me.panelDatesRange)
-        Me.Name = "frmReportReceiptsResume"
+        Me.Name = "frmReportDebtsResume"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Reporte resumen de Pagos"
+        Me.Text = "Reporte resumen de Deudas"
         Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
-        CType(Me.dtReceiptsResumeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.dsReceipts, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panelDatesRange.ResumeLayout(False)
         Me.panelDatesRange.PerformLayout()
+        CType(Me.dtDebtsResumeBindingSource, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.dsDebts, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
-
     Friend WithEvents panelDatesRange As Panel
+    Friend WithEvents chkStreet As CheckBox
+    Friend WithEvents cbxStreets As ComboBox
     Friend WithEvents btnReportRefresh As Button
     Friend WithEvents chkYearRate As CheckBox
     Friend WithEvents cbxYearRate As ComboBox
@@ -218,9 +219,7 @@ Partial Class frmReportReceiptsResume
     Friend WithEvents dtpTo As DateTimePicker
     Friend WithEvents dtpSince As DateTimePicker
     Friend WithEvents chkDateRange As CheckBox
-    Friend WithEvents rptReceipts As Microsoft.Reporting.WinForms.ReportViewer
-    Friend WithEvents dtReceiptsResumeBindingSource As BindingSource
-    Friend WithEvents dsReceipts As dsReceipts
-    Friend WithEvents chkStreet As CheckBox
-    Friend WithEvents cbxStreets As ComboBox
+    Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
+    Friend WithEvents dtDebtsResumeBindingSource As BindingSource
+    Friend WithEvents dsDebts As dsDebts
 End Class

@@ -14,6 +14,10 @@ Public Class frmNewuser
             Close()
         ElseIf vIdUserReg = "new" Then
             newUser()
+        ElseIf vIdUserReg = "edit" Then
+            newUser()
+            btnFindUser.Visible = True
+            btnFindUser.PerformClick()
         Else
             Dim dataUser() As String = getUser(vIdUserReg)
 
@@ -52,6 +56,17 @@ Public Class frmNewuser
         txtDateCreated.Text = Format(Today, "Short Date")
         txtDateUpdated.Text = Format(Today, "Short Date")
         grpUser.Focus()
+    End Sub
+
+    Public Sub userFound(Optional vDataUser() As String = Nothing)
+        vIdUserReg = vDataUser(0)
+        txtNames.Text = vDataUser(2)
+        txtSurnames.Text = vDataUser(3)
+        txtDocID.Text = vDataUser(1)
+        cbxTypeUser.SelectedValue = vDataUser(4)
+        txtAddress.Text = vDataUser(5)
+        txtTelephone.Text = vDataUser(7)
+        txtCellphone.Text = vDataUser(6)
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -94,17 +109,19 @@ Public Class frmNewuser
         If vFrmGet = 1 Then
             saveUserNew(dataUserEdited)
             newUser()
-        ElseIf vFrmGet = 2 Then
+        ElseIf vFrmGet = 2 And vIdUserReg <> "new" And vIdUserReg <> "edit" Then
             updateUser(dataUserEdited)
         ElseIf vFrmGet = 3 Then
             saveUserNew(dataUserEdited, True, vIdInternalLine)
             newUser()
         End If
-
-        'Close()
     End Sub
 
     Private Sub frmNewuser_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Dispose()
+    End Sub
+
+    Private Sub btnFindUser_Click(sender As Object, e As EventArgs) Handles btnFindUser.Click
+        showFindUsers(Nothing, 3, Me)
     End Sub
 End Class

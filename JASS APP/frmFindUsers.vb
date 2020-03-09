@@ -86,9 +86,9 @@ Public Class frmFindUsers
                 Case 2
                     frmEditLine.userFound(True, dataUser, cbxRates.SelectedValue, Convert.ToDouble(txtPriceRate.Text))
                 Case 3
-                    Dim frm As New frmAccount
+                    Dim frm As New frmNewuser
                     frm = vFrmIn
-                    frm.userFound(True, dataUser)
+                    frm.userFound(dataUser)
                 Case Else
                     Close()
             End Select
@@ -113,9 +113,15 @@ Public Class frmFindUsers
 
             Select Case vFrmGet
                 Case 1
-                    frmNewline.userFound(True, dataUser)
+                    Dim frm As New frmNewline
+                    frm = vFrmIn
+                    frm.userFound(True, dataUser)
                 Case 2
                     frmEditLine.userFound(True, dataUser, cbxRates.SelectedValue, Convert.ToDouble(txtPriceRate.Text))
+                Case 3
+                    Dim frm As New frmNewuser
+                    frm = vFrmIn
+                    frm.userFound(dataUser)
                 Case Else
                     Close()
             End Select

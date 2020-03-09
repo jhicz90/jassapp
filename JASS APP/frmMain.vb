@@ -51,6 +51,10 @@
         showReportReceiptsResume()
     End Sub
 
+    Private Sub tsmiDebtsResume_Click(sender As Object, e As EventArgs) Handles tsmiDebtsResume.Click
+        showReportDebtsResume()
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         Do
             If MdiChildren.Count > 0 Then
@@ -96,4 +100,9 @@
     Private Sub tsmiRestore_Click(sender As Object, e As EventArgs) Handles tsmiRestore.Click
         restoreDBMysql()
     End Sub
+
+    Private Sub tsmiFindUsers_Click(sender As Object, e As EventArgs) Handles tsmiFindUsers.Click
+        showNewUser("edit", Nothing, 2, Me)
+    End Sub
+
 End Class

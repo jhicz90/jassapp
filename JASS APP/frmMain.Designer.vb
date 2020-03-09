@@ -43,6 +43,7 @@ Partial Class frmMain
         Me.tsmiCollectBox = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiDeclarationServices = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiRateType = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiReceipts = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdWindows = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiMinWindows = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiMaxWindows = New System.Windows.Forms.ToolStripMenuItem()
@@ -54,6 +55,7 @@ Partial Class frmMain
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
+        Me.tsmiDebtsResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -62,12 +64,14 @@ Partial Class frmMain
         Me.tsMainToolbar.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsdpdFile, Me.tsdpdRegister, Me.tsdpdCollect, Me.tsdpdWindows, Me.tsdpdReports, Me.tsdpdHelp})
         Me.tsMainToolbar.Location = New System.Drawing.Point(0, 0)
         Me.tsMainToolbar.Name = "tsMainToolbar"
+        Me.tsMainToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
         Me.tsMainToolbar.Size = New System.Drawing.Size(1045, 25)
         Me.tsMainToolbar.TabIndex = 0
         Me.tsMainToolbar.Text = "MainToolbar"
         '
         'tsdpdFile
         '
+        Me.tsdpdFile.AutoToolTip = False
         Me.tsdpdFile.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNew, Me.tsmiPrint, Me.tsmiConfig, Me.tsmiBackup, Me.tsmiRestore, Me.tsmiExit})
         Me.tsdpdFile.Image = Global.JASS_APP.My.Resources.Resources.top_menu_32
         Me.tsdpdFile.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -169,6 +173,7 @@ Partial Class frmMain
         '
         'tsdpdRegister
         '
+        Me.tsdpdRegister.AutoToolTip = False
         Me.tsdpdRegister.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiFindLines, Me.tsmiFindUsers})
         Me.tsdpdRegister.Image = Global.JASS_APP.My.Resources.Resources.book_stack_32
         Me.tsdpdRegister.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -176,8 +181,6 @@ Partial Class frmMain
         Me.tsdpdRegister.ShowDropDownArrow = False
         Me.tsdpdRegister.Size = New System.Drawing.Size(70, 22)
         Me.tsdpdRegister.Text = "Registro"
-        Me.tsdpdRegister.ToolTipText = "Padron - Permite buscar y editar las lineas para poder" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cambiar la tarifa o modif" &
-    "icar a los titulares."
         '
         'tsmiFindLines
         '
@@ -197,15 +200,14 @@ Partial Class frmMain
         '
         'tsdpdCollect
         '
-        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiDeclarationServices, Me.tsmiRateType})
+        Me.tsdpdCollect.AutoToolTip = False
+        Me.tsdpdCollect.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectBox, Me.tsmiDeclarationServices, Me.tsmiRateType, Me.tsmiReceipts})
         Me.tsdpdCollect.Image = Global.JASS_APP.My.Resources.Resources.coins_32
         Me.tsdpdCollect.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdCollect.Name = "tsdpdCollect"
         Me.tsdpdCollect.ShowDropDownArrow = False
         Me.tsdpdCollect.Size = New System.Drawing.Size(77, 22)
         Me.tsdpdCollect.Text = "Cobranza"
-        Me.tsdpdCollect.ToolTipText = "Cobranza - Módulo que contiene el pago o cobro" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "de tarifa y el ingreso de las tar" &
-    "ifas por linea."
         '
         'tsmiCollectBox
         '
@@ -230,8 +232,16 @@ Partial Class frmMain
         Me.tsmiRateType.Size = New System.Drawing.Size(200, 22)
         Me.tsmiRateType.Text = "Tarifas y servicios"
         '
+        'tsmiReceipts
+        '
+        Me.tsmiReceipts.Image = Global.JASS_APP.My.Resources.Resources.receipt_check
+        Me.tsmiReceipts.Name = "tsmiReceipts"
+        Me.tsmiReceipts.Size = New System.Drawing.Size(200, 22)
+        Me.tsmiReceipts.Text = "Recibos"
+        '
         'tsdpdWindows
         '
+        Me.tsdpdWindows.AutoToolTip = False
         Me.tsdpdWindows.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiMinWindows, Me.tsmiMaxWindows, Me.ToolStripSeparator1, Me.tsmiCloseWindows})
         Me.tsdpdWindows.Image = Global.JASS_APP.My.Resources.Resources.restore_window_32
         Me.tsdpdWindows.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -239,7 +249,6 @@ Partial Class frmMain
         Me.tsdpdWindows.ShowDropDownArrow = False
         Me.tsdpdWindows.Size = New System.Drawing.Size(74, 22)
         Me.tsdpdWindows.Text = "Ventanas"
-        Me.tsdpdWindows.ToolTipText = "Ventanas - Facilita el manejo de las ventanas" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "con acciones rápidas."
         '
         'tsmiMinWindows
         '
@@ -266,15 +275,14 @@ Partial Class frmMain
         '
         'tsdpdReports
         '
-        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily, Me.tsmiCollectDailyResume})
+        Me.tsdpdReports.AutoToolTip = False
+        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily, Me.tsmiCollectDailyResume, Me.tsmiDebtsResume})
         Me.tsdpdReports.Image = Global.JASS_APP.My.Resources.Resources.analyze_32
         Me.tsdpdReports.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdReports.Name = "tsdpdReports"
         Me.tsdpdReports.ShowDropDownArrow = False
         Me.tsdpdReports.Size = New System.Drawing.Size(73, 22)
         Me.tsdpdReports.Text = "Reportes"
-        Me.tsdpdReports.ToolTipText = "Reportes - Imprima o exporte reportes sobre" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "cobranza, padrón de usuario o lineas" &
-    " de servicio."
         '
         'tsmiCollectDaily
         '
@@ -290,6 +298,7 @@ Partial Class frmMain
         '
         'tsdpdHelp
         '
+        Me.tsdpdHelp.AutoToolTip = False
         Me.tsdpdHelp.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiAbout})
         Me.tsdpdHelp.Image = Global.JASS_APP.My.Resources.Resources.help_32
         Me.tsdpdHelp.ImageTransparentColor = System.Drawing.Color.Magenta
@@ -301,7 +310,7 @@ Partial Class frmMain
         'tsmiAbout
         '
         Me.tsmiAbout.Name = "tsmiAbout"
-        Me.tsmiAbout.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiAbout.Size = New System.Drawing.Size(136, 22)
         Me.tsmiAbout.Text = "Acerda de..."
         '
         'stStatusToolbar
@@ -312,6 +321,12 @@ Partial Class frmMain
         Me.stStatusToolbar.Size = New System.Drawing.Size(1045, 22)
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
+        '
+        'tsmiDebtsResume
+        '
+        Me.tsmiDebtsResume.Name = "tsmiDebtsResume"
+        Me.tsmiDebtsResume.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiDebtsResume.Text = "Reporte resumen de deudas"
         '
         'frmMain
         '
@@ -366,4 +381,6 @@ Partial Class frmMain
     Friend WithEvents tsmiCollectDailyResume As ToolStripMenuItem
     Friend WithEvents tsmiBackup As ToolStripMenuItem
     Friend WithEvents tsmiRestore As ToolStripMenuItem
+    Friend WithEvents tsmiReceipts As ToolStripMenuItem
+    Friend WithEvents tsmiDebtsResume As ToolStripMenuItem
 End Class

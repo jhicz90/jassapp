@@ -48,10 +48,13 @@ Partial Class frmNewuser
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnFindUser = New System.Windows.Forms.Button()
         Me.grpUser.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.Panel3.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpUser
@@ -242,6 +245,7 @@ Partial Class frmNewuser
         Me.TableLayoutPanel3.ColumnCount = 2
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel3.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel3.Controls.Add(Me.Panel1, 0, 0)
         Me.TableLayoutPanel3.Controls.Add(Me.Panel3, 1, 0)
         Me.TableLayoutPanel3.Location = New System.Drawing.Point(12, 374)
         Me.TableLayoutPanel3.Name = "TableLayoutPanel3"
@@ -343,6 +347,28 @@ Partial Class frmNewuser
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Código de usuario"
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btnFindUser)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(3, 3)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(374, 69)
+        Me.Panel1.TabIndex = 2
+        '
+        'btnFindUser
+        '
+        Me.btnFindUser.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
+        Me.btnFindUser.Location = New System.Drawing.Point(3, 10)
+        Me.btnFindUser.Name = "btnFindUser"
+        Me.btnFindUser.Size = New System.Drawing.Size(150, 50)
+        Me.btnFindUser.TabIndex = 1
+        Me.btnFindUser.Text = "&Buscar"
+        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnFindUser.UseVisualStyleBackColor = True
+        Me.btnFindUser.Visible = False
+        '
         'frmNewuser
         '
         Me.AcceptButton = Me.btnSave
@@ -369,6 +395,7 @@ Partial Class frmNewuser
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -400,4 +427,6 @@ Partial Class frmNewuser
     Friend WithEvents Label4 As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents btnFindUser As Button
 End Class

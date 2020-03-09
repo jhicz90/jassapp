@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="dsDebts" targetNamespace="http://tempuri.org/dsDebts.xsd" xmlns:mstns="http://tempuri.org/dsDebts.xsd" xmlns="http://tempuri.org/dsDebts.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="dsDebts" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="dsDebts" msprop:Generator_UserDSName="dsDebts">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="dtDebtsResume" msprop:Generator_TableClassName="dtDebtsResumeDataTable" msprop:Generator_TableVarName="tabledtDebtsResume" msprop:Generator_TablePropName="dtDebtsResume" msprop:Generator_RowDeletingName="dtDebtsResumeRowDeleting" msprop:Generator_RowChangingName="dtDebtsResumeRowChanging" msprop:Generator_RowEvHandlerName="dtDebtsResumeRowChangeEventHandler" msprop:Generator_RowDeletedName="dtDebtsResumeRowDeleted" msprop:Generator_UserTableName="dtDebtsResume" msprop:Generator_RowChangedName="dtDebtsResumeRowChanged" msprop:Generator_RowEvArgName="dtDebtsResumeRowChangeEvent" msprop:Generator_RowClassName="dtDebtsResumeRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="year" msprop:Generator_ColumnVarNameInTable="columnyear" msprop:Generator_ColumnPropNameInRow="year" msprop:Generator_ColumnPropNameInTable="yearColumn" msprop:Generator_UserColumnName="year" type="xs:long" minOccurs="0" />
+              <xs:element name="debtentered" msprop:Generator_ColumnVarNameInTable="columndebtentered" msprop:Generator_ColumnPropNameInRow="debtentered" msprop:Generator_ColumnPropNameInTable="debtenteredColumn" msprop:Generator_UserColumnName="debtentered" type="xs:decimal" minOccurs="0" />
+              <xs:element name="paidout" msprop:Generator_ColumnVarNameInTable="columnpaidout" msprop:Generator_ColumnPropNameInRow="paidout" msprop:Generator_ColumnPropNameInTable="paidoutColumn" msprop:Generator_UserColumnName="paidout" type="xs:decimal" minOccurs="0" />
+              <xs:element name="debttodate" msprop:Generator_ColumnVarNameInTable="columndebttodate" msprop:Generator_ColumnPropNameInRow="debttodate" msprop:Generator_ColumnPropNameInTable="debttodateColumn" msprop:Generator_UserColumnName="debttodate" type="xs:decimal" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

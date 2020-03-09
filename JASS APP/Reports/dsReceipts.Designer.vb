@@ -480,7 +480,7 @@ Partial Public Class dsReceipts
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Overloads Function AdddtReceiptsRow(ByVal idpayment As String, ByVal fullname As String, ByVal payer As String, ByVal codepay As String, ByVal state As String, ByVal year As String, ByVal amount As Decimal, ByVal name As String, ByVal created As String) As dtReceiptsRow
+        Public Overloads Function AdddtReceiptsRow(ByVal idpayment As String, ByVal fullname As String, ByVal payer As String, ByVal codepay As String, ByVal state As String, ByVal year As String, ByVal amount As Decimal, ByVal name As String, ByVal created As Date) As dtReceiptsRow
             Dim rowdtReceiptsRow As dtReceiptsRow = CType(Me.NewRow,dtReceiptsRow)
             Dim columnValuesArray() As Object = New Object() {idpayment, fullname, payer, codepay, state, year, amount, name, created}
             rowdtReceiptsRow.ItemArray = columnValuesArray
@@ -535,7 +535,7 @@ Partial Public Class dsReceipts
             MyBase.Columns.Add(Me.columnamount)
             Me.columnname = New Global.System.Data.DataColumn("name", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnname)
-            Me.columncreated = New Global.System.Data.DataColumn("created", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            Me.columncreated = New Global.System.Data.DataColumn("created", GetType(Date), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columncreated)
         End Sub
         
@@ -678,6 +678,10 @@ Partial Public Class dsReceipts
         
         Private columnamounttotal As Global.System.Data.DataColumn
         
+        Private columnpayconsumption As Global.System.Data.DataColumn
+        
+        Private columnpayothers As Global.System.Data.DataColumn
+        
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Sub New()
@@ -730,6 +734,22 @@ Partial Public Class dsReceipts
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property payconsumptionColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnpayconsumption
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public ReadOnly Property payothersColumn() As Global.System.Data.DataColumn
+            Get
+                Return Me.columnpayothers
+            End Get
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0"),  _
          Global.System.ComponentModel.Browsable(false)>  _
         Public ReadOnly Property Count() As Integer
@@ -766,9 +786,9 @@ Partial Public Class dsReceipts
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Overloads Function AdddtReceiptsResumeRow(ByVal year As String, ByVal amounttotal As Decimal) As dtReceiptsResumeRow
+        Public Overloads Function AdddtReceiptsResumeRow(ByVal year As String, ByVal amounttotal As Decimal, ByVal payconsumption As Decimal, ByVal payothers As Decimal) As dtReceiptsResumeRow
             Dim rowdtReceiptsResumeRow As dtReceiptsResumeRow = CType(Me.NewRow,dtReceiptsResumeRow)
-            Dim columnValuesArray() As Object = New Object() {year, amounttotal}
+            Dim columnValuesArray() As Object = New Object() {year, amounttotal, payconsumption, payothers}
             rowdtReceiptsResumeRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowdtReceiptsResumeRow)
             Return rowdtReceiptsResumeRow
@@ -793,6 +813,8 @@ Partial Public Class dsReceipts
         Friend Sub InitVars()
             Me.columnyear = MyBase.Columns("year")
             Me.columnamounttotal = MyBase.Columns("amounttotal")
+            Me.columnpayconsumption = MyBase.Columns("payconsumption")
+            Me.columnpayothers = MyBase.Columns("payothers")
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -802,6 +824,10 @@ Partial Public Class dsReceipts
             MyBase.Columns.Add(Me.columnyear)
             Me.columnamounttotal = New Global.System.Data.DataColumn("amounttotal", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnamounttotal)
+            Me.columnpayconsumption = New Global.System.Data.DataColumn("payconsumption", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnpayconsumption)
+            Me.columnpayothers = New Global.System.Data.DataColumn("payothers", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnpayothers)
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
@@ -1068,10 +1094,10 @@ Partial Public Class dsReceipts
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Property created() As String
+        Public Property created() As Date
             Get
                 Try 
-                    Return CType(Me(Me.tabledtReceipts.createdColumn),String)
+                    Return CType(Me(Me.tabledtReceipts.createdColumn),Date)
                 Catch e As Global.System.InvalidCastException
                     Throw New Global.System.Data.StrongTypingException("El valor de la columna 'created' de la tabla 'dtReceipts' es DBNull.", e)
                 End Try
@@ -1237,6 +1263,37 @@ Partial Public Class dsReceipts
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property payconsumption() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tabledtReceiptsResume.payconsumptionColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'payconsumption' de la tabla 'dtReceiptsResume' es DBNull."& _ 
+                            "", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tabledtReceiptsResume.payconsumptionColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property payothers() As Decimal
+            Get
+                Try 
+                    Return CType(Me(Me.tabledtReceiptsResume.payothersColumn),Decimal)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'payothers' de la tabla 'dtReceiptsResume' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tabledtReceiptsResume.payothersColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Function IsyearNull() As Boolean
             Return Me.IsNull(Me.tabledtReceiptsResume.yearColumn)
         End Function
@@ -1257,6 +1314,30 @@ Partial Public Class dsReceipts
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Sub SetamounttotalNull()
             Me(Me.tabledtReceiptsResume.amounttotalColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IspayconsumptionNull() As Boolean
+            Return Me.IsNull(Me.tabledtReceiptsResume.payconsumptionColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetpayconsumptionNull()
+            Me(Me.tabledtReceiptsResume.payconsumptionColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function IspayothersNull() As Boolean
+            Return Me.IsNull(Me.tabledtReceiptsResume.payothersColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub SetpayothersNull()
+            Me(Me.tabledtReceiptsResume.payothersColumn) = Global.System.Convert.DBNull
         End Sub
     End Class
     
