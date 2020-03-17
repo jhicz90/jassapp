@@ -103,6 +103,7 @@ Partial Class frmRateType
         Me.chkPeriodic.TabIndex = 4
         Me.chkPeriodic.Text = "Tarifa mensualizada"
         Me.chkPeriodic.UseVisualStyleBackColor = True
+        Me.chkPeriodic.Visible = False
         '
         'btnSaveService
         '
@@ -209,7 +210,7 @@ Partial Class frmRateType
         Me.tabpageServices.Padding = New System.Windows.Forms.Padding(3)
         Me.tabpageServices.Size = New System.Drawing.Size(776, 424)
         Me.tabpageServices.TabIndex = 0
-        Me.tabpageServices.Text = "Declaración de servicios"
+        Me.tabpageServices.Text = "Servicios"
         Me.tabpageServices.UseVisualStyleBackColor = True
         '
         'tabpageYear
@@ -377,7 +378,7 @@ Partial Class frmRateType
         Me.Controls.Add(Me.tabRates)
         Me.Name = "frmRateType"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Tarifas y servicios"
+        Me.Text = "Años, tarifas y servicios"
         CType(Me.dtgRateType, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabRates.ResumeLayout(False)
         Me.tabpageServices.ResumeLayout(False)

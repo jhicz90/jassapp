@@ -29,6 +29,14 @@
         showGenerateYear(vIdInternalLine)
         initDetail()
     End Sub
+    Private Sub btnAddDebtDetail_Click(sender As Object, e As EventArgs) Handles btnAddDebtDetail.Click
+        If dtgAccountYear.Rows.Count > 0 And dtgAccountYear.SelectedRows(0).Index <> -1 Then
+            showGenerateService(dtgAccountYear.Item(0, dtgAccountYear.SelectedRows(0).Index).Value)
+            initDetail()
+        Else
+            MsgBox("La lista no contiene registros o necesita seleccionar un registro", vbInformation, "Aviso")
+        End If
+    End Sub
 
     Private Sub dtgAccountYear_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgAccountYear.CellClick
         If e.RowIndex <> -1 Then
@@ -36,6 +44,8 @@
                 showGenerateDetail(dtgAccountYear.Item(0, e.RowIndex).Value)
                 initDetail()
             End If
+        Else
+            MsgBox("Seleccione un registro de la lista", vbInformation, "Aviso")
         End If
     End Sub
 End Class

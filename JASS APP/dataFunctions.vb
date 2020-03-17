@@ -330,6 +330,30 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub listServices(vControl As ComboBox)
+        Dim ds As New DataSet
+        Dim ada As New MySqlDataAdapter
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                ada.SelectCommand = New MySqlCommand("SELECT idratetype, (CONCAT(name, "" - "", description)) AS namerate FROM rate_types", cnnx)
+                ada.Fill(ds)
+
+                vControl.DataSource = ds.Tables(0)
+                vControl.ValueMember = "idratetype"
+                vControl.DisplayMember = "namerate"
+
+                If vControl.Items.Count > 0 Then
+                    vControl.SelectedIndex = 0
+                End If
+            Catch ex As Exception
+                MsgBox(ex.Message)
+                vControl.Enabled = False
+                vControl.SelectedIndex = -1
+            End Try
+        End If
+    End Sub
+
     Public Sub listAvenues(vControl As ComboBox)
         Dim ds As New DataSet
         Dim ada As New MySqlDataAdapter
@@ -854,6 +878,33 @@ Module dataFunctions
                 Return codeLine
             Catch ex As Exception
                 Return Nothing
+            End Try
+        End If
+    End Function
+
+    Public Function getServiceRate(vIdService As Integer) As Boolean
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableService As New DataTable
+
+        If cnnx.DataSource.Equals("") Then
+            Return False
+        Else
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT rate_types.periodic FROM rate_types WHERE rate_types.idratetype LIKE @idratetype"
+                cmd.Parameters.AddWithValue("idratetype", vIdService)
+                ada.SelectCommand = cmd
+                ada.Fill(tableService)
+
+                If tableService.Rows.Count > 0 Then
+                    Return tableService.Rows(0).Item(0).ToString
+                Else
+                    Return False
+                End If
+            Catch ex As Exception
+                Return False
             End Try
         End If
     End Function
@@ -1410,6 +1461,16 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub showReceipts(Optional vfrmMdiParent As Form = Nothing)
+        Dim frm As New frmReceipts
+        If IsNothing(vfrmMdiParent) Then
+            frm.ShowDialog()
+        Else
+            frm.MdiParent = vfrmMdiParent
+            frm.Show()
+        End If
+    End Sub
+
     Public Sub showReportReceipts()
         Dim frm As New frmReportReceipts
         frm.Show()
@@ -1464,6 +1525,12 @@ Module dataFunctions
     Public Sub showGenerateYear(vIdInternalLine As String)
         Dim frm As New frmDebtRecordYear
         frm.vIdInternalLine = vIdInternalLine
+        frm.ShowDialog()
+    End Sub
+
+    Public Sub showGenerateService(vIdAccountLine As String)
+        Dim frm As New frmDebtRecordService
+        frm.vIdAccountLine = vIdAccountLine
         frm.ShowDialog()
     End Sub
 
@@ -2190,6 +2257,52 @@ Module dataFunctions
         Else
             MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
             Return Nothing
+        End If
+    End Function
+
+    Public Function getAccountLine(vIdAccount As String) As String()
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableAccount As New DataTable
+
+        If cnnx.DataSource.Equals("") Then
+            Return Nothing
+        Else
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                  account_line.idaccountline,
+                  account_line.internalline,
+                  years_rate.idyearrate,
+                  years_rate.year,
+                  account_line.debttotal,
+                  account_line.saldototal
+                FROM
+                  account_line
+                  INNER JOIN years_rate
+                    ON years_rate.idyearrate = account_line.yearrate 
+                WHERE account_line.idaccountline = @idaccount"
+                cmd.Parameters.AddWithValue("idaccount", vIdAccount)
+                ada.SelectCommand = cmd
+                ada.Fill(tableAccount)
+
+                If tableAccount.Rows.Count > 0 Then
+                    Dim dataAccount(5) As String
+                    dataAccount(0) = tableAccount.Rows(0).Item(0).ToString 'Id de cuenta
+                    dataAccount(1) = tableAccount.Rows(0).Item(1).ToString 'Id de linea interna
+                    dataAccount(2) = tableAccount.Rows(0).Item(2).ToString 'Id de año
+                    dataAccount(3) = tableAccount.Rows(0).Item(3).ToString 'Año
+                    dataAccount(4) = tableAccount.Rows(0).Item(4).ToString 'Deuda inicial
+                    dataAccount(5) = tableAccount.Rows(0).Item(5).ToString 'Saldo total
+
+                    Return dataAccount
+                Else
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                Return Nothing
+            End Try
         End If
     End Function
 
@@ -3081,13 +3194,17 @@ Module dataFunctions
         If Not cnnx.DataSource.Equals("") Then
             Try
                 Dim cmdstr As String = ""
+                Dim cmdstr2 As String = ""
 
                 cmdstr &= " WHERE "
+                cmdstr2 &= " WHERE "
 
                 If CBool(dataReport(0)) Then
                     cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
+                    cmdstr2 = cmdstr2 & "(DATE_FORMAT(account_detail.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
                 Else
                     cmdstr &= " (payments.created <> """")"
+                    cmdstr2 &= " (account_detail.created <> """")"
                 End If
 
                 If CBool(dataReport(3)) Then
@@ -3098,14 +3215,18 @@ Module dataFunctions
 
                 If CBool(dataReport(5)) Then
                     cmdstr = cmdstr & " AND (payments.yearrate = " & dataReport(6) & ")"
+                    cmdstr2 = cmdstr2 & " AND (account_detail.yearrate = " & dataReport(6) & ")"
                 Else
                     cmdstr &= " AND (payments.yearrate <> """")"
+                    cmdstr2 &= " AND (account_detail.yearrate <> """")"
                 End If
 
                 If CBool(dataReport(7)) Then
                     cmdstr = cmdstr & " AND (service_line.street = " & dataReport(8) & ")"
+                    cmdstr2 = cmdstr2 & " AND (service_line.street = " & dataReport(8) & ")"
                 Else
                     cmdstr &= " AND (service_line.street <> """")"
+                    cmdstr2 &= " AND (service_line.street <> """")"
                 End If
 
                 cmdstr &= " AND payments.canceled = 0 "
@@ -3113,23 +3234,61 @@ Module dataFunctions
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT
-                  years_rate.year,
-                  IFNULL(SUM(account_detail.debttotal), 0) AS debtentered,
-                  (SELECT
-                    SUM(payments.amounttotal)
-                  FROM
-                    payments) AS paidout,
-                  (
+                    years_rate.year,
+                    IFNULL(SUM(account_detail.debttotal), 0) AS debtentered,
+                    (SELECT
+                    IFNULL(SUM(payments.amounttotal), 0) AS amounttotal
+                    FROM
+                    payments
+                    INNER JOIN user_sys
+                        ON user_sys.idusersys = payments.collector
+                    INNER JOIN years_rate
+                        ON years_rate.idyearrate = payments.yearrate
+                    INNER JOIN account_line
+                        ON account_line.idaccountline = payments.accountline
+                    INNER JOIN internal_line
+                        ON internal_line.idinternalline = account_line.internalline
+                    INNER JOIN users_line
+                        ON users_line.internalline = internal_line.idinternalline
+                    INNER JOIN user_reg
+                        ON user_reg.iduserreg = users_line.userreg
+                    INNER JOIN service_line
+                        ON service_line.idserviceline = internal_line.serviceline
+                    " & cmdstr & ") AS paidout,
+                    (
                     IFNULL(SUM(account_detail.debttotal), 0) -
                     (SELECT
-                      IFNULL(SUM(payments.amounttotal), 0)
+                        IFNULL(SUM(payments.amounttotal), 0) AS amounttotal
                     FROM
-                      payments)
-                  ) AS debttodate
+                        payments
+                        INNER JOIN user_sys
+                        ON user_sys.idusersys = payments.collector
+                        INNER JOIN years_rate
+                        ON years_rate.idyearrate = payments.yearrate
+                        INNER JOIN account_line
+                        ON account_line.idaccountline = payments.accountline
+                        INNER JOIN internal_line
+                        ON internal_line.idinternalline = account_line.internalline
+                        INNER JOIN users_line
+                        ON users_line.internalline = internal_line.idinternalline
+                        INNER JOIN user_reg
+                        ON user_reg.iduserreg = users_line.userreg
+                        INNER JOIN service_line
+                        ON service_line.idserviceline = internal_line.serviceline
+                   " & cmdstr & ")
+                    ) AS debttodate
                 FROM
-                  account_detail
-                  INNER JOIN years_rate
-                    ON years_rate.idyearrate = account_detail.yearrate"
+                    account_detail
+                    INNER JOIN years_rate
+                    ON years_rate.idyearrate = account_detail.yearrate
+                    INNER JOIN account_line
+                    ON account_line.idaccountline = account_detail.accountline
+                    INNER JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                    INNER JOIN service_line
+                    ON service_line.idserviceline = internal_line.serviceline
+               " & cmdstr2 & " GROUP BY years_rate.year
+                   ORDER BY years_rate.year ASC"
                 ada.SelectCommand = cmd
                 ada.Fill(ds, "dtDebtsResume")
 

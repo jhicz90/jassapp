@@ -33,8 +33,6 @@ Public Class frmReportDebtsResume
         rptDebts.ZoomMode = ZoomMode.PageWidth
         critReport()
         rptDebts.RefreshReport()
-        Me.rptDebts.RefreshReport()
-        Me.rptDebts.RefreshReport()
     End Sub
 
     Public Sub initReport()

@@ -52,10 +52,10 @@ Partial Class frmMain
         Me.tsdpdReports = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiCollectDaily = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiCollectDailyResume = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiDebtsResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
-        Me.tsmiDebtsResume = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -230,7 +230,7 @@ Partial Class frmMain
         Me.tsmiRateType.Image = Global.JASS_APP.My.Resources.Resources.todo_list
         Me.tsmiRateType.Name = "tsmiRateType"
         Me.tsmiRateType.Size = New System.Drawing.Size(200, 22)
-        Me.tsmiRateType.Text = "Tarifas y servicios"
+        Me.tsmiRateType.Text = "Años, tarifas y servicios"
         '
         'tsmiReceipts
         '
@@ -296,6 +296,12 @@ Partial Class frmMain
         Me.tsmiCollectDailyResume.Size = New System.Drawing.Size(263, 22)
         Me.tsmiCollectDailyResume.Text = "Reporte resumen de cobranza diaria"
         '
+        'tsmiDebtsResume
+        '
+        Me.tsmiDebtsResume.Name = "tsmiDebtsResume"
+        Me.tsmiDebtsResume.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiDebtsResume.Text = "Reporte resumen de deudas"
+        '
         'tsdpdHelp
         '
         Me.tsdpdHelp.AutoToolTip = False
@@ -321,12 +327,6 @@ Partial Class frmMain
         Me.stStatusToolbar.Size = New System.Drawing.Size(1045, 22)
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
-        '
-        'tsmiDebtsResume
-        '
-        Me.tsmiDebtsResume.Name = "tsmiDebtsResume"
-        Me.tsmiDebtsResume.Size = New System.Drawing.Size(263, 22)
-        Me.tsmiDebtsResume.Text = "Reporte resumen de deudas"
         '
         'frmMain
         '

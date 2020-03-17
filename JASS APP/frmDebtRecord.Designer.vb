@@ -36,13 +36,13 @@ Partial Class frmDebtRecord
         Me.btnAddDebtDetail = New System.Windows.Forms.Button()
         Me.btnAddYear = New System.Windows.Forms.Button()
         Me.dtgAccountYear = New System.Windows.Forms.DataGridView()
-        Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmMontoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmPayedTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmSaldoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.clmEdit = New System.Windows.Forms.DataGridViewButtonColumn()
+        Me.clmEstado = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmSaldoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmPayedTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmMontoTotal = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmYear = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.clmIdAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.GroupBox1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         CType(Me.dtgAccountYear, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -207,49 +207,6 @@ Partial Class frmDebtRecord
         Me.dtgAccountYear.Size = New System.Drawing.Size(768, 339)
         Me.dtgAccountYear.TabIndex = 5
         '
-        'clmIdAccount
-        '
-        Me.clmIdAccount.HeaderText = "Id de Cuenta"
-        Me.clmIdAccount.Name = "clmIdAccount"
-        Me.clmIdAccount.ReadOnly = True
-        Me.clmIdAccount.Visible = False
-        '
-        'clmYear
-        '
-        Me.clmYear.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        Me.clmYear.HeaderText = "Año"
-        Me.clmYear.Name = "clmYear"
-        Me.clmYear.ReadOnly = True
-        Me.clmYear.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmMontoTotal
-        '
-        Me.clmMontoTotal.HeaderText = "Monto Total"
-        Me.clmMontoTotal.Name = "clmMontoTotal"
-        Me.clmMontoTotal.ReadOnly = True
-        Me.clmMontoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmPayedTotal
-        '
-        Me.clmPayedTotal.HeaderText = "Pagado"
-        Me.clmPayedTotal.Name = "clmPayedTotal"
-        Me.clmPayedTotal.ReadOnly = True
-        Me.clmPayedTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmSaldoTotal
-        '
-        Me.clmSaldoTotal.HeaderText = "Saldo Total"
-        Me.clmSaldoTotal.Name = "clmSaldoTotal"
-        Me.clmSaldoTotal.ReadOnly = True
-        Me.clmSaldoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
-        'clmEstado
-        '
-        Me.clmEstado.HeaderText = "Estado"
-        Me.clmEstado.Name = "clmEstado"
-        Me.clmEstado.ReadOnly = True
-        Me.clmEstado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
-        '
         'clmEdit
         '
         Me.clmEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
@@ -259,6 +216,49 @@ Partial Class frmDebtRecord
         Me.clmEdit.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.clmEdit.Text = "Editar"
         Me.clmEdit.UseColumnTextForButtonValue = True
+        '
+        'clmEstado
+        '
+        Me.clmEstado.HeaderText = "Estado"
+        Me.clmEstado.Name = "clmEstado"
+        Me.clmEstado.ReadOnly = True
+        Me.clmEstado.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmSaldoTotal
+        '
+        Me.clmSaldoTotal.HeaderText = "Saldo Total"
+        Me.clmSaldoTotal.Name = "clmSaldoTotal"
+        Me.clmSaldoTotal.ReadOnly = True
+        Me.clmSaldoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmPayedTotal
+        '
+        Me.clmPayedTotal.HeaderText = "Pagado"
+        Me.clmPayedTotal.Name = "clmPayedTotal"
+        Me.clmPayedTotal.ReadOnly = True
+        Me.clmPayedTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmMontoTotal
+        '
+        Me.clmMontoTotal.HeaderText = "Monto Total"
+        Me.clmMontoTotal.Name = "clmMontoTotal"
+        Me.clmMontoTotal.ReadOnly = True
+        Me.clmMontoTotal.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmYear
+        '
+        Me.clmYear.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
+        Me.clmYear.HeaderText = "Año"
+        Me.clmYear.Name = "clmYear"
+        Me.clmYear.ReadOnly = True
+        Me.clmYear.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable
+        '
+        'clmIdAccount
+        '
+        Me.clmIdAccount.HeaderText = "Id de Cuenta"
+        Me.clmIdAccount.Name = "clmIdAccount"
+        Me.clmIdAccount.ReadOnly = True
+        Me.clmIdAccount.Visible = False
         '
         'frmDebtRecord
         '
@@ -293,6 +293,8 @@ Partial Class frmDebtRecord
     Friend WithEvents Label10 As Label
     Friend WithEvents GroupBox2 As GroupBox
     Friend WithEvents dtgAccountYear As DataGridView
+    Friend WithEvents btnAddYear As Button
+    Friend WithEvents btnAddDebtDetail As Button
     Friend WithEvents clmIdAccount As DataGridViewTextBoxColumn
     Friend WithEvents clmYear As DataGridViewTextBoxColumn
     Friend WithEvents clmMontoTotal As DataGridViewTextBoxColumn
@@ -300,6 +302,4 @@ Partial Class frmDebtRecord
     Friend WithEvents clmSaldoTotal As DataGridViewTextBoxColumn
     Friend WithEvents clmEstado As DataGridViewTextBoxColumn
     Friend WithEvents clmEdit As DataGridViewButtonColumn
-    Friend WithEvents btnAddYear As Button
-    Friend WithEvents btnAddDebtDetail As Button
 End Class

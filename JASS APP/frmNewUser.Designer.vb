@@ -39,6 +39,8 @@ Partial Class frmNewuser
         Me.txtCellphone = New System.Windows.Forms.TextBox()
         Me.txtTelephone = New System.Windows.Forms.TextBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnFindUser = New System.Windows.Forms.Button()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.btnSave = New System.Windows.Forms.Button()
         Me.btnCancel = New System.Windows.Forms.Button()
@@ -48,13 +50,11 @@ Partial Class frmNewuser
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.btnFindUser = New System.Windows.Forms.Button()
         Me.grpUser.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'grpUser
@@ -255,6 +255,28 @@ Partial Class frmNewuser
         Me.TableLayoutPanel3.Size = New System.Drawing.Size(760, 75)
         Me.TableLayoutPanel3.TabIndex = 3
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btnFindUser)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(3, 3)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(374, 69)
+        Me.Panel1.TabIndex = 2
+        '
+        'btnFindUser
+        '
+        Me.btnFindUser.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
+        Me.btnFindUser.Location = New System.Drawing.Point(3, 10)
+        Me.btnFindUser.Name = "btnFindUser"
+        Me.btnFindUser.Size = New System.Drawing.Size(150, 50)
+        Me.btnFindUser.TabIndex = 1
+        Me.btnFindUser.Text = "&Buscar"
+        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
+        Me.btnFindUser.UseVisualStyleBackColor = True
+        Me.btnFindUser.Visible = False
+        '
         'Panel3
         '
         Me.Panel3.Controls.Add(Me.btnSave)
@@ -347,28 +369,6 @@ Partial Class frmNewuser
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Código de usuario"
         '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.btnFindUser)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(3, 3)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(374, 69)
-        Me.Panel1.TabIndex = 2
-        '
-        'btnFindUser
-        '
-        Me.btnFindUser.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnFindUser.Image = Global.JASS_APP.My.Resources.Resources.find_user_male_32
-        Me.btnFindUser.Location = New System.Drawing.Point(3, 10)
-        Me.btnFindUser.Name = "btnFindUser"
-        Me.btnFindUser.Size = New System.Drawing.Size(150, 50)
-        Me.btnFindUser.TabIndex = 1
-        Me.btnFindUser.Text = "&Buscar"
-        Me.btnFindUser.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
-        Me.btnFindUser.UseVisualStyleBackColor = True
-        Me.btnFindUser.Visible = False
-        '
         'frmNewuser
         '
         Me.AcceptButton = Me.btnSave
@@ -394,8 +394,8 @@ Partial Class frmNewuser
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.TableLayoutPanel3.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

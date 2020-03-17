@@ -793,6 +793,16 @@ Namespace My.Resources
         '''<summary>
         '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
         '''</summary>
+        Friend ReadOnly Property iconReceipts() As System.Drawing.Icon
+            Get
+                Dim obj As Object = ResourceManager.GetObject("iconReceipts", resourceCulture)
+                Return CType(obj,System.Drawing.Icon)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Busca un recurso adaptado de tipo System.Drawing.Icon similar a (Icono).
+        '''</summary>
         Friend ReadOnly Property iconSearch() As System.Drawing.Icon
             Get
                 Dim obj As Object = ResourceManager.GetObject("iconSearch", resourceCulture)

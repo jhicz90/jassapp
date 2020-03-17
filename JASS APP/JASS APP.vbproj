@@ -195,6 +195,12 @@
     <Compile Include="frmDebtRecordDetail.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmDebtRecordService.Designer.vb">
+      <DependentUpon>frmDebtRecordService.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmDebtRecordService.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmDebtRecordYear.Designer.vb">
       <DependentUpon>frmDebtRecordYear.vb</DependentUpon>
     </Compile>
@@ -281,6 +287,12 @@
     <Compile Include="frmReceipt.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmReceipts.Designer.vb">
+      <DependentUpon>frmReceipts.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReceipts.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmReportDebtsResume.Designer.vb">
       <DependentUpon>frmReportDebtsResume.vb</DependentUpon>
     </Compile>
@@ -353,6 +365,9 @@
     <EmbeddedResource Include="frmDebtRecordDetail.resx">
       <DependentUpon>frmDebtRecordDetail.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDebtRecordService.resx">
+      <DependentUpon>frmDebtRecordService.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmDebtRecordYear.resx">
       <DependentUpon>frmDebtRecordYear.vb</DependentUpon>
     </EmbeddedResource>
@@ -394,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmReceipt.resx">
       <DependentUpon>frmReceipt.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReceipts.resx">
+      <DependentUpon>frmReceipts.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmReportDebtsResume.resx">
       <DependentUpon>frmReportDebtsResume.vb</DependentUpon>
@@ -695,6 +713,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\btn-add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iconReceipts.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

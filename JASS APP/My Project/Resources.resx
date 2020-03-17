@@ -334,6 +334,9 @@
   <data name="iconReceipt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iconReceipt.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="iconReceipts" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\iconReceipts.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="iconSearch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\iconSearch.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

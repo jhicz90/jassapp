@@ -50,6 +50,7 @@ Partial Class frmDebtRecordYear
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btnClose.Location = New System.Drawing.Point(297, 76)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(75, 23)
@@ -78,7 +79,9 @@ Partial Class frmDebtRecordYear
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.cbxYearRate)
         Me.Controls.Add(Me.Label1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "frmDebtRecordYear"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Añadir año"

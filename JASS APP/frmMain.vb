@@ -43,6 +43,10 @@
         showRateType(Me)
     End Sub
 
+    Private Sub tsmiReceipts_Click(sender As Object, e As EventArgs) Handles tsmiReceipts.Click
+        showReceipts(Me)
+    End Sub
+
     Private Sub tsmiCollectDaily_Click(sender As Object, e As EventArgs) Handles tsmiCollectDaily.Click
         showReportReceipts()
     End Sub
@@ -104,5 +108,4 @@
     Private Sub tsmiFindUsers_Click(sender As Object, e As EventArgs) Handles tsmiFindUsers.Click
         showNewUser("edit", Nothing, 2, Me)
     End Sub
-
 End Class

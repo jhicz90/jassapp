@@ -11,6 +11,10 @@
 
         nudYear.Maximum = Year(Today)
 
+        If My.Settings.vUserIdLogin = 1 Then
+            chkPeriodic.Visible = True
+        End If
+
         listRateTypes(dtgRateType)
         listYears(dtgYears)
     End Sub
