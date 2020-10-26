@@ -1898,11 +1898,47 @@ Module dataFunctions
         End If
     End Sub
 
+    Public Sub registerCancelReceipt(vNumReceipt As Integer)
+        Dim cmdFindReceipts, cmdInsertCancelReceipt As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableReceipts As New DataTable
+        Dim numReceipt As String = vNumReceipt.ToString.PadLeft(7, "0")
+
+        If Not cnnx.DataSource.Equals("") Then
+            cmdFindReceipts.Connection = cnnx
+            cmdFindReceipts.CommandType = CommandType.Text
+            cmdFindReceipts.CommandText = "SELECT * FROM payments WHERE payments.codepay LIKE @codepayment"
+            cmdFindReceipts.Parameters.AddWithValue("codepayment", numReceipt)
+            ada.SelectCommand = cmdFindReceipts
+            ada.Fill(tableReceipts)
+
+            If tableReceipts.Rows.Count > 0 Then
+                MsgBox("El recibo N°" & numReceipt & " esta registrado anulelo desde la lista", vbCritical, "Aviso")
+            Else
+                If MsgBox("¿Desea registrar el recibo N°" & numReceipt & " como anulado?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
+                    cmdInsertCancelReceipt.Connection = cnnx
+                    cmdInsertCancelReceipt.CommandType = CommandType.Text
+                    cmdInsertCancelReceipt.CommandText = "INSERT INTO payments(codepay, accountline, yearrate, canceled, amounttotal, payer, collector) VALUES(@codepay, @accountline, @yearrate, @canceled, @amounttotal, @payer, @collector)"
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("codepay", numReceipt)
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("accountline", 0)
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("yearrate", My.Settings.vIdYear)
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("canceled", 1)
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("amounttotal", 0)
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("payer", "ANULADO")
+                    cmdInsertCancelReceipt.Parameters.AddWithValue("collector", My.Settings.vUserIdLogin)
+                    cmdInsertCancelReceipt.ExecuteNonQuery()
+                End If
+            End If
+        Else
+            MsgBox("No se conecto con la base de datos", vbCritical, "Aviso")
+        End If
+    End Sub
+
     Public Function cancelReceipt(dgDetail As DataGridView, vIdPayment As String, vNumReceipt As String, vDatePay As Date) As Boolean
         Dim cmdUpdateReceipt As New MySqlCommand
         Dim cmdUpdateAccountLine As New MySqlCommand
 
-        If Not (cnnx.DataSource.Equals("")) Then
+        If Not cnnx.DataSource.Equals("") Then
             If DateDiff(DateInterval.Day, CDate(Format(vDatePay, "dd/MM/yyyy")), Today) <= 7 Then
                 If MsgBox("¿Desea anular el recibo N°" & vNumReceipt & "?", MsgBoxStyle.YesNo + vbExclamation, "Aviso") = MsgBoxResult.Yes Then
                     If Not (vIdPayment = Nothing And dgDetail.Rows.Count > 0) Then
@@ -2808,6 +2844,56 @@ Module dataFunctions
                 MsgBox("Ocurrio un error al cargar los datos", vbExclamation, "Aviso")
                 MsgBox(ex.Message)
                 dgYears.Rows.Clear()
+            End Try
+        End If
+    End Sub
+
+    Public Sub listLastReceipts(dgReceipts As DataGridView, vNumReceipt As String, Optional vSeeNumReceipts As Integer = 10)
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim tableReceipts As New DataTable
+        Dim valNumReceipt As Integer = Val(vNumReceipt)
+
+        dgReceipts.Rows.Clear()
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = "SELECT
+                    payments.idpayment,
+                    payments.codepay,
+                    payments.accountline,
+                    years_rate.year,
+                    IF(payments.canceled,""Anulado"","""") AS state,
+                    payments.amounttotal,
+                    payments.payer,
+                    UCASE(user_sys.name) AS usercollect,
+                    payments.created,
+                    payments.updated
+                FROM
+                    payments
+                    INNER JOIN years_rate
+                    ON years_rate.idyearrate = payments.yearrate
+                    LEFT JOIN account_line
+                    ON account_line.idaccountline = payments.accountline
+                    LEFT JOIN internal_line
+                    ON internal_line.idinternalline = account_line.internalline
+                    INNER JOIN user_sys
+                    ON user_sys.idusersys = payments.collector
+                WHERE CONVERT(payments.codepay,SIGNED) <= @numreceipt
+                ORDER BY payments.created DESC
+                LIMIT " & vSeeNumReceipts
+                cmd.Parameters.AddWithValue("numreceipt", valNumReceipt)
+                ada.SelectCommand = cmd
+                ada.Fill(tableReceipts)
+
+                For index As Integer = 0 To tableReceipts.Rows.Count - 1
+                    dgReceipts.Rows.Add(tableReceipts.Rows(index).Item(0).ToString, tableReceipts.Rows(index).Item(2).ToString, tableReceipts.Rows(index).Item(3).ToString, tableReceipts.Rows(index).Item(1).ToString, tableReceipts.Rows(index).Item(4).ToString, Format(CDec(tableReceipts.Rows(index).Item(5).ToString), "###,##0.00"), tableReceipts.Rows(index).Item(6).ToString, tableReceipts.Rows(index).Item(7).ToString, tableReceipts.Rows(index).Item(8).ToString)
+                Next
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar los datos", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                dgReceipts.Rows.Clear()
             End Try
         End If
     End Sub

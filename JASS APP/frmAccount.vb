@@ -83,7 +83,7 @@
     End Sub
 
     Private Sub btnFindUser_Click(sender As Object, e As EventArgs) Handles btnFindUser.Click
-        showFindUsers(Nothing, 3, Me)
+        showFindUsers(Nothing, 4, Me)
     End Sub
 
     Private Sub dtgUsersAccount_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dtgUsersAccount.CellContentClick

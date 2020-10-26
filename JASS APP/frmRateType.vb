@@ -9,7 +9,7 @@
     Private Sub frmRateType_Load(sender As Object, e As EventArgs) Handles Me.Load
         Icon = My.Resources.iconRate
 
-        nudYear.Maximum = Year(Today)
+        nudYear.Maximum = Year(Today) + 1
 
         If My.Settings.vUserIdLogin = 1 Then
             chkPeriodic.Visible = True

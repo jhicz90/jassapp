@@ -89,6 +89,10 @@ Public Class frmFindUsers
                     Dim frm As New frmNewuser
                     frm = vFrmIn
                     frm.userFound(dataUser)
+                Case 4
+                    Dim frm As New frmAccount
+                    frm = vFrmIn
+                    frm.userFound(True, dataUser)
                 Case Else
                     Close()
             End Select

@@ -365,6 +365,7 @@ Partial Class frmCollectDetail
         Me.btnDeposit.Text = "DEPOSITO A CUENTA"
         Me.btnDeposit.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
         Me.btnDeposit.UseVisualStyleBackColor = True
+        Me.btnDeposit.Visible = False
         '
         'btnSeePayments
         '
@@ -635,7 +636,7 @@ Partial Class frmCollectDetail
         Me.Controls.Add(Me.txtCodLine)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Label1)
-        Me.MinimumSize = New System.Drawing.Size(1200, 750)
+        Me.MinimumSize = New System.Drawing.Size(1200, 726)
         Me.Name = "frmCollectDetail"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Cuenta de Servicio"

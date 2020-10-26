@@ -20,5 +20,8 @@
     <Setting Name="vYearName" Type="System.String" Scope="User">
       <Value Profile="(Default)">AÑO</Value>
     </Setting>
+    <Setting Name="vSeeNumReceipts" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

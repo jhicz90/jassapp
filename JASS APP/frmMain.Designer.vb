@@ -27,7 +27,6 @@ Partial Class frmMain
         Me.tsmiNew = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiNewLine = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiContract = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tsmiSharedLine = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiNewUser = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiPrint = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsmiConfigPrints = New System.Windows.Forms.ToolStripMenuItem()
@@ -82,7 +81,7 @@ Partial Class frmMain
         '
         'tsmiNew
         '
-        Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiSharedLine, Me.tsmiNewUser})
+        Me.tsmiNew.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiNewLine, Me.tsmiContract, Me.tsmiNewUser})
         Me.tsmiNew.Image = Global.JASS_APP.My.Resources.Resources.btn_add
         Me.tsmiNew.Name = "tsmiNew"
         Me.tsmiNew.Size = New System.Drawing.Size(198, 22)
@@ -103,13 +102,6 @@ Partial Class frmMain
         Me.tsmiContract.ShortcutKeyDisplayString = ""
         Me.tsmiContract.Size = New System.Drawing.Size(180, 22)
         Me.tsmiContract.Text = "Convenio"
-        '
-        'tsmiSharedLine
-        '
-        Me.tsmiSharedLine.Name = "tsmiSharedLine"
-        Me.tsmiSharedLine.ShortcutKeyDisplayString = ""
-        Me.tsmiSharedLine.Size = New System.Drawing.Size(180, 22)
-        Me.tsmiSharedLine.Text = "Linea compartida"
         '
         'tsmiNewUser
         '
@@ -355,7 +347,6 @@ Partial Class frmMain
     Friend WithEvents tsmiNew As ToolStripMenuItem
     Friend WithEvents tsmiNewLine As ToolStripMenuItem
     Friend WithEvents tsmiContract As ToolStripMenuItem
-    Friend WithEvents tsmiSharedLine As ToolStripMenuItem
     Friend WithEvents tsmiPrint As ToolStripMenuItem
     Friend WithEvents tsmiConfig As ToolStripMenuItem
     Friend WithEvents tsmiExit As ToolStripMenuItem

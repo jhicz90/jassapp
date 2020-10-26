@@ -717,5 +717,11 @@
   <ItemGroup>
     <None Include="Resources\iconReceipts.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\billdelete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\billdelete-32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
