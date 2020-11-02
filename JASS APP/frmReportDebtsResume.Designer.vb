@@ -31,12 +31,13 @@ Partial Class frmReportDebtsResume
         Me.cbxYearRate = New System.Windows.Forms.ComboBox()
         Me.chkCollectUserSys = New System.Windows.Forms.CheckBox()
         Me.cbxUsersSys = New System.Windows.Forms.ComboBox()
-        Me.dtpTo = New System.Windows.Forms.DateTimePicker()
-        Me.dtpSince = New System.Windows.Forms.DateTimePicker()
-        Me.chkDateRange = New System.Windows.Forms.CheckBox()
+        Me.dtpPayTo = New System.Windows.Forms.DateTimePicker()
+        Me.dtpDebtTo = New System.Windows.Forms.DateTimePicker()
         Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.dtDebtsResumeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.dsDebts = New JASS_APP.dsDebts()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.panelDatesRange.SuspendLayout()
         CType(Me.dtDebtsResumeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dsDebts, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -47,6 +48,8 @@ Partial Class frmReportDebtsResume
         Me.panelDatesRange.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panelDatesRange.BackColor = System.Drawing.Color.MediumTurquoise
+        Me.panelDatesRange.Controls.Add(Me.Label2)
+        Me.panelDatesRange.Controls.Add(Me.Label1)
         Me.panelDatesRange.Controls.Add(Me.chkStreet)
         Me.panelDatesRange.Controls.Add(Me.cbxStreets)
         Me.panelDatesRange.Controls.Add(Me.btnReportRefresh)
@@ -54,9 +57,8 @@ Partial Class frmReportDebtsResume
         Me.panelDatesRange.Controls.Add(Me.cbxYearRate)
         Me.panelDatesRange.Controls.Add(Me.chkCollectUserSys)
         Me.panelDatesRange.Controls.Add(Me.cbxUsersSys)
-        Me.panelDatesRange.Controls.Add(Me.dtpTo)
-        Me.panelDatesRange.Controls.Add(Me.dtpSince)
-        Me.panelDatesRange.Controls.Add(Me.chkDateRange)
+        Me.panelDatesRange.Controls.Add(Me.dtpPayTo)
+        Me.panelDatesRange.Controls.Add(Me.dtpDebtTo)
         Me.panelDatesRange.Location = New System.Drawing.Point(0, 0)
         Me.panelDatesRange.Margin = New System.Windows.Forms.Padding(0)
         Me.panelDatesRange.Name = "panelDatesRange"
@@ -135,35 +137,23 @@ Partial Class frmReportDebtsResume
         Me.cbxUsersSys.Size = New System.Drawing.Size(231, 21)
         Me.cbxUsersSys.TabIndex = 3
         '
-        'dtpTo
+        'dtpPayTo
         '
-        Me.dtpTo.Checked = False
-        Me.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpTo.Location = New System.Drawing.Point(267, 9)
-        Me.dtpTo.Name = "dtpTo"
-        Me.dtpTo.Size = New System.Drawing.Size(120, 20)
-        Me.dtpTo.TabIndex = 2
+        Me.dtpPayTo.Checked = False
+        Me.dtpPayTo.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpPayTo.Location = New System.Drawing.Point(302, 9)
+        Me.dtpPayTo.Name = "dtpPayTo"
+        Me.dtpPayTo.Size = New System.Drawing.Size(120, 20)
+        Me.dtpPayTo.TabIndex = 2
         '
-        'dtpSince
+        'dtpDebtTo
         '
-        Me.dtpSince.Checked = False
-        Me.dtpSince.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
-        Me.dtpSince.Location = New System.Drawing.Point(141, 9)
-        Me.dtpSince.Name = "dtpSince"
-        Me.dtpSince.Size = New System.Drawing.Size(120, 20)
-        Me.dtpSince.TabIndex = 1
-        '
-        'chkDateRange
-        '
-        Me.chkDateRange.AutoSize = True
-        Me.chkDateRange.Checked = True
-        Me.chkDateRange.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkDateRange.Location = New System.Drawing.Point(12, 12)
-        Me.chkDateRange.Name = "chkDateRange"
-        Me.chkDateRange.Size = New System.Drawing.Size(108, 17)
-        Me.chkDateRange.TabIndex = 0
-        Me.chkDateRange.Text = "Rango de fechas"
-        Me.chkDateRange.UseVisualStyleBackColor = True
+        Me.dtpDebtTo.Checked = False
+        Me.dtpDebtTo.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
+        Me.dtpDebtTo.Location = New System.Drawing.Point(94, 9)
+        Me.dtpDebtTo.Name = "dtpDebtTo"
+        Me.dtpDebtTo.Size = New System.Drawing.Size(120, 20)
+        Me.dtpDebtTo.TabIndex = 1
         '
         'rptDebts
         '
@@ -188,6 +178,24 @@ Partial Class frmReportDebtsResume
         '
         Me.dsDebts.DataSetName = "dsDebts"
         Me.dsDebts.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 12)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(76, 13)
+        Me.Label1.TabIndex = 12
+        Me.Label1.Text = "Deudas hasta:"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(227, 12)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(69, 13)
+        Me.Label2.TabIndex = 13
+        Me.Label2.Text = "Pagos hasta:"
         '
         'frmReportDebtsResume
         '
@@ -216,10 +224,11 @@ Partial Class frmReportDebtsResume
     Friend WithEvents cbxYearRate As ComboBox
     Friend WithEvents chkCollectUserSys As CheckBox
     Friend WithEvents cbxUsersSys As ComboBox
-    Friend WithEvents dtpTo As DateTimePicker
-    Friend WithEvents dtpSince As DateTimePicker
-    Friend WithEvents chkDateRange As CheckBox
+    Friend WithEvents dtpPayTo As DateTimePicker
+    Friend WithEvents dtpDebtTo As DateTimePicker
     Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents dtDebtsResumeBindingSource As BindingSource
     Friend WithEvents dsDebts As dsDebts
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
 End Class

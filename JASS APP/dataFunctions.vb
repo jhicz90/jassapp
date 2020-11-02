@@ -3281,100 +3281,37 @@ Module dataFunctions
             Try
                 Dim cmdstr As String = ""
                 Dim cmdstr2 As String = ""
+                Dim cmdstr3 As String = ""
 
-                cmdstr &= " WHERE "
-                cmdstr2 &= " WHERE "
+                cmdstr = cmdstr & " AND (DATE_FORMAT(payments.created, ""%Y-%m-%d"") <= """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """) AND (DATE_FORMAT(account_line.created, ""%Y-%m-%d"") <= """ & CDate(dataReport(0)).ToString("yyyy-MM-dd") & """)"
+                cmdstr2 = cmdstr2 & " AND (DATE_FORMAT(account_line.created, ""%Y-%m-%d"") <= """ & CDate(dataReport(0)).ToString("yyyy-MM-dd") & """)"
 
-                If CBool(dataReport(0)) Then
-                    cmdstr = cmdstr & "(DATE_FORMAT(payments.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
-                    cmdstr2 = cmdstr2 & "(DATE_FORMAT(account_detail.created, ""%Y-%m-%d"") BETWEEN """ & CDate(dataReport(1)).ToString("yyyy-MM-dd") & """ AND """ & CDate(dataReport(2)).ToString("yyyy-MM-dd") & """)"
+                If CBool(dataReport(2)) Then
+                    cmdstr = cmdstr & " AND (payments.collector = " & dataReport(3) & ")"
                 Else
-                    cmdstr &= " (payments.created <> """")"
-                    cmdstr2 &= " (account_detail.created <> """")"
+                    cmdstr &= " AND (payments.collector <> """")"
                 End If
 
-                If CBool(dataReport(3)) Then
-                    cmdstr = cmdstr & " AND (user_sys.idusersys = " & dataReport(4) & ")"
+                If CBool(dataReport(4)) Then
+                    cmdstr3 = " WHERE yeardebt.idyearrate = " & dataReport(5)
                 Else
-                    cmdstr &= " AND (user_sys.idusersys <> """")"
+                    cmdstr3 = ""
                 End If
 
-                If CBool(dataReport(5)) Then
-                    cmdstr = cmdstr & " AND (payments.yearrate = " & dataReport(6) & ")"
-                    cmdstr2 = cmdstr2 & " AND (account_detail.yearrate = " & dataReport(6) & ")"
-                Else
-                    cmdstr &= " AND (payments.yearrate <> """")"
-                    cmdstr2 &= " AND (account_detail.yearrate <> """")"
+                If CBool(dataReport(6)) Then
+                    cmdstr = cmdstr & " AND (service_line.street = " & dataReport(7) & ")"
+                    cmdstr2 = cmdstr2 & " AND (service_line.street = " & dataReport(7) & ")"
                 End If
-
-                If CBool(dataReport(7)) Then
-                    cmdstr = cmdstr & " AND (service_line.street = " & dataReport(8) & ")"
-                    cmdstr2 = cmdstr2 & " AND (service_line.street = " & dataReport(8) & ")"
-                Else
-                    cmdstr &= " AND (service_line.street <> """")"
-                    cmdstr2 &= " AND (service_line.street <> """")"
-                End If
-
-                cmdstr &= " AND payments.canceled = 0 "
 
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
                 cmd.CommandText = "SELECT
-                    years_rate.year,
-                    IFNULL(SUM(account_detail.debttotal), 0) AS debtentered,
-                    (SELECT
-                    IFNULL(SUM(payments.amounttotal), 0) AS amounttotal
-                    FROM
-                    payments
-                    INNER JOIN user_sys
-                        ON user_sys.idusersys = payments.collector
-                    INNER JOIN years_rate
-                        ON years_rate.idyearrate = payments.yearrate
-                    INNER JOIN account_line
-                        ON account_line.idaccountline = payments.accountline
-                    INNER JOIN internal_line
-                        ON internal_line.idinternalline = account_line.internalline
-                    INNER JOIN users_line
-                        ON users_line.internalline = internal_line.idinternalline
-                    INNER JOIN user_reg
-                        ON user_reg.iduserreg = users_line.userreg
-                    INNER JOIN service_line
-                        ON service_line.idserviceline = internal_line.serviceline
-                    " & cmdstr & ") AS paidout,
-                    (
-                    IFNULL(SUM(account_detail.debttotal), 0) -
-                    (SELECT
-                        IFNULL(SUM(payments.amounttotal), 0) AS amounttotal
-                    FROM
-                        payments
-                        INNER JOIN user_sys
-                        ON user_sys.idusersys = payments.collector
-                        INNER JOIN years_rate
-                        ON years_rate.idyearrate = payments.yearrate
-                        INNER JOIN account_line
-                        ON account_line.idaccountline = payments.accountline
-                        INNER JOIN internal_line
-                        ON internal_line.idinternalline = account_line.internalline
-                        INNER JOIN users_line
-                        ON users_line.internalline = internal_line.idinternalline
-                        INNER JOIN user_reg
-                        ON user_reg.iduserreg = users_line.userreg
-                        INNER JOIN service_line
-                        ON service_line.idserviceline = internal_line.serviceline
-                   " & cmdstr & ")
-                    ) AS debttodate
-                FROM
-                    account_detail
-                    INNER JOIN years_rate
-                    ON years_rate.idyearrate = account_detail.yearrate
-                    INNER JOIN account_line
-                    ON account_line.idaccountline = account_detail.accountline
-                    INNER JOIN internal_line
-                    ON internal_line.idinternalline = account_line.internalline
-                    INNER JOIN service_line
-                    ON service_line.idserviceline = internal_line.serviceline
-               " & cmdstr2 & " GROUP BY years_rate.year
-                   ORDER BY years_rate.year ASC"
+                    yeardebt.year, 
+                    (SELECT IFNULL(SUM(account_line.debttotal),0) FROM account_line LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE account_line.yearrate = yeardebt.idyearrate " & cmdstr2 & ") AS debtentered, 
+                    (SELECT IFNULL(SUM(payments.amounttotal),0) FROM payments INNER JOIN account_line ON account_line.idaccountline = payments.accountline LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE payments.canceled=0 AND payments.yearrate = yeardebt.idyearrate" & cmdstr & ") AS paidout, 
+                    (SELECT debtentered-paidout) AS debttodate 
+                    FROM account_line INNER JOIN years_rate AS yeardebt ON yeardebt.idyearrate = account_line.yearrate" & cmdstr3 & " GROUP BY account_line.yearrate
+                    ORDER BY yeardebt.year ASC"
                 ada.SelectCommand = cmd
                 ada.Fill(ds, "dtDebtsResume")
 

@@ -11,19 +11,18 @@ Public Class frmReportDebtsResume
         listYearRate(cbxYearRate)
         listAvenues(cbxStreets)
         initReport()
-        dtpSince.Value = Today
-        dtpTo.Value = Today
+        dtpDebtTo.Value = Today
+        dtpPayTo.Value = Today
 
-        Dim dataReport(8) As String
-        dataReport(0) = chkDateRange.Checked
-        dataReport(1) = dtpSince.Value
-        dataReport(2) = dtpTo.Value
-        dataReport(3) = chkCollectUserSys.Checked
-        dataReport(4) = cbxUsersSys.SelectedValue
-        dataReport(5) = chkYearRate.Checked
-        dataReport(6) = cbxYearRate.SelectedValue
-        dataReport(7) = chkStreet.Checked
-        dataReport(8) = cbxStreets.SelectedValue
+        Dim dataReport(7) As String
+        dataReport(0) = dtpDebtTo.Value
+        dataReport(1) = dtpPayTo.Value
+        dataReport(2) = chkCollectUserSys.Checked
+        dataReport(3) = cbxUsersSys.SelectedValue
+        dataReport(4) = chkYearRate.Checked
+        dataReport(5) = cbxYearRate.SelectedValue
+        dataReport(6) = chkStreet.Checked
+        dataReport(7) = cbxStreets.SelectedValue
 
         Dim ds As dsDebts = reportDebtsResume(dataReport)
         Dim dtReport As New ReportDataSource("dsDebts", ds.Tables(0))
@@ -36,14 +35,6 @@ Public Class frmReportDebtsResume
     End Sub
 
     Public Sub initReport()
-        If chkDateRange.Checked Then
-            dtpSince.Enabled = True
-            dtpTo.Enabled = True
-        Else
-            dtpSince.Enabled = False
-            dtpTo.Enabled = False
-        End If
-
         If chkCollectUserSys.Checked Then
             cbxUsersSys.Enabled = True
         Else
@@ -66,15 +57,7 @@ Public Class frmReportDebtsResume
     Public Sub critReport()
         Dim parameters As New List(Of ReportParameter)()
 
-        If chkDateRange.Checked Then
-            If dtpSince.Value = dtpTo.Value Then
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value
-            Else
-                dateSinceTo = "Rango de fechas: " & dtpSince.Value & " a " & dtpTo.Value
-            End If
-        Else
-            dateSinceTo = "Rango de fechas: Todo"
-        End If
+        dateSinceTo = "Deuda hasta: " & dtpDebtTo.Value & " Pagos hasta: " & dtpPayTo.Value
 
         If chkCollectUserSys.Checked Then
             collectUserSys = "Cobrado por: " & cbxUsersSys.Text
@@ -101,7 +84,7 @@ Public Class frmReportDebtsResume
         rptDebts.LocalReport.SetParameters(parameters)
     End Sub
 
-    Private Sub chkDateRange_CheckedChanged(sender As Object, e As EventArgs) Handles chkDateRange.CheckedChanged
+    Private Sub chkDateRange_CheckedChanged(sender As Object, e As EventArgs)
         initReport()
     End Sub
 
@@ -118,16 +101,15 @@ Public Class frmReportDebtsResume
     End Sub
 
     Private Sub btnReportRefresh_Click(sender As Object, e As EventArgs) Handles btnReportRefresh.Click
-        Dim dataReport(8) As String
-        dataReport(0) = chkDateRange.Checked
-        dataReport(1) = dtpSince.Value
-        dataReport(2) = dtpTo.Value
-        dataReport(3) = chkCollectUserSys.Checked
-        dataReport(4) = cbxUsersSys.SelectedValue
-        dataReport(5) = chkYearRate.Checked
-        dataReport(6) = cbxYearRate.SelectedValue
-        dataReport(7) = chkStreet.Checked
-        dataReport(8) = cbxStreets.SelectedValue
+        Dim dataReport(7) As String
+        dataReport(0) = dtpDebtTo.Value
+        dataReport(1) = dtpPayTo.Value
+        dataReport(2) = chkCollectUserSys.Checked
+        dataReport(3) = cbxUsersSys.SelectedValue
+        dataReport(4) = chkYearRate.Checked
+        dataReport(5) = cbxYearRate.SelectedValue
+        dataReport(6) = chkStreet.Checked
+        dataReport(7) = cbxStreets.SelectedValue
 
         Dim ds As dsDebts = reportDebtsResume(dataReport)
         Dim dtReport As New ReportDataSource("dsDebts", ds.Tables(0))
