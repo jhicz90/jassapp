@@ -55,6 +55,7 @@ Partial Class frmMain
         Me.tsdpdHelp = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsmiAbout = New System.Windows.Forms.ToolStripMenuItem()
         Me.stStatusToolbar = New System.Windows.Forms.StatusStrip()
+        Me.tsmiDebtsDetail = New System.Windows.Forms.ToolStripMenuItem()
         Me.tsMainToolbar.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -268,7 +269,7 @@ Partial Class frmMain
         'tsdpdReports
         '
         Me.tsdpdReports.AutoToolTip = False
-        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily, Me.tsmiCollectDailyResume, Me.tsmiDebtsResume})
+        Me.tsdpdReports.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCollectDaily, Me.tsmiCollectDailyResume, Me.tsmiDebtsResume, Me.tsmiDebtsDetail})
         Me.tsdpdReports.Image = Global.JASS_APP.My.Resources.Resources.analyze_32
         Me.tsdpdReports.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.tsdpdReports.Name = "tsdpdReports"
@@ -319,6 +320,12 @@ Partial Class frmMain
         Me.stStatusToolbar.Size = New System.Drawing.Size(1045, 22)
         Me.stStatusToolbar.TabIndex = 1
         Me.stStatusToolbar.Text = "StatusToolbar"
+        '
+        'tsmiDebtsDetail
+        '
+        Me.tsmiDebtsDetail.Name = "tsmiDebtsDetail"
+        Me.tsmiDebtsDetail.Size = New System.Drawing.Size(263, 22)
+        Me.tsmiDebtsDetail.Text = "Reporte detalle de deudas"
         '
         'frmMain
         '
@@ -374,4 +381,5 @@ Partial Class frmMain
     Friend WithEvents tsmiRestore As ToolStripMenuItem
     Friend WithEvents tsmiReceipts As ToolStripMenuItem
     Friend WithEvents tsmiDebtsResume As ToolStripMenuItem
+    Friend WithEvents tsmiDebtsDetail As ToolStripMenuItem
 End Class

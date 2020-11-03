@@ -24,6 +24,8 @@ Partial Class frmReportDebtsResume
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.panelDatesRange = New System.Windows.Forms.Panel()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.chkStreet = New System.Windows.Forms.CheckBox()
         Me.cbxStreets = New System.Windows.Forms.ComboBox()
         Me.btnReportRefresh = New System.Windows.Forms.Button()
@@ -33,11 +35,9 @@ Partial Class frmReportDebtsResume
         Me.cbxUsersSys = New System.Windows.Forms.ComboBox()
         Me.dtpPayTo = New System.Windows.Forms.DateTimePicker()
         Me.dtpDebtTo = New System.Windows.Forms.DateTimePicker()
-        Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.dtDebtsResumeBindingSource = New System.Windows.Forms.BindingSource(Me.components)
         Me.dsDebts = New JASS_APP.dsDebts()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.panelDatesRange.SuspendLayout()
         CType(Me.dtDebtsResumeBindingSource, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dsDebts, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -64,6 +64,24 @@ Partial Class frmReportDebtsResume
         Me.panelDatesRange.Name = "panelDatesRange"
         Me.panelDatesRange.Size = New System.Drawing.Size(984, 111)
         Me.panelDatesRange.TabIndex = 4
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(227, 12)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(69, 13)
+        Me.Label2.TabIndex = 13
+        Me.Label2.Text = "Pagos hasta:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 12)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(76, 13)
+        Me.Label1.TabIndex = 12
+        Me.Label1.Text = "Deudas hasta:"
         '
         'chkStreet
         '
@@ -155,6 +173,16 @@ Partial Class frmReportDebtsResume
         Me.dtpDebtTo.Size = New System.Drawing.Size(120, 20)
         Me.dtpDebtTo.TabIndex = 1
         '
+        'dtDebtsResumeBindingSource
+        '
+        Me.dtDebtsResumeBindingSource.DataMember = "dtDebtsResume"
+        Me.dtDebtsResumeBindingSource.DataSource = Me.dsDebts
+        '
+        'dsDebts
+        '
+        Me.dsDebts.DataSetName = "dsDebts"
+        Me.dsDebts.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
+        '
         'rptDebts
         '
         Me.rptDebts.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -168,34 +196,6 @@ Partial Class frmReportDebtsResume
         Me.rptDebts.Size = New System.Drawing.Size(984, 347)
         Me.rptDebts.TabIndex = 5
         Me.rptDebts.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
-        '
-        'dtDebtsResumeBindingSource
-        '
-        Me.dtDebtsResumeBindingSource.DataMember = "dtDebtsResume"
-        Me.dtDebtsResumeBindingSource.DataSource = Me.dsDebts
-        '
-        'dsDebts
-        '
-        Me.dsDebts.DataSetName = "dsDebts"
-        Me.dsDebts.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 12)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(76, 13)
-        Me.Label1.TabIndex = 12
-        Me.Label1.Text = "Deudas hasta:"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(227, 12)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(69, 13)
-        Me.Label2.TabIndex = 13
-        Me.Label2.Text = "Pagos hasta:"
         '
         'frmReportDebtsResume
         '
@@ -226,9 +226,9 @@ Partial Class frmReportDebtsResume
     Friend WithEvents cbxUsersSys As ComboBox
     Friend WithEvents dtpPayTo As DateTimePicker
     Friend WithEvents dtpDebtTo As DateTimePicker
-    Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents dtDebtsResumeBindingSource As BindingSource
     Friend WithEvents dsDebts As dsDebts
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
+    Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
 End Class

@@ -1486,6 +1486,11 @@ Module dataFunctions
         frm.Show()
     End Sub
 
+    Public Sub showReportDebtsDetail()
+        Dim frm As New frmReportDebtsDetail
+        frm.Show()
+    End Sub
+
     Public Sub showEditLine(vIdServiceLine As String)
         Dim frm As New frmEditLine
         frm.vIdServiceLine = vIdServiceLine
@@ -3335,7 +3340,31 @@ Module dataFunctions
             Try
                 cmd.Connection = cnnx
                 cmd.CommandType = CommandType.Text
-                cmd.CommandText = ""
+                cmd.CommandText = "SELECT DISTINCT
+                CALLE.idstreet AS idstreet,
+                CALLE.name AS street,
+                SERVICE.idserviceline AS idservice_line,
+                SERVICE.name AS service_line,
+                INTERNAL.code AS internal_line,
+                (SELECT GROUP_CONCAT(TRIM(CONCAT(user_reg.surnames, "" "", user_reg.names)) SEPARATOR ',') AS fullname
+                FROM internal_line
+                INNER JOIN users_line ON users_line.internalline = internal_line.idinternalline
+                INNER JOIN user_reg ON user_reg.iduserreg = users_line.userreg
+                WHERE internal_line.serviceline = SERVICE.idserviceline AND internal_line.idinternalline = INTERNAL.idinternalline) AS users_line,
+                (SELECT IFNULL(SUM(account_line.saldototal),0) FROM account_line INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE years_rate.year <= @year1 AND account_line.internalline = INTERNAL.idinternalline) AS debt1,
+                (SELECT IFNULL(SUM(account_line.saldototal),0) FROM account_line INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE years_rate.year = @year2 AND account_line.internalline = INTERNAL.idinternalline) AS debt2,
+                (SELECT IFNULL(SUM(account_line.saldototal),0) FROM account_line INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE years_rate.year = @year3 AND account_line.internalline = INTERNAL.idinternalline) AS debt3,
+                (SELECT IFNULL(SUM(account_line.saldototal),0) FROM account_line INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE years_rate.year = @year4 AND account_line.internalline = INTERNAL.idinternalline) AS debt4,
+                (SELECT IFNULL(SUM(account_line.saldototal),0) FROM account_line INNER JOIN years_rate ON years_rate.idyearrate = account_line.yearrate LEFT JOIN internal_line ON internal_line.idinternalline = account_line.idaccountline LEFT JOIN service_line ON service_line.idserviceline = internal_line.serviceline WHERE years_rate.year = @year5 AND account_line.internalline = INTERNAL.idinternalline) AS debt5,
+                (SELECT debt1+debt2+debt3+debt4+debt5) AS debttotal
+                FROM internal_line AS INTERNAL
+                LEFT JOIN service_line AS SERVICE ON INTERNAL.serviceline = SERVICE.idserviceline
+                INNER JOIN streets AS CALLE ON CALLE.idstreet = SERVICE.street"
+                cmd.Parameters.AddWithValue("year1", CInt(dataReport(8)) - 4)
+                cmd.Parameters.AddWithValue("year2", CInt(dataReport(8)) - 3)
+                cmd.Parameters.AddWithValue("year3", CInt(dataReport(8)) - 2)
+                cmd.Parameters.AddWithValue("year4", CInt(dataReport(8)) - 1)
+                cmd.Parameters.AddWithValue("year5", CInt(dataReport(8)))
                 ada.SelectCommand = cmd
                 ada.Fill(ds, "dtDebtsDetail")
 

@@ -14,7 +14,7 @@ Public Class frmReportDebtsDetail
         dtpDebtTo.Value = Today
         dtpPayTo.Value = Today
 
-        Dim dataReport(7) As String
+        Dim dataReport(8) As String
         dataReport(0) = dtpDebtTo.Value
         dataReport(1) = dtpPayTo.Value
         dataReport(2) = chkCollectUserSys.Checked
@@ -23,6 +23,7 @@ Public Class frmReportDebtsDetail
         dataReport(5) = cbxYearRate.SelectedValue
         dataReport(6) = chkStreet.Checked
         dataReport(7) = cbxStreets.SelectedValue
+        dataReport(8) = My.Settings.vYear
 
         Dim ds As dsDebtsDetail = reportDebtsDetail(dataReport)
         Dim dtReport As New ReportDataSource("dsDetail", ds.Tables(0))
@@ -32,6 +33,7 @@ Public Class frmReportDebtsDetail
         rptDebts.ZoomMode = ZoomMode.PageWidth
         critReport()
         rptDebts.RefreshReport()
+        Me.rptDebts.RefreshReport()
     End Sub
 
     Public Sub initReport()
@@ -81,6 +83,11 @@ Public Class frmReportDebtsDetail
         parameters.Add(New ReportParameter("rptParamUserSys", collectUserSys))
         parameters.Add(New ReportParameter("rptParamStreet", sectorStreet))
         parameters.Add(New ReportParameter("rptParamYearRate", yearRate))
+        parameters.Add(New ReportParameter("rptParamYear5", My.Settings.vYear))
+        parameters.Add(New ReportParameter("rptParamYear4", My.Settings.vYear - 1))
+        parameters.Add(New ReportParameter("rptParamYear3", My.Settings.vYear - 2))
+        parameters.Add(New ReportParameter("rptParamYear2", My.Settings.vYear - 3))
+        parameters.Add(New ReportParameter("rptParamYear1", My.Settings.vYear - 4))
         rptDebts.LocalReport.SetParameters(parameters)
     End Sub
 
@@ -101,7 +108,7 @@ Public Class frmReportDebtsDetail
     End Sub
 
     Private Sub btnReportRefresh_Click(sender As Object, e As EventArgs) Handles btnReportRefresh.Click
-        Dim dataReport(7) As String
+        Dim dataReport(8) As String
         dataReport(0) = dtpDebtTo.Value
         dataReport(1) = dtpPayTo.Value
         dataReport(2) = chkCollectUserSys.Checked
@@ -110,6 +117,7 @@ Public Class frmReportDebtsDetail
         dataReport(5) = cbxYearRate.SelectedValue
         dataReport(6) = chkStreet.Checked
         dataReport(7) = cbxStreets.SelectedValue
+        dataReport(8) = My.Settings.vYear
 
         Dim ds As dsDebts = reportDebtsResume(dataReport)
         Dim dtReport As New ReportDataSource("dsDetail", ds.Tables(0))

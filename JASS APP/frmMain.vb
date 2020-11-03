@@ -59,6 +59,10 @@
         showReportDebtsResume()
     End Sub
 
+    Private Sub tsmiDebtsDetail_Click(sender As Object, e As EventArgs) Handles tsmiDebtsDetail.Click
+        showReportDebtsDetail()
+    End Sub
+
     Private Sub tsmiCloseWindows_Click(sender As Object, e As EventArgs) Handles tsmiCloseWindows.Click
         Do
             If MdiChildren.Count > 0 Then

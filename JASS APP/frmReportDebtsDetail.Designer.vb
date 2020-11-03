@@ -22,7 +22,6 @@ Partial Class frmReportDebtsDetail
     'No lo modifique con el editor de código.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.panelDatesRange = New System.Windows.Forms.Panel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -35,22 +34,9 @@ Partial Class frmReportDebtsDetail
         Me.cbxUsersSys = New System.Windows.Forms.ComboBox()
         Me.dtpPayTo = New System.Windows.Forms.DateTimePicker()
         Me.dtpDebtTo = New System.Windows.Forms.DateTimePicker()
+        Me.rptDebts = New Microsoft.Reporting.WinForms.ReportViewer()
         Me.panelDatesRange.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'rptDebts
-        '
-        Me.rptDebts.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.rptDebts.DocumentMapCollapsed = True
-        Me.rptDebts.LocalReport.ReportEmbeddedResource = "JASS_APP.rptDebtsDetail.rdlc"
-        Me.rptDebts.Location = New System.Drawing.Point(0, 114)
-        Me.rptDebts.Name = "rptDebts"
-        Me.rptDebts.ServerReport.BearerToken = Nothing
-        Me.rptDebts.Size = New System.Drawing.Size(984, 347)
-        Me.rptDebts.TabIndex = 7
-        Me.rptDebts.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
         '
         'panelDatesRange
         '
@@ -182,6 +168,20 @@ Partial Class frmReportDebtsDetail
         Me.dtpDebtTo.Size = New System.Drawing.Size(120, 20)
         Me.dtpDebtTo.TabIndex = 1
         '
+        'rptDebts
+        '
+        Me.rptDebts.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.rptDebts.DocumentMapCollapsed = True
+        Me.rptDebts.LocalReport.ReportEmbeddedResource = "JASS_APP.rptDebtsDetail.rdlc"
+        Me.rptDebts.Location = New System.Drawing.Point(0, 114)
+        Me.rptDebts.Name = "rptDebts"
+        Me.rptDebts.ServerReport.BearerToken = Nothing
+        Me.rptDebts.Size = New System.Drawing.Size(984, 347)
+        Me.rptDebts.TabIndex = 7
+        Me.rptDebts.ZoomMode = Microsoft.Reporting.WinForms.ZoomMode.PageWidth
+        '
         'frmReportDebtsDetail
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -198,8 +198,6 @@ Partial Class frmReportDebtsDetail
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
     Friend WithEvents panelDatesRange As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
@@ -212,4 +210,5 @@ Partial Class frmReportDebtsDetail
     Friend WithEvents cbxUsersSys As ComboBox
     Friend WithEvents dtpPayTo As DateTimePicker
     Friend WithEvents dtpDebtTo As DateTimePicker
+    Friend WithEvents rptDebts As Microsoft.Reporting.WinForms.ReportViewer
 End Class
