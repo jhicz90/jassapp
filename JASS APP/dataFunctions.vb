@@ -3325,4 +3325,28 @@ Module dataFunctions
             Return ds
         End If
     End Function
+
+    Public Function reportDebtsDetail(dataReport() As String) As dsDebtsDetail
+        Dim cmd As New MySqlCommand
+        Dim ada As New MySqlDataAdapter
+        Dim ds As New dsDebtsDetail
+
+        If Not cnnx.DataSource.Equals("") Then
+            Try
+                cmd.Connection = cnnx
+                cmd.CommandType = CommandType.Text
+                cmd.CommandText = ""
+                ada.SelectCommand = cmd
+                ada.Fill(ds, "dtDebtsDetail")
+
+                Return ds
+            Catch ex As Exception
+                MsgBox("Ocurrio un error al cargar", vbExclamation, "Aviso")
+                MsgBox(ex.Message)
+                Return ds
+            End Try
+        Else
+            Return ds
+        End If
+    End Function
 End Module

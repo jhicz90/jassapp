@@ -291,9 +291,9 @@ Partial Public Class dsDebtsDetail
         
         Private columnservice_line As Global.System.Data.DataColumn
         
-        Private columnidinternal_line As Global.System.Data.DataColumn
-        
         Private columninternal_line As Global.System.Data.DataColumn
+        
+        Private columnusers_line As Global.System.Data.DataColumn
         
         Private columndebt1 As Global.System.Data.DataColumn
         
@@ -376,17 +376,17 @@ Partial Public Class dsDebtsDetail
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public ReadOnly Property idinternal_lineColumn() As Global.System.Data.DataColumn
+        Public ReadOnly Property internal_lineColumn() As Global.System.Data.DataColumn
             Get
-                Return Me.columnidinternal_line
+                Return Me.columninternal_line
             End Get
         End Property
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public ReadOnly Property internal_lineColumn() As Global.System.Data.DataColumn
+        Public ReadOnly Property users_lineColumn() As Global.System.Data.DataColumn
             Get
-                Return Me.columninternal_line
+                Return Me.columnusers_line
             End Get
         End Property
         
@@ -475,9 +475,9 @@ Partial Public Class dsDebtsDetail
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Overloads Function AdddtDebtsDetailRow(ByVal idstreet As String, ByVal street As String, ByVal idservice_line As String, ByVal service_line As String, ByVal idinternal_line As String, ByVal internal_line As String, ByVal debt1 As Decimal, ByVal debt2 As Decimal, ByVal debt3 As Decimal, ByVal debt4 As Decimal, ByVal debt5 As Decimal, ByVal debttotal As Decimal) As dtDebtsDetailRow
+        Public Overloads Function AdddtDebtsDetailRow(ByVal idstreet As String, ByVal street As String, ByVal idservice_line As String, ByVal service_line As String, ByVal internal_line As String, ByVal users_line As String, ByVal debt1 As Decimal, ByVal debt2 As Decimal, ByVal debt3 As Decimal, ByVal debt4 As Decimal, ByVal debt5 As Decimal, ByVal debttotal As Decimal) As dtDebtsDetailRow
             Dim rowdtDebtsDetailRow As dtDebtsDetailRow = CType(Me.NewRow,dtDebtsDetailRow)
-            Dim columnValuesArray() As Object = New Object() {idstreet, street, idservice_line, service_line, idinternal_line, internal_line, debt1, debt2, debt3, debt4, debt5, debttotal}
+            Dim columnValuesArray() As Object = New Object() {idstreet, street, idservice_line, service_line, internal_line, users_line, debt1, debt2, debt3, debt4, debt5, debttotal}
             rowdtDebtsDetailRow.ItemArray = columnValuesArray
             Me.Rows.Add(rowdtDebtsDetailRow)
             Return rowdtDebtsDetailRow
@@ -504,8 +504,8 @@ Partial Public Class dsDebtsDetail
             Me.columnstreet = MyBase.Columns("street")
             Me.columnidservice_line = MyBase.Columns("idservice_line")
             Me.columnservice_line = MyBase.Columns("service_line")
-            Me.columnidinternal_line = MyBase.Columns("idinternal_line")
             Me.columninternal_line = MyBase.Columns("internal_line")
+            Me.columnusers_line = MyBase.Columns("users_line")
             Me.columndebt1 = MyBase.Columns("debt1")
             Me.columndebt2 = MyBase.Columns("debt2")
             Me.columndebt3 = MyBase.Columns("debt3")
@@ -525,10 +525,10 @@ Partial Public Class dsDebtsDetail
             MyBase.Columns.Add(Me.columnidservice_line)
             Me.columnservice_line = New Global.System.Data.DataColumn("service_line", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columnservice_line)
-            Me.columnidinternal_line = New Global.System.Data.DataColumn("idinternal_line", GetType(String), Nothing, Global.System.Data.MappingType.Element)
-            MyBase.Columns.Add(Me.columnidinternal_line)
             Me.columninternal_line = New Global.System.Data.DataColumn("internal_line", GetType(String), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columninternal_line)
+            Me.columnusers_line = New Global.System.Data.DataColumn("users_line", GetType(String), Nothing, Global.System.Data.MappingType.Element)
+            MyBase.Columns.Add(Me.columnusers_line)
             Me.columndebt1 = New Global.System.Data.DataColumn("debt1", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
             MyBase.Columns.Add(Me.columndebt1)
             Me.columndebt2 = New Global.System.Data.DataColumn("debt2", GetType(Decimal), Nothing, Global.System.Data.MappingType.Element)
@@ -747,21 +747,6 @@ Partial Public Class dsDebtsDetail
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Property idinternal_line() As String
-            Get
-                Try 
-                    Return CType(Me(Me.tabledtDebtsDetail.idinternal_lineColumn),String)
-                Catch e As Global.System.InvalidCastException
-                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'idinternal_line' de la tabla 'dtDebtsDetail' es DBNull.", e)
-                End Try
-            End Get
-            Set
-                Me(Me.tabledtDebtsDetail.idinternal_lineColumn) = value
-            End Set
-        End Property
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Property internal_line() As String
             Get
                 Try 
@@ -772,6 +757,21 @@ Partial Public Class dsDebtsDetail
             End Get
             Set
                 Me(Me.tabledtDebtsDetail.internal_lineColumn) = value
+            End Set
+        End Property
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Property users_line() As String
+            Get
+                Try 
+                    Return CType(Me(Me.tabledtDebtsDetail.users_lineColumn),String)
+                Catch e As Global.System.InvalidCastException
+                    Throw New Global.System.Data.StrongTypingException("El valor de la columna 'users_line' de la tabla 'dtDebtsDetail' es DBNull.", e)
+                End Try
+            End Get
+            Set
+                Me(Me.tabledtDebtsDetail.users_lineColumn) = value
             End Set
         End Property
         
@@ -915,18 +915,6 @@ Partial Public Class dsDebtsDetail
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Function Isidinternal_lineNull() As Boolean
-            Return Me.IsNull(Me.tabledtDebtsDetail.idinternal_lineColumn)
-        End Function
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
-        Public Sub Setidinternal_lineNull()
-            Me(Me.tabledtDebtsDetail.idinternal_lineColumn) = Global.System.Convert.DBNull
-        End Sub
-        
-        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Function Isinternal_lineNull() As Boolean
             Return Me.IsNull(Me.tabledtDebtsDetail.internal_lineColumn)
         End Function
@@ -935,6 +923,18 @@ Partial Public Class dsDebtsDetail
          Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
         Public Sub Setinternal_lineNull()
             Me(Me.tabledtDebtsDetail.internal_lineColumn) = Global.System.Convert.DBNull
+        End Sub
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Function Isusers_lineNull() As Boolean
+            Return Me.IsNull(Me.tabledtDebtsDetail.users_lineColumn)
+        End Function
+        
+        <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "16.0.0.0")>  _
+        Public Sub Setusers_lineNull()
+            Me(Me.tabledtDebtsDetail.users_lineColumn) = Global.System.Convert.DBNull
         End Sub
         
         <Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _

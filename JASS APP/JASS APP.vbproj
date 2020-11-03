@@ -311,6 +311,12 @@
     <Compile Include="frmReceipts.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmReportDebtsDetail.Designer.vb">
+      <DependentUpon>frmReportDebtsDetail.vb</DependentUpon>
+    </Compile>
+    <Compile Include="frmReportDebtsDetail.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="frmReportDebtsResume.Designer.vb">
       <DependentUpon>frmReportDebtsResume.vb</DependentUpon>
     </Compile>
@@ -438,6 +444,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmReceipts.resx">
       <DependentUpon>frmReceipts.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmReportDebtsDetail.resx">
+      <DependentUpon>frmReportDebtsDetail.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmReportDebtsResume.resx">
       <DependentUpon>frmReportDebtsResume.vb</DependentUpon>
